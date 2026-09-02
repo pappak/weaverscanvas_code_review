@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WeaversCanvas — Animated Ad</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,600;0,700;0,800;1,600&family=IM+Fell+English:ital@1&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 600px; height: 600px;
+    overflow: hidden;
+    background: #1a1208;
+    display: flex; align-items: center; justify-content: center;
+  }
+  canvas { display: block; image-rendering: crisp-edges; }
+</style>
+</head>
+<body>
+<canvas id="c" width="600" height="600"></canvas>
+<script>
+/* ──────────────────────────────────────────────────────────────────
+   WeaversCanvas — 600×600 Animated Promo Ad
+   Opens in any browser. Screen-record for Instagram / Ravelry.
+   Duration: 13 s loop.
+────────────────────────────────────────────────────────────────── */
+document.fonts.ready.then(boot);
+
+function boot() {
+  const canvas = document.getElementById('c');
+  const ctx    = canvas.getContext('2d');
+  const W = 600, H = 600;
+
+  /* ── Loom structure: 4-shaft 2/2 twill, 16 threads × 16 picks ── */
+  const SHAFTS = 4, TREADLES = 4, THREADS = 16, PICKS = 16, CELL = 14, GAP = 8;
+
+  const threading  = Array.from({length: THREADS}, (_, i) => i % SHAFTS);
+  const treadling  = Array.from({length: PICKS},   (_, i) => i % TREADLES);
+  const tieup      = Array.from({length: SHAFTS},  (_, s) =>
+                       Array.from({length: TREADLES}, (_, t) =>
+                         ((t - s + SHAFTS) % SHAFTS) < 2 ? 1 : 0));
+  const drawdown   = Array.from({length: PICKS}, (_, p) =>
+                       Array.from({length: THREADS}, (_, t) =>
+                         tieup[threading[t]][treadling[p]]));
+
+  /* ── Positions ── */
+  const LEFT = Math.round((W - (THREADS*CELL + GAP + TREADLES*CELL)) / 2);
+  const TOP  = 100;
+  const TX = LEFT,                      TY = TOP;
+  const UX = LEFT + THREADS*CELL + GAP, UY = TOP;
+  const DX = LEFT,                      DY = TOP + SHAFTS*CELL + GAP;
+  const RX = LEFT + THREADS*CELL + GAP, RY = TOP + SHAFTS*CELL + GAP;
+
+  /* ── Colour palette ── */
+  const INDIGO  = '#001E87';
+  const PURPLE  = '#4D167C';
+  const GRID_C  = '#C0B8D8';
+  const WEFT_C  = '#0D1038';
+  const WARP_C  = [
+    '#B84C2A','#D09010','#557040','#1E5C6E',
+    '#7D3558','#B84C2A','#D09010','#557040',
+    '#1E5C6E','#7D3558','#B84C2A','#D09010',
+    '#557040','#1E5C6E','#7D3558','#B84C2A',
+  ];
+
+  /* ── Easing ── */
+  const eOut  = t => 1-(1-t)**2;
+  const eIO   = t => t<.5 ? 2*t*t : 1-(-2*t+2)**2/2;
+  const clamp = (v,lo,hi) => Math.max(lo, Math.min(hi, v));
+  const norm  = (t, a, b) => clamp((t-a)/(b-a), 0, 1);
+
+  /* ── Stable grain texture ── */
+  const grain = Array.from({length: 2200}, () =>
+    [Math.random()*W|0, Math.random()*H|0, Math.random() > .5]);
+
+  /* ── Helpers ── */
+  function rrect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y);   ctx.arcTo(x+w, y,   x+w, y+r,   r);
+    ctx.lineTo(x+w, y+h-r); ctx.arcTo(x+w, y+h, x+w-r, y+h, r);
+    ctx.lineTo(x+r, y+h);   ctx.arcTo(x,   y+h, x,   y+h-r, r);
+    ctx.lineTo(x, y+r);     ctx.arcTo(x,   y,   x+r, y,     r);
+    ctx.closePath();
+  }
+
+  function gridLines(x, y, cols, rows, a) {
+    if (a <= 0) return;
+    ctx.save(); ctx.globalAlpha = a;
+    ctx.strokeStyle = GRID_C; ctx.lineWidth = .5;
+    for (let c = 0; c <= cols; c++) {
+      ctx.beginPath(); ctx.moveTo(x+c*CELL, y); ctx.lineTo(x+c*CELL, y+rows*CELL); ctx.stroke();
+    }
+    for (let r = 0; r <= rows; r++) {
+      ctx.beginPath(); ctx.moveTo(x, y+r*CELL); ctx.lineTo(x+cols*CELL, y+r*CELL); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  /* ── Draw layers ── */
+
+  function drawBG(a) {
+    ctx.save();
+    const g = ctx.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0,   '#F8F2EA');
+    g.addColorStop(.45, '#F3EBE0');
+    g.addColorStop(1,   '#EAE0D2');
+    ctx.globalAlpha = a;
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    // grain
+    ctx.globalAlpha = a * .017;
+    grain.forEach(([gx, gy, dk]) => {
+      ctx.fillStyle = dk ? '#000' : '#fff'; ctx.fillRect(gx, gy, 1, 1);
+    });
+
+    // frame
+    ctx.globalAlpha = a * .32;
+    ctx.strokeStyle = INDIGO; ctx.lineWidth = 1.2;
+    ctx.strokeRect(13, 13, W-26, H-26);
+    ctx.globalAlpha = a * .10;
+    ctx.strokeRect(19, 19, W-38, H-38);
+
+    ctx.restore();
+  }
+
+  function drawTitle(a) {
+    if (a <= 0) return;
+    const dy = (1-a) * 18;
+    ctx.save(); ctx.globalAlpha = a; ctx.translate(0, dy);
+
+    // diamond ornament
+    ctx.font = '700 16px Raleway, sans-serif';
+    ctx.fillStyle = PURPLE; ctx.textAlign = 'center';
+    ctx.fillText('◆', W/2, 38);
+
+    // wordmark
+    ctx.font = '800 40px Raleway, sans-serif';
+    ctx.fillStyle = INDIGO;
+    ctx.fillText('WeaversCanvas', W/2, 64);
+
+    // tagline under title
+    ctx.font = '500 12px Raleway, sans-serif';
+    ctx.fillStyle = PURPLE; ctx.globalAlpha = a * .75;
+    ctx.fillText('Free Online Loom Draft Tool  •  v1.16.1', W/2, 82);
+
+    ctx.restore();
+  }
+
+  function drawSmallLabels(a) {
+    if (a <= 0) return;
+    ctx.save();
+    ctx.globalAlpha = a * .5;
+    ctx.font = '600 8px Raleway, sans-serif';
+    ctx.fillStyle = PURPLE; ctx.textAlign = 'center';
+    ctx.letterSpacing = '0.06em';
+
+    // above threading
+    ctx.fillText('THREADING', TX + THREADS*CELL/2, TY - 4);
+    // above tieup
+    ctx.fillText('TIE-UP', UX + TREADLES*CELL/2, UY - 4);
+
+    // rotated treadling label
+    ctx.save();
+    ctx.translate(RX + TREADLES*CELL + 12, RY + PICKS*CELL/2);
+    ctx.rotate(Math.PI/2);
+    ctx.fillText('TREADLING', 0, 0);
+    ctx.restore();
+
+    ctx.restore();
+  }
+
+  function drawThreading(count, a) {
+    ctx.save();
+    ctx.globalAlpha = a * .55; ctx.fillStyle = '#EEE8F6';
+    ctx.fillRect(TX, TY, THREADS*CELL, SHAFTS*CELL);
+    ctx.restore();
+
+    gridLines(TX, TY, THREADS, SHAFTS, a*.35);
+
+    ctx.save(); ctx.globalAlpha = a;
+    for (let t = 0; t < Math.min(count, THREADS); t++) {
+      const row = SHAFTS - 1 - threading[t];
+      ctx.fillStyle = INDIGO;
+      ctx.fillRect(TX + t*CELL + 1.5, TY + row*CELL + 1.5, CELL-3, CELL-3);
+    }
+    ctx.strokeStyle = GRID_C; ctx.lineWidth = 1;
+    ctx.strokeRect(TX, TY, THREADS*CELL, SHAFTS*CELL);
+    ctx.restore();
+  }
+
+  function drawTieup(prog, a) {
+    ctx.save();
+    ctx.globalAlpha = a * .55; ctx.fillStyle = '#EEE8F6';
+    ctx.fillRect(UX, UY, TREADLES*CELL, SHAFTS*CELL);
+    ctx.restore();
+
+    gridLines(UX, UY, TREADLES, SHAFTS, a*.35);
+
+    ctx.save(); ctx.globalAlpha = a;
+    const show = Math.floor(prog * SHAFTS * TREADLES);
+    for (let s = 0; s < SHAFTS; s++)
+      for (let t = 0; t < TREADLES; t++)
+        if (s*TREADLES+t < show && tieup[s][t]) {
+          const row = SHAFTS - 1 - s;
+          ctx.fillStyle = PURPLE;
+          ctx.fillRect(UX + t*CELL + 1.5, UY + row*CELL + 1.5, CELL-3, CELL-3);
+        }
+    ctx.strokeStyle = GRID_C; ctx.lineWidth = 1;
+    ctx.strokeRect(UX, UY, TREADLES*CELL, SHAFTS*CELL);
+    ctx.restore();
+  }
+
+  function drawTreadling(count, a) {
+    ctx.save();
+    ctx.globalAlpha = a * .55; ctx.fillStyle = '#EEE8F6';
+    ctx.fillRect(RX, RY, TREADLES*CELL, PICKS*CELL);
+    ctx.restore();
+
+    gridLines(RX, RY, TREADLES, PICKS, a*.35);
+
+    ctx.save(); ctx.globalAlpha = a;
+    for (let p = 0; p < Math.min(count, PICKS); p++) {
+      const t = treadling[p];
+      ctx.fillStyle = INDIGO;
+      ctx.fillRect(RX + t*CELL + 1.5, RY + p*CELL + 1.5, CELL-3, CELL-3);
+    }
+    ctx.strokeStyle = GRID_C; ctx.lineWidth = 1;
+    ctx.strokeRect(RX, RY, TREADLES*CELL, PICKS*CELL);
+    ctx.restore();
+  }
+
+  function drawDrawdown(rows, a) {
+    if (rows <= 0) return;
+    ctx.save();
+
+    // unfilled area bg
+    ctx.globalAlpha = a * .45; ctx.fillStyle = '#E4DFEE';
+    ctx.fillRect(DX, DY, THREADS*CELL, PICKS*CELL);
+
+    // filled rows
+    ctx.globalAlpha = a;
+    for (let p = 0; p < Math.min(rows, PICKS); p++)
+      for (let t = 0; t < THREADS; t++) {
+        ctx.fillStyle = drawdown[p][t] ? WARP_C[t] : WEFT_C;
+        ctx.fillRect(DX + t*CELL + .5, DY + p*CELL + .5, CELL-1, CELL-1);
+      }
+
+    // grid overlay
+    ctx.globalAlpha = a * .06; ctx.strokeStyle = '#000'; ctx.lineWidth = .5;
+    for (let c = 0; c <= THREADS; c++) {
+      ctx.beginPath(); ctx.moveTo(DX+c*CELL, DY); ctx.lineTo(DX+c*CELL, DY+PICKS*CELL); ctx.stroke();
+    }
+    for (let r = 0; r <= PICKS; r++) {
+      ctx.beginPath(); ctx.moveTo(DX, DY+r*CELL); ctx.lineTo(DX+THREADS*CELL, DY+r*CELL); ctx.stroke();
+    }
+
+    // border
+    ctx.globalAlpha = a; ctx.strokeStyle = GRID_C; ctx.lineWidth = 1;
+    ctx.strokeRect(DX, DY, THREADS*CELL, PICKS*CELL);
+    ctx.restore();
+  }
+
+  // Animated weft yarn line that sweeps across during drawdown rows
+  function drawWeftLine(pick, fracInRow, a) {
+    if (a <= 0 || pick >= PICKS) return;
+    ctx.save();
+    const y     = DY + pick*CELL + CELL/2;
+    const xEnd  = DX + fracInRow * THREADS*CELL;
+    ctx.globalAlpha = a * .6;
+    ctx.strokeStyle = '#C05727';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([3,2]);
+    ctx.beginPath(); ctx.moveTo(DX, y); ctx.lineTo(xEnd, y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  function drawCTA(prog, a) {
+    if (prog <= 0 || a <= 0) return;
+    ctx.save();
+
+    const baseY = DY + PICKS*CELL + 30;
+
+    // italic craft tagline
+    const tA = clamp(prog*2.5, 0, 1);
+    ctx.globalAlpha = a * tA;
+    ctx.font = 'italic 600 15px "IM Fell English", serif';
+    ctx.fillStyle = '#5A4A36'; ctx.textAlign = 'center';
+    ctx.fillText('Design your weave. Bring it to life.', W/2, baseY);
+
+    // URL button
+    const bA = clamp((prog-.3)*2, 0, 1);
+    if (bA > 0) {
+      ctx.globalAlpha = a * bA;
+      const bw=262, bh=44, bx=W/2-bw/2, by=baseY+14;
+      ctx.shadowColor = 'rgba(77,22,124,.38)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 5;
+      rrect(bx, by, bw, bh, 11); ctx.fillStyle = PURPLE; ctx.fill();
+      ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+      ctx.font = 'bold 19px Raleway, sans-serif'; ctx.fillStyle = '#FFF';
+      ctx.fillText('weaverscanvas.ca', W/2, by+29);
+      ctx.font = '600 14px Raleway, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.65)';
+      ctx.fillText('→', W/2 + 97, by+29);
+    }
+
+    // fine print
+    const fA = clamp((prog-.65)*3, 0, 1);
+    if (fA > 0) {
+      ctx.globalAlpha = a * fA * .55;
+      ctx.font = '500 11px Raleway, sans-serif'; ctx.fillStyle = '#7A6A55';
+      ctx.fillText('For weavers, by weavers  •  Free forever  •  No account needed', W/2, baseY + 72);
+    }
+
+    ctx.restore();
+  }
+
+  /* ─── Main loop ─────────────────────────────────────────────── */
+  const TOTAL = 13000; // 13 s
+  let t0 = null;
+
+  function frame(ts) {
+    if (!t0) t0 = ts;
+    const el = (ts - t0) % TOTAL;
+
+    // master fade envelope
+    const mA = Math.min(1, el/450) * (el > 11800 ? Math.max(0, 1-(el-11800)/1200) : 1);
+
+    ctx.clearRect(0, 0, W, H);
+    drawBG(mA);
+
+    // title fades in 0→850ms
+    drawTitle(eOut(norm(el, 0, 850)) * mA);
+
+    // section labels appear at 700ms
+    const labA = eOut(norm(el, 700, 1200)) * mA;
+    drawSmallLabels(labA);
+
+    // grid alpha (all grids share this)
+    const gridA = eOut(norm(el, 650, 1150)) * mA;
+
+    // Threading: 800ms → 3000ms  (16 threads over 2200ms)
+    const thProg  = norm(el, 800, 3000);
+    const thCount = Math.floor(thProg * THREADS);
+    drawThreading(thCount, gridA);
+
+    // Tie-up: 2300ms → 3200ms
+    drawTieup(norm(el, 2300, 3200), gridA);
+
+    // Treadling: 2700ms → 4700ms  (16 picks over 2000ms)
+    const trProg  = norm(el, 2700, 4700);
+    const trCount = Math.floor(trProg * PICKS);
+    drawTreadling(trCount, gridA);
+
+    // Drawdown: 4600ms → 9600ms  (16 rows over 5000ms → ~312ms/row)
+    const ddElapsed = norm(el, 4600, 9600) * 5000;
+    const msPerRow  = 5000 / PICKS;
+    const ddRows    = Math.floor(ddElapsed / msPerRow);
+    const fracInRow = (ddElapsed % msPerRow) / msPerRow;
+    drawDrawdown(ddRows, gridA);
+
+    // weft shuttle line on current row
+    if (ddRows < PICKS && ddRows >= 0 && ddElapsed > 0)
+      drawWeftLine(ddRows, fracInRow, gridA);
+
+    // CTA: 9400ms → end
+    drawCTA(norm(el, 9400, 13000), mA);
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
