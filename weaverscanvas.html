@@ -114,8 +114,8 @@
 
         .btn-tool   { background: linear-gradient(135deg, #4D167C, #001E87); color: white; border: none; padding: 7px 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
         .btn-tool:hover { background: linear-gradient(135deg, #5d1f96, #0028b0); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
-        .green-style { background: linear-gradient(135deg, #4CAF50, #2E7D32) !important; border: none !important; box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important; }
-        .green-style:hover { background: linear-gradient(135deg, #5cbf60, #3a8a40) !important; box-shadow: 0 4px 9px rgba(0,0,0,0.22) !important; }
+        .green-style { background: linear-gradient(135deg, #4CAF50, #2E7D32) !important; color: #ffffff !important; border: none !important; box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important; }
+        .green-style:hover { background: linear-gradient(135deg, #5cbf60, #3a8a40) !important; color: #ffffff !important; box-shadow: 0 4px 9px rgba(0,0,0,0.22) !important; }
 
         .btn-output { background: linear-gradient(135deg, #4D167C, #001E87); color: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
         .btn-output:hover { background: linear-gradient(135deg, #5d1f96, #0028b0); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
@@ -140,7 +140,7 @@
         .tooltip-enabled [title]:hover::after {
             content: attr(title);
             position: absolute;
-            bottom: 100%;
+            top: 100%;
             left: 50%;
             transform: translateX(-50%);
             background: #3A3A3A;
@@ -149,10 +149,11 @@
             border-radius: 6px;
             font-size: 12px;
             white-space: nowrap;
-            z-index: 10000;
-            margin-bottom: 8px;
+            z-index: 999999;
+            margin-top: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
             font-family: 'Raleway', sans-serif;
+            pointer-events: none;
         }
         
         .tooltip-disabled [title]:hover::after {
@@ -590,19 +591,20 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 0;
-            font-size: 14px;
-            background: #cc0033;
-            border: 1px solid #cc0033;
+            gap: 1px;
+            font-size: 16px;
+            background: #cc0033 !important;
+            border: 1px solid #cc0033 !important;
             border-radius: 6px;
             cursor: pointer;
-            color: white;
+            color: white !important;
             transition: all 0.15s;
             font-family: 'Raleway', sans-serif;
-            opacity: 0;
+            opacity: 1;
+            pointer-events: auto;
         }
-        #zoomResetBtn.visible { opacity: 1; }
-        #zoomResetBtn:hover { background: #e8003a; }
+        #zoomResetBtn.visible { opacity: 1; pointer-events: auto; }
+        #zoomResetBtn:hover { background: #e8003a !important; border-color: #e8003a !important; }
         #zoomResetBtn span { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
 
         /* Grid layout */
@@ -784,15 +786,13 @@
 </head>
 <body class="tooltip-enabled">
 
-
-
-    <div id="_loader_">Loading...</div>
+<div id="_loader_">Loading...</div>
 
 <div style="padding:6px 16px;display:flex;align-items:center;gap:12px;background:var(--logo-bar-bg,#ffffff);">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='50' viewBox='0 0 200 50'%3E%3Crect width='200' height='50' fill='none'/%3E%3Ctext x='100' y='32' font-family='Raleway,sans-serif' font-size='22' font-weight='800' fill='%23001E87' text-anchor='middle'%3EWC%3C/text%3E%3C/svg%3E" alt="Weaver's Canvas" style="height:50px;width:auto;display:inline-block;" onerror="this.style.display='none'">
+    <img src="weaverscanvas-logo.png" alt="Weaver's Canvas" style="height:60px;width:auto;display:inline-block;" onerror="this.style.display='none'">
     <div style="display:flex;flex-direction:column;gap:2px;">
-        <div style="font-size:1.1em;font-weight:800;color:#001E87;letter-spacing:0.02em;line-height:1;">WeaversCanvas</div>
-        <div style="font-size:0.72em;font-weight:500;opacity:0.7;letter-spacing:0.06em;color:#001E87;line-height:1;" id="appVersion">v1.16.1 [Build 793]</div>
+        <div style="font-size:1.2em;font-weight:800;color:#001E87;letter-spacing:0.02em;line-height:1.2;">WeaversCanvas</div>
+        <div style="font-size:0.72em;font-weight:500;opacity:0.7;letter-spacing:0.06em;color:#001E87;line-height:1;" id="appVersion">v1.16.2 <span style="color:#ff4444;font-weight:800;">BETA</span> [Build 794]</div>
     </div>
 </div>
 
@@ -812,7 +812,7 @@
             <button class="btn btn-tool green-style" onclick="openYarnLibrary()" title="Browse the Master Yarn Chart 2014 — pick a yarn and apply it to your design" style="padding:6px 10px;">Yarn Library</button>
         </span>
         <span style="width:16px;display:inline-block;"></span>
-        <button class="btn btn-input cream-style" onclick="openClearResetChoice()" title="Clear the grid or reset to defaults">Clear / Reset</button>
+        <button class="btn btn-danger" id="clearResetBtn" onclick="openClearResetChoice()" title="Clear the grid or reset to defaults" style="background:#990033;color:#ffffff;border:2px solid #770022;">Clear / Reset</button>
         <button class="btn btn-view" onclick="toggleUnderside()" id="undersideBtn" title="Show the underside/back view of the weave">Show Back</button>
         <button class="btn btn-view" onclick="toggleClothView()" id="clothViewBtn" title="View the pattern as it would look in real cloth">Cloth View</button>
 <button class="btn btn-view" onclick="toggleRulers()" id="rulersBtn" title="Show or hide the ruler measurements">Hide Rulers</button>
@@ -857,7 +857,7 @@
 
         <!-- Tools Dropdown (yellow) -->
         <div class="dropdown" style="display:inline-block;position:relative;">
-            <button class="btn btn-tool" onclick="toggleToolsDropdown()" title="Open additional tools menu" style="background:#FFC107;color:#3A3A3A;border:1.5px solid #E5A800;padding:9px 20px;font-size:13px;font-weight:800;letter-spacing:0.06em;border-radius:7px;box-shadow:0 2px 6px rgba(255,193,7,0.4);text-shadow:0 1px 0 rgba(255,255,255,0.4);" onmouseover="this.style.background='#FFB300';this.style.boxShadow='0 4px 10px rgba(255,193,7,0.55)'" onmouseout="this.style.background='#FFC107';this.style.boxShadow='0 2px 6px rgba(255,193,7,0.4)'">Tools <span style="font-size:0.7em;">▼</span></button>
+            <button class="btn btn-tool" id="toolsBtn" onclick="toggleToolsDropdown()" title="Open additional tools menu" style="background:#FFC107;color:#3A3A3A;border:2px solid #E5A800;padding:10px 22px;font-size:14px;font-weight:800;letter-spacing:0.06em;border-radius:7px;box-shadow:0 3px 10px rgba(255,193,7,0.5);text-shadow:0 1px 0 rgba(255,255,255,0.4);" onmouseover="this.style.background='#FFB300';this.style.boxShadow='0 5px 14px rgba(255,193,7,0.65)'" onmouseout="this.style.background='#FFC107';this.style.boxShadow='0 3px 10px rgba(255,193,7,0.5)'">🛠 Tools <span style="font-size:0.75em;">▼</span></button>
             <div id="toolsDropdown" class="dropdown-content" style="display:none;position:absolute;right:0;top:100%;background:#fff;min-width:160px;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:1000;">
                 <div style="padding:8px 12px;font-size:10px;font-weight:700;color:#6b6b8a;letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid #eee;">Analysis</div>
 <button class="dropdown-item" onclick="openLibraryModal()" title="Browse pattern library">Library</button>
@@ -1886,7 +1886,7 @@
         <div class="tool-btn" id="tool-free" onclick="selectTool('free')" title="Freehand tool - Draw freehand patterns">✏<span>free</span></div>
         <div class="tool-btn" id="tool-select" onclick="selectTool('select')" title="Select tool - Select and move areas">□<span>select</span></div>
         <div class="tool-btn" id="tool-fill" onclick="selectTool('fill')" title="Fill tool - Flood fill an area with color">▣<span>fill</span></div>
-        <button id="zoomResetBtn" onclick="window._resetViewport && window._resetViewport()"><span>Reset View</span></button>
+        <button id="zoomResetBtn" onclick="window._resetViewport && window._resetViewport()" title="Reset zoom to 100%">↺<span>reset</span></button>
     </div>
 
     <!-- Grid layout -->
@@ -3038,12 +3038,12 @@
     }
     // ─────────────────────────────────────────────────────────────────────────
     // Build number — auto-increments on each load
-    let _buildNum = 793;
+    let _buildNum = 794;
     function incrementVersion() {
         _buildNum++;
     }
     function renderVersion() {
-        const BUILD = 'v1.16.1 [Build ' + _buildNum + ']';
+        const BUILD = 'v1.16.2 <span style="color:#ff4444;font-weight:800;">BETA</span> [Build ' + _buildNum + ']';
         const el = document.getElementById('appVersion');
         if (el) el.innerHTML = BUILD;
     }
@@ -3054,13 +3054,13 @@
     let shafts = 8;
     let treadles = 10;
     let cellSize = 15;
-    let currentColor = '#001E87';
+    let currentColor = '#cc0033';
     let showGrid = true;
     let showUnderside = false;
     let dragFillMode = null;
 
     let threading = {}, treadling = {}, tieup = {}, mainPattern = {}, warpColors = {}, weftColors = {};
-    let colorPalette = ['#001E87','#4D167C','#990033'];
+    let colorPalette = ['#cc0033','#ffffff','#001E87'];
     let _vpTranslateX = 0, _vpTranslateY = 0, _vpZoom = 1;
     const ZOOM_MIN = 0.2, ZOOM_MAX = 5, ZOOM_STEP = 0.1;
 
@@ -3158,13 +3158,13 @@
         gl.style.willChange = 'transform';
         gl.style.transformOrigin = '0 0';
 
-        // Update zoom button visibility
+        // Reset button stays visible so zoom can always be reset to 100%
         function updateZoomBtn() {
             const btn = document.getElementById('zoomResetBtn');
             if (!btn) return;
-            const away = Math.abs(zoomScale - 1) > 0.01;
-            btn.classList.toggle('visible', away);
-            btn.style.pointerEvents = away ? 'auto' : 'none';
+            btn.classList.add('visible');
+            btn.style.pointerEvents = 'auto';
+            btn.style.opacity = '1';
         }
 
         let rafPending = false;
@@ -3695,8 +3695,8 @@ function toggleRulers() {
                 s.dataset.color = colorVal.toLowerCase();
 
                 const tooltip = document.createElement('div');
-                tooltip.style.cssText = 'position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:#1a1a2e;color:white;font-family:\'Raleway\',sans-serif;font-size:9px;font-weight:700;white-space:nowrap;padding:3px 7px;border-radius:4px;pointer-events:none;opacity:0;transition:opacity 0.12s;z-index:9999;';
-                tooltip.innerHTML = nameColor(colorVal) + '<br><span style="font-weight:600;opacity:0.75;">' + colorVal.toUpperCase() + '</span><br><span style="font-weight:500;opacity:0.55;font-size:8px;">double-click for full spectrum</span><br><span style="font-weight:500;opacity:0.55;font-size:8px;">right-click to remove</span>';
+                tooltip.style.cssText = 'position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:#1a1a2e;color:white;font-family:\'Raleway\',sans-serif;font-size:13px;font-weight:700;white-space:nowrap;padding:7px 12px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity 0.12s;z-index:9999;line-height:1.5;text-align:center;';
+                tooltip.innerHTML = nameColor(colorVal) + '<br><span style="font-weight:600;opacity:0.75;">' + colorVal.toUpperCase() + '</span><br><span style="font-weight:500;opacity:0.65;font-size:11px;">double-click for full spectrum</span><br><span style="font-weight:500;opacity:0.65;font-size:11px;">right-click to remove</span>';
                 wrapper.appendChild(tooltip);
                 s.addEventListener('mouseenter', () => { tooltip.style.opacity='1'; });
                 s.addEventListener('mouseleave', () => { tooltip.style.opacity='0'; });
@@ -4723,7 +4723,7 @@ function toggleRulers() {
             document.getElementById('weftThreads').value = 48;
             document.getElementById('shafts').value = 8;
             document.getElementById('treadles').value = 10;
-            colorPalette = ['#001E87','#4D167C','#990033'];
+            colorPalette = ['#cc0033','#ffffff','#001E87'];
             currentColor = colorPalette[0];
             initializeData();
             createColorPalette();
@@ -4733,7 +4733,7 @@ function toggleRulers() {
             syncResizeBtnHighlight();
             if (window._resetViewport) window._resetViewport();
         } else {
-            colorPalette = ['#001E87','#4D167C','#990033'];
+            colorPalette = ['#cc0033','#ffffff','#001E87'];
             currentColor = colorPalette[0];
             createColorPalette();
             initializeData();
@@ -9150,7 +9150,7 @@ function ylApplyYarnCalc(idx) {
 <footer style="margin-top:0;padding:28px 32px 24px;background:var(--footer-bg,#2A2A2A);color:#c0c0c0;font-family:'Raleway',sans-serif;font-size:0.82em;line-height:1.7;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:32px;flex-wrap:wrap;">
     <div style="flex:1;min-width:280px;text-align:center;">
-      <div style="color:#9ba0ad;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:14px;">A Precision Studio</div>
+      <div style="color:#9ba0ad;font-size:0.78em;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:14px;">A Precision Studio · Beta Testing Version</div>
       <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px;margin-bottom:14px;">
         <a href="mailto:info@weaverscanvas.ca" style="color:#C9A227;text-decoration:none;font-weight:600;">✉ info@weaverscanvas.ca</a>
         <span style="color:#6b6b8a;">·</span>
@@ -9158,14 +9158,14 @@ function ylApplyYarnCalc(idx) {
       </div>
       <div style="font-size:0.75em;color:#8b8fa0;max-width:680px;margin:0 auto;line-height:1.6;">
         © 2026 WeaversCanvas. All rights reserved. This software is provided
-        <em>"as is"</em> and may contain
+        <em>"as is"</em> for beta testing and evaluation purposes only and may contain
         errors or inaccuracies. Not for redistribution, resale, or commercial use
         without written permission. Patterns, drafts, and exports created with
         this tool are the property of the user.
       </div>
     </div>
     <div style="text-align:right;flex-shrink:0;">
-      <div style="font-size:0.72em;color:#6b6b8a;letter-spacing:0.04em;">v1.16.1 · build 793</div>
+      <div style="font-size:0.72em;color:#6b6b8a;letter-spacing:0.04em;">v1.16.2 · build 794</div>
     </div>
   </div>
 </footer>
@@ -9206,24 +9206,41 @@ function ylApplyYarnCalc(idx) {
 
   .green-style,
   button[style*="background:#2E7D32"],
-  button[style*="background:#4CAF50"] {
-    color: #5f8069 !important;
+  button[style*="background:#4CAF50"],
+  button[id="tooltipBtn"] {
+    color: #ffffff !important;
+    background: #4CAF50 !important;
     border-color: #b7cdbd !important;
+  }
+
+  button[id="toolsBtn"] {
+    color: #3A3A3A !important;
+    background: #FFC107 !important;
+    border-color: #E5A800 !important;
   }
 
   .btn-danger,
   .cut-btn,
   .del-btn,
+  button[id="clearResetBtn"],
   button[style*="background:#990033"],
   button[style*="background:#cc0033"] {
-    color: #b00035 !important;
-    border-color: color-mix(in srgb, #b00035 58%, transparent) !important;
+    color: #ffffff !important;
+    background: #990033 !important;
+    border-color: #770022 !important;
   }
 
   button:hover:not(:disabled) {
-    background: color-mix(in srgb, currentColor 9%, transparent) !important;
+    background: color-mix(in srgb, currentColor 18%, transparent) !important;
     box-shadow: none !important;
   }
+
+  /* Preserve coloured button backgrounds on hover */
+  button[id="tooltipBtn"]:hover:not(:disabled) { background: #43a047 !important; }
+  button[id="toolsBtn"]:hover:not(:disabled)   { background: #FFB300 !important; }
+  .green-style:hover:not(:disabled)            { background: #43a047 !important; }
+  .btn-danger:hover:not(:disabled),
+  button[id="clearResetBtn"]:hover:not(:disabled) { background: #b00035 !important; }
 
   button:active:not(:disabled) {
     transform: translateY(1px) !important;
