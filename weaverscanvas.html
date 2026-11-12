@@ -3262,7 +3262,10 @@
         colorPalette = [...s.colorPalette];
         currentColor = colorPalette[0] || currentColor;
         createColorPalette();
-        createGrids();
+        // The snapshot never changes the grid dimensions, so the existing DOM
+        // can be repainted rather than rebuilt.
+        if (mainGridCells && mainGridCells.length) refreshGridsInPlace();
+        else createGrids();
         calculateDrawdown();
         updatePatternInfo();
     }
@@ -4302,6 +4305,59 @@ function toggleRulers() {
         createMainGrid(); createTreadlingDraft();
     }
 
+    /**
+     * Refresh the existing grid DOM in place from the current state.
+     *
+     * Rebuilding every cell (createGrids) costs several milliseconds and
+     * churns thousands of DOM nodes and event-handler closures. That is fine
+     * when the grid dimensions change, but undo/redo never changes them - the
+     * undo snapshot holds threading, treadling, tie-up and colours, not the
+     * dimensions - so undo can simply repaint what is already there.
+     *
+     * @returns {void}
+     */
+    function refreshGridsInPlace() {
+        // Colour bars
+        for (let i = 0; i < warpThreads; i++) {
+            const cell = warpColorCells[i];
+            if (cell) cell.style.backgroundColor = warpColors[i] || 'white';
+        }
+        for (let i = 0; i < weftThreads; i++) {
+            const cell = weftColorCells[i];
+            if (cell) cell.style.backgroundColor = weftColors[i] || 'white';
+        }
+        // Threading: highlight the shaft each warp end passes through
+        for (let warp = 0; warp < warpThreads; warp++) {
+            const shaft = threading[warp];
+            const row = threadingCells[warp];
+            if (!row) continue;
+            for (let s = 1; s <= shafts; s++) {
+                const cell = row[s];
+                if (cell) cell.classList.toggle('active', shaft === s);
+            }
+        }
+        // Tie-up
+        for (let shaft = 1; shaft <= shafts; shaft++) {
+            const row = tieupCells[shaft];
+            if (!row) continue;
+            for (let treadle = 1; treadle <= treadles; treadle++) {
+                const cell = row[treadle];
+                if (cell) cell.classList.toggle('active', !!tieup[`${shaft}-${treadle}`]);
+            }
+        }
+        // Treadling
+        for (let pick = 0; pick < weftThreads; pick++) {
+            const treadle = treadling[pick];
+            const row = treadlingCells[pick];
+            if (!row) continue;
+            for (let t = 1; t <= treadles; t++) {
+                const cell = row[t];
+                if (cell) cell.classList.toggle('active', treadle === t);
+            }
+        }
+        // Drawdown cells are repainted by calculateDrawdown().
+    }
+
 // ════════════════════════════════════════════════════════════════════════════
 // GRID RENDERING — draft canvases
 // ════════════════════════════════════════════════════════════════════════════
@@ -4317,7 +4373,6 @@ function toggleRulers() {
             cell.dataset.warpIndex = i;
             cell.setAttribute('role', 'gridcell');
             cell.setAttribute('aria-colindex', String(i + 1));
-            cell.setAttribute('aria-label', `Warp end ${i + 1}: ${warpColors[i] || 'no colour'}`);
             cell.onmousedown = e => { e.preventDefault(); isDragging = true; dragMode = 'warp-color'; pushUndo(); setWarpColor(i, cell); _lastDraggingCell = cell; cell.classList.add('dragging'); };
             cell.onmouseenter = () => { if (isDragging && dragMode === 'warp-color') { setWarpColor(i, cell); clearAllDragHighlights(); _lastDraggingCell = cell; cell.classList.add('dragging'); } };
             cell.oncontextmenu = e => { e.preventDefault(); pickColorFromCell(warpColors[i]); highlightColorBarCell('warp', i); };
@@ -4338,7 +4393,6 @@ function toggleRulers() {
             cell.dataset.weftIndex = i;
             cell.setAttribute('role', 'gridcell');
             cell.setAttribute('aria-rowindex', String(i + 1));
-            cell.setAttribute('aria-label', `Weft pick ${i + 1}: ${weftColors[i] || 'no colour'}`);
             cell.onmousedown = e => { e.preventDefault(); isDragging = true; dragMode = 'weft-color'; pushUndo(); setWeftColor(i, cell); _lastDraggingCell = cell; cell.classList.add('dragging'); };
             cell.onmouseenter = () => { if (isDragging && dragMode === 'weft-color') { setWeftColor(i, cell); clearAllDragHighlights(); _lastDraggingCell = cell; cell.classList.add('dragging'); } };
             cell.oncontextmenu = e => { e.preventDefault(); pickColorFromCell(weftColors[i]); highlightColorBarCell('weft', i); };
@@ -4534,7 +4588,8 @@ function toggleRulers() {
                 cell.setAttribute('role', 'gridcell');
                 cell.setAttribute('aria-rowindex', String(pick + 1));
                 cell.setAttribute('aria-colindex', String(end + 1));
-                cell.setAttribute('aria-selected', 'false');
+                // aria-selected is set by the paint pass, not here, to avoid
+                // writing it twice for every cell.
                 // Roving tabindex: only one cell is a tab stop, the rest are
                 // reached with the arrow keys. Avoids thousands of tab stops.
                 cell.tabIndex = (pick === 0 && end === 0) ? 0 : -1;
@@ -4697,12 +4752,12 @@ function toggleRulers() {
         const paintState = (isUp ? '1' : '0') + '|' + (isUp ? (wc || '') : (wfc || ''));
         if (cell._paintState === paintState) return;
         cell._paintState = paintState;
-        // Keep the accessible state in step with the visual state.
+        // Keep the accessible state in step with the visual state. Only
+        // aria-selected is written here: the cell's row/column indices come
+        // from the ARIA grid attributes set at creation, so a per-cell label
+        // string would be redundant - and building one for every cell on every
+        // repaint is expensive enough to notice on large grids.
         cell.setAttribute('aria-selected', isUp ? 'true' : 'false');
-        cell.setAttribute(
-            'aria-label',
-            `Pick ${pick + 1}, end ${end + 1}: ${isUp ? 'warp up' : 'weft up'}`
-        );
         const cs = cell.classList;
         if (isUp) {
             if (wc && wc !== 'white') { 
