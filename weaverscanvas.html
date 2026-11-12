@@ -10,24 +10,63 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&family=Syne:wght@800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f0f2f8;
-            --logo-bar-bg: #ffffff;
-            --surface: #ffffff;
-            --border: #b8c0d8;
-            --border-dark: #001E87;
-            --text: #3A3A3A;
-            --text-muted: #6b6b8a;
+            /* ── Brand ─────────────────────────────────────────────────── */
+            --brand-blue: #001E87;
+            --brand-purple: #4D167C;
+            --brand-purple-hover: #5d1f96;
+            --brand-blue-hover: #0028b0;
+            --brand-purple-deep: #3a0f5e;
+
+            /* Backwards-compatible aliases used across the existing styles */
             --accent: #4D167C;
             --accent-hover: #3a0f5e;
-            --cell-size: 15px;
+
+            /* ── Surfaces ─────────────────────────────────────────────── */
+            --bg: #f0f2f8;
+            --surface: #ffffff;
+            --surface-2: #e0e4f0;
+            --surface-warm: #f5f0e8;
+            --antique-white: #EDE8DE;
+
+            /* ── Text ─────────────────────────────────────────────────── */
+            --text: #3A3A3A;
+            --text-muted: #6b6b8a;
+            --text-faint: #9ba3c0;
+            --ink: #1a1a1a;
+
+            /* ── Lines & borders ──────────────────────────────────────── */
+            --border: #b8c0d8;
+            --border-dark: #001E87;
+            --line-warm: #c8bfb0;
             --shaft-bg: #dde2f2;
-            --active-cell: #001E87;
+
+            /* ── Interactive ───────────────────────────────────────────── */
             --btn-bg: #e8ecf8;
             --btn-hover: #d0d8f0;
+            --active-cell: #001E87;
+
+            /* ── Regions ──────────────────────────────────────────────── */
             --header-bg: #f8f9ff;
             --controlsbar-bg: #f0f2f8;
             --workspace-bg: #ffffff;
             --footer-bg: #2A2A2A;
+            --logo-bar-bg: #ffffff;
+
+            /* ── Status ───────────────────────────────────────────────── */
+            --danger: #cc0033;
+            --danger-dark: #880022;
+            --danger-hover: #e8003a;
+            --success: #2E7D32;
+            --success-hover: #3a8a40;
+            --success-text: #1A7A3A;
+            --green: #4CAF50;
+            --warning: #c48500;
+
+            /* ── Metrics ──────────────────────────────────────────────── */
+            --cell-size: 15px;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
         }
 
         * {
@@ -58,9 +97,9 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: var(--header-bg, #f8f9ff);
-            color: #001E87;
-            border-bottom: 2px solid #4D167C;
+            background: var(--header-bg, var(--header-bg));
+            color: var(--brand-blue);
+            border-bottom: 2px solid var(--brand-purple);
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -73,7 +112,7 @@
             font-family: 'Raleway', sans-serif;
             font-size: 1.4rem;
             letter-spacing: 0.02em;
-            color: #001E87;
+            color: var(--brand-blue);
             white-space: nowrap;
         }
 
@@ -89,8 +128,8 @@
             font-size: 11px;
             padding: 8px 18px;
             border: none;
-            background: linear-gradient(135deg, #4D167C, #001E87);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--brand-purple), var(--brand-blue));
+            color: var(--surface);
             cursor: pointer;
             letter-spacing: 0.05em;
             font-weight: 700;
@@ -99,38 +138,38 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
-        .btn:hover { background: linear-gradient(135deg, #5d1f96, #0028b0); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
+        .btn:hover { background: linear-gradient(135deg, var(--brand-purple-hover), var(--brand-blue-hover)); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
         .btn:active { transform: scale(0.94); }
 
-        .btn-accent { background: #4D167C; color: #ffffff; border-color: rgba(255,255,255,0.5); }
-        .btn-accent:hover { background: #3a0f5e; border-color: #ffffff; }
+        .btn-accent { background: var(--brand-purple); color: var(--surface); border-color: rgba(255,255,255,0.5); }
+        .btn-accent:hover { background: var(--brand-purple-deep); border-color: var(--surface); }
 
         /* Colour-coded button groups — gradient style */
-        .btn-view   { background: linear-gradient(135deg, #4D167C, #001E87); color: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
-        .btn-view:hover { background: linear-gradient(135deg, #5d1f96, #0028b0); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
+        .btn-view   { background: linear-gradient(135deg, var(--brand-purple), var(--brand-blue)); color: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+        .btn-view:hover { background: linear-gradient(135deg, var(--brand-purple-hover), var(--brand-blue-hover)); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
 
-        .btn-generate { background: linear-gradient(135deg, #4D167C, #001E87); color: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
-        .btn-generate:hover { background: linear-gradient(135deg, #5d1f96, #0028b0); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
+        .btn-generate { background: linear-gradient(135deg, var(--brand-purple), var(--brand-blue)); color: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+        .btn-generate:hover { background: linear-gradient(135deg, var(--brand-purple-hover), var(--brand-blue-hover)); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
 
-        .btn-tool   { background: linear-gradient(135deg, #4D167C, #001E87); color: white; border: none; padding: 7px 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
-        .btn-tool:hover { background: linear-gradient(135deg, #5d1f96, #0028b0); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
-        .green-style { background: linear-gradient(135deg, #4CAF50, #2E7D32) !important; color: #ffffff !important; border: none !important; box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important; }
-        .green-style:hover { background: linear-gradient(135deg, #5cbf60, #3a8a40) !important; color: #ffffff !important; box-shadow: 0 4px 9px rgba(0,0,0,0.22) !important; }
+        .btn-tool   { background: linear-gradient(135deg, var(--brand-purple), var(--brand-blue)); color: white; border: none; padding: 7px 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+        .btn-tool:hover { background: linear-gradient(135deg, var(--brand-purple-hover), var(--brand-blue-hover)); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
+        .green-style { background: linear-gradient(135deg, var(--green), var(--success)) !important; color: var(--surface) !important; border: none !important; box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important; }
+        .green-style:hover { background: linear-gradient(135deg, #5cbf60, var(--success-hover)) !important; color: var(--surface) !important; box-shadow: 0 4px 9px rgba(0,0,0,0.22) !important; }
 
-        .btn-output { background: linear-gradient(135deg, #4D167C, #001E87); color: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
-        .btn-output:hover { background: linear-gradient(135deg, #5d1f96, #0028b0); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
+        .btn-output { background: linear-gradient(135deg, var(--brand-purple), var(--brand-blue)); color: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+        .btn-output:hover { background: linear-gradient(135deg, var(--brand-purple-hover), var(--brand-blue-hover)); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
 
-        .btn-input  { background: linear-gradient(135deg, #001E87, #4D167C); color: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
-        .btn-input:hover { background: linear-gradient(135deg, #0028b0, #5d1f96); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
+        .btn-input  { background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple)); color: white; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+        .btn-input:hover { background: linear-gradient(135deg, var(--brand-blue-hover), var(--brand-purple-hover)); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
         .btn.cream-style { background: linear-gradient(135deg, #9a9a9a, #6a6a6a) !important; color: #fff !important; border: none !important; }
         .btn.cream-style:hover { background: linear-gradient(135deg, #aaaaaa, #7a7a7a) !important; }
 
-        .btn-danger { background: linear-gradient(135deg, #cc0033, #880022); color: #ffffff; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
-        .btn-danger:hover { background: linear-gradient(135deg, #e8003a, #a0002a); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
+        .btn-danger { background: linear-gradient(135deg, var(--danger), var(--danger-dark)); color: var(--surface); border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+        .btn-danger:hover { background: linear-gradient(135deg, var(--danger-hover), #a0002a); box-shadow: 0 4px 9px rgba(0,0,0,0.22); }
         .btn-danger:active { transform: scale(0.94); background: #ff6688 !important; color: white !important; box-shadow: 0 0 12px 3px rgba(255,100,120,0.8) !important; }
         
-        .dropdown-item { display:block;width:100%;padding:10px 14px;background:none;border:none;text-align:left;font-family:'Raleway',sans-serif;font-size:0.85em;color:#3A3A3A;cursor:pointer;white-space:nowrap;}
-        .dropdown-item:hover { background: #f0f2f8; }
+        .dropdown-item { display:block;width:100%;padding:10px 14px;background:none;border:none;text-align:left;font-family:'Raleway',sans-serif;font-size:0.85em;color:var(--text);cursor:pointer;white-space:nowrap;}
+        .dropdown-item:hover { background: var(--bg); }
         
         /* Tooltips */
         .tooltip-enabled [title] {
@@ -143,7 +182,7 @@
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: #3A3A3A;
+            background: var(--text);
             color: white;
             padding: 6px 12px;
             border-radius: 6px;
@@ -162,13 +201,13 @@
         
         #featuresModal { display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;overflow-y:auto;padding:16px; }
         #featuresModal .modal-content { background:white;border-radius:12px;width:100%;max-width:700px;max-height:90vh;overflow-y:auto;font-family:'Raleway',sans-serif; }
-        #featuresModal .modal-header { background:linear-gradient(135deg,#4D167C,#001E87);padding:16px 20px;display:flex;align-items:center;justify-content:space-between; }
+        #featuresModal .modal-header { background:linear-gradient(135deg,var(--brand-purple),var(--brand-blue));padding:16px 20px;display:flex;align-items:center;justify-content:space-between; }
         #featuresModal .modal-title { color:white;font-weight:800;font-size:1.1em; }
         #featuresModal .modal-close { background:none;border:none;color:rgba(255,255,255,0.75);font-size:20px;cursor:pointer; }
         #featuresModal .features-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:20px; }
-        #featuresModal .feature-item { background:#f0f2f8;border-radius:8px;padding:14px; }
-        #featuresModal .feature-title { font-weight:700;color:#001E87;margin-bottom:6px; }
-        #featuresModal .feature-desc { font-size:0.85em;color:#6b6b8a; }
+        #featuresModal .feature-item { background:var(--bg);border-radius:8px;padding:14px; }
+        #featuresModal .feature-title { font-weight:700;color:var(--brand-blue);margin-bottom:6px; }
+        #featuresModal .feature-desc { font-size:0.85em;color:var(--text-muted); }
 
         .rand-slider-group {
             display: flex;
@@ -211,30 +250,30 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #ffffff;
+            background: var(--surface);
             cursor: pointer;
-            border: 2px solid #4D167C;
+            border: 2px solid var(--brand-purple);
         }
         .rand-slider-item input[type="range"]::-moz-range-thumb {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #ffffff;
+            background: var(--surface);
             cursor: pointer;
-            border: 2px solid #4D167C;
+            border: 2px solid var(--brand-purple);
         }
         .rand-slider-item input[type="number"] {
             text-align: center;
             font-weight: 700;
-            color: #001E87;
+            color: var(--brand-blue);
         }
 
         .controls-bar {
             position: sticky;
             top: 50px;
             z-index: 999;
-            background: var(--controlsbar-bg, #f0f2f8);
-            border-bottom: 2px solid #001E87;
+            background: var(--controlsbar-bg, var(--bg));
+            border-bottom: 2px solid var(--brand-blue);
             padding: 10px 16px;
             display: flex;
             justify-content: center;
@@ -257,7 +296,7 @@
         .control-group label {
             font-size: 10px;
             letter-spacing: 0.08em;
-            color: #6b6b8a;
+            color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 700;
         }
@@ -270,7 +309,7 @@
             padding: 4px 4px;
             border: none;
             background: white;
-            color: #001E87;
+            color: var(--brand-blue);
             text-align: center;
             -moz-appearance: textfield;
         }
@@ -282,19 +321,19 @@
         .stepper {
             display: flex;
             align-items: center;
-            border: 1.5px solid #b8c0d8;
+            border: 1.5px solid var(--border);
             border-radius: 5px;
             overflow: hidden;
             background: white;
         }
         .stepper input[type="number"] {
-            border-left: 1px solid #dde2f2 !important;
-            border-right: 1px solid #dde2f2 !important;
+            border-left: 1px solid var(--shaft-bg) !important;
+            border-right: 1px solid var(--shaft-bg) !important;
         }
         .step-btn {
-            background: #e8ecf8;
+            background: var(--btn-bg);
             border: none;
-            color: #001E87;
+            color: var(--brand-blue);
             font-size: 15px; font-weight: 700;
             width: 22px; height: 28px;
             cursor: pointer;
@@ -303,11 +342,11 @@
             transition: background 0.1s;
             flex-shrink: 0;
         }
-        .step-btn:hover { background: #001E87; color: white; }
+        .step-btn:hover { background: var(--brand-blue); color: white; }
 
         .control-group input[type="range"] {
             width: 90px;
-            accent-color: #4D167C;
+            accent-color: var(--brand-purple);
         }
 
         .size-btns { display: flex; gap: 4px; }
@@ -316,16 +355,16 @@
             font-family: 'Raleway', sans-serif;
             font-size: 10px;
             padding: 4px 8px;
-            border: 1px solid #b8c0d8;
-            background: #e8ecf8;
-            color: #001E87;
+            border: 1px solid var(--border);
+            background: var(--btn-bg);
+            color: var(--brand-blue);
             cursor: pointer;
             letter-spacing: 0.03em;
             font-weight: 600;
             border-radius: 5px;
         }
-        .resize-btn:hover { background: #d0d8f0; border-color: #001E87; }
-        .resize-btn.active { background: #001E87; color: #ffffff; border-color: #001E87; }
+        .resize-btn:hover { background: var(--btn-hover); border-color: var(--brand-blue); }
+        .resize-btn.active { background: var(--brand-blue); color: var(--surface); border-color: var(--brand-blue); }
 
         .color-picker-wrap {
             display: flex;
@@ -349,17 +388,17 @@
         input[type="color"] {
             width: 64px;
             height: 32px;
-            border: 1.5px solid #001E87;
+            border: 1.5px solid var(--brand-blue);
             padding: 2px 3px;
-            background: #ffffff;
+            background: var(--surface);
             cursor: pointer;
             border-radius: 0;
             box-shadow: none;
             display: block;
             transition: border-color 0.12s;
         }
-        input[type="color"]:hover { border-color: #4D167C; }
-        input[type="color"]:focus { outline: none; border-color: #4D167C; }
+        input[type="color"]:hover { border-color: var(--brand-purple); }
+        input[type="color"]:focus { outline: none; border-color: var(--brand-purple); }
 
         .color-swatches-block {
             display: flex;
@@ -395,7 +434,7 @@
         }
         .color-swatch.active {
             outline: none;
-            box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #4D167C;
+            box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--brand-purple);
         }
         .color-swatch .edit-hint {
             display: none;
@@ -403,7 +442,7 @@
             bottom: calc(100% + 5px);
             left: 50%;
             transform: translateX(-50%);
-            background: #3A3A3A;
+            background: var(--text);
             color: #fff;
             font-size: 8px;
             white-space: nowrap;
@@ -419,7 +458,7 @@
             left: 50%;
             transform: translateX(-50%);
             border: 3px solid transparent;
-            border-top-color: #3A3A3A;
+            border-top-color: var(--text);
         }
         .swatch-picker {
             display: none;
@@ -440,7 +479,7 @@
             font-family: 'Raleway', sans-serif;
             font-size: 9px;
             font-weight: 700;
-            color: #001E87;
+            color: var(--brand-blue);
             letter-spacing: 0.12em;
             text-transform: uppercase;
             text-align: center;
@@ -456,7 +495,7 @@
             font-family: 'Raleway', sans-serif;
             font-size: 9px;
             font-weight: 700;
-            color: #001E87;
+            color: var(--brand-blue);
             letter-spacing: 0.12em;
             text-transform: uppercase;
             writing-mode: vertical-rl;
@@ -500,7 +539,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: 1px;
-            background: #001E87;
+            background: var(--brand-blue);
             height: 4px;
         }
         .ruler-cell.tick5::after { height: 7px; }
@@ -512,7 +551,7 @@
             top: 50%;
             transform: translateY(-50%);
             height: 1px;
-            background: #001E87;
+            background: var(--brand-blue);
             width: 4px;
         }
         .ruler-cell-v.tick5::after { width: 7px; }
@@ -521,7 +560,7 @@
             font-family: 'Raleway', sans-serif;
             font-size: 7px;
             font-weight: 600;
-            color: #001E87;
+            color: var(--brand-blue);
             line-height: 1;
             position: absolute;
             bottom: 11px;
@@ -533,7 +572,7 @@
             font-family: 'Raleway', sans-serif;
             font-size: 7px;
             font-weight: 600;
-            color: #001E87;
+            color: var(--brand-blue);
             line-height: 1;
             position: absolute;
             left: 11px;
@@ -543,7 +582,7 @@
         }
 
         .workspace {
-            background: var(--workspace-bg, #ffffff);
+            background: var(--workspace-bg, var(--surface));
             padding: 20px 24px;
             display: flex;
             gap: 16px;
@@ -579,7 +618,7 @@
             gap: 1px;
         }
         .tool-btn span { font-size: 8px; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase; }
-        .tool-btn.active { background: #001E87; color: #ffffff; border-color: #001E87; }
+        .tool-btn.active { background: var(--brand-blue); color: var(--surface); border-color: var(--brand-blue); }
         .tool-btn.active span { color: #b8c8ff; }
         .tool-btn:hover:not(.active) { background: var(--btn-hover); }
         
@@ -593,8 +632,8 @@
             justify-content: center;
             gap: 1px;
             font-size: 16px;
-            background: #cc0033 !important;
-            border: 1px solid #cc0033 !important;
+            background: var(--danger) !important;
+            border: 1px solid var(--danger) !important;
             border-radius: 6px;
             cursor: pointer;
             color: white !important;
@@ -604,7 +643,7 @@
             pointer-events: auto;
         }
         #zoomResetBtn.visible { opacity: 1; pointer-events: auto; }
-        #zoomResetBtn:hover { background: #e8003a !important; border-color: #e8003a !important; }
+        #zoomResetBtn:hover { background: var(--danger-hover) !important; border-color: var(--danger-hover) !important; }
         #zoomResetBtn span { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
 
         /* Grid layout */
@@ -668,7 +707,7 @@
         .shaft-spacer { width: calc(var(--cell-size) + 2px); flex-shrink: 0; }
 
         .main-grid-wrap {
-            border: 2px solid #001E87;
+            border: 2px solid var(--brand-blue);
             padding: 1px;
             background: white;
         }
@@ -712,7 +751,7 @@
 
         /* Warp thread up (vertical) */
         .weaving-cell.filled {
-            background: #3A3A3A;
+            background: var(--text);
             box-shadow: inset 1px 0 1px rgba(255,255,255,0.15), inset -1px 0 2px rgba(0,0,0,0.3);
         }
 
@@ -727,48 +766,48 @@
         .weaving-cell:hover:not(.filled) { border-color: var(--border-dark); border-width: 1.5px; }
 
         .threading-cell { background: var(--surface); }
-        .threading-cell.active { background: #001E87; }
+        .threading-cell.active { background: var(--brand-blue); }
         .threading-cell:hover { background: var(--shaft-bg); border-color: var(--border-dark); }
         .threading-cell.active:hover { background: #444; }
 
         .treadling-cell { background: var(--surface); }
-        .treadling-cell.active { background: #001E87; }
+        .treadling-cell.active { background: var(--brand-blue); }
         .treadling-cell:hover { background: var(--shaft-bg); border-color: var(--border-dark); }
 
         .tieup-cell { background: var(--surface); }
-        .tieup-cell.active { background: #4D167C; }
+        .tieup-cell.active { background: var(--brand-purple); }
         .tieup-cell:hover { background: var(--shaft-bg); border-color: var(--border-dark); }
 
         .color-cell { background: white; flex-shrink: 0; }
         .color-cell:hover { border-color: var(--border-dark); border-width: 1.5px; }
-        .color-cell.selected { box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #4D167C; z-index: 2; position: relative; }
+        .color-cell.selected { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--brand-purple); z-index: 2; position: relative; }
 
         .dragging { opacity: 0.75; }
-        .weaving-cell.sel-highlight { box-shadow: inset 0 0 0 1px #cc0033; z-index: 1; }
-        .threading-cell.sel-highlight { background: rgba(204,0,51,0.12) !important; box-shadow: inset 0 0 0 1px #cc0033; z-index: 1; }
-        .treadling-cell.sel-highlight { background: rgba(204,0,51,0.12) !important; box-shadow: inset 0 0 0 1px #cc0033; z-index: 1; }
+        .weaving-cell.sel-highlight { box-shadow: inset 0 0 0 1px var(--danger); z-index: 1; }
+        .threading-cell.sel-highlight { background: rgba(204,0,51,0.12) !important; box-shadow: inset 0 0 0 1px var(--danger); z-index: 1; }
+        .treadling-cell.sel-highlight { background: rgba(204,0,51,0.12) !important; box-shadow: inset 0 0 0 1px var(--danger); z-index: 1; }
 
         #tileBtn, #selToolbar {
             display: none; position: fixed; z-index: 999;
             font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
-            padding: 6px 14px; background: #4D167C; color: white;
+            padding: 6px 14px; background: var(--brand-purple); color: white;
             border: none; border-radius: 6px; cursor: pointer;
             box-shadow: 0 4px 16px rgba(0,0,0,0.3);
             letter-spacing: 0.04em;
         }
-        #tileBtn:hover, #selToolbar:hover { background: #3a0f5e; }
+        #tileBtn:hover, #selToolbar:hover { background: var(--brand-purple-deep); }
         #selToolbar {
             display: none; gap: 4px; padding: 4px 8px;
         }
         #selToolbar button {
-            padding: 5px 10px; font-size: 10px; background: #4D167C; color: white;
+            padding: 5px 10px; font-size: 10px; background: var(--brand-purple); color: white;
             border: none; border-radius: 4px; cursor: pointer;
         }
-        #selToolbar button:hover { background: #3a0f5e; }
-        #selToolbar button.cut-btn { background: #cc0033; }
-        #selToolbar button.cut-btn:hover { background: #e8003a; }
-        #selToolbar button.del-btn { background: #cc0033; }
-        #selToolbar button.del-btn:hover { background: #e8003a; }
+        #selToolbar button:hover { background: var(--brand-purple-deep); }
+        #selToolbar button.cut-btn { background: var(--danger); }
+        #selToolbar button.cut-btn:hover { background: var(--danger-hover); }
+        #selToolbar button.del-btn { background: var(--danger); }
+        #selToolbar button.del-btn:hover { background: var(--danger-hover); }
 
         .pattern-info {
             font-size: 10px;
@@ -779,6 +818,38 @@
 
         .file-input { display: none; }
 
+        /* Keyboard focus visibility for the grid canvas */
+        #mainGrid [role="gridcell"]:focus-visible,
+        #threadingDraft [role="gridcell"]:focus-visible,
+        #tieupGrid [role="gridcell"]:focus-visible,
+        #treadlingDraft [role="gridcell"]:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
+            z-index: 3;
+            position: relative;
+        }
+
+        /* Screen-reader-only helper text */
+        .sr-only {
+            position: absolute;
+            width: 1px; height: 1px;
+            padding: 0; margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Respect reduced-motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
         @media print {
             .no-print { display: none !important; }
         }
@@ -788,11 +859,11 @@
 
 <div id="_loader_">Loading...</div>
 
-<div style="padding:6px 16px;display:flex;align-items:center;gap:12px;background:var(--logo-bar-bg,#ffffff);">
+<div style="padding:6px 16px;display:flex;align-items:center;gap:12px;background:var(--logo-bar-bg,var(--surface));">
     <img src="weaverscanvas-logo.png" alt="Weaver's Canvas" style="height:60px;width:auto;display:inline-block;" onerror="this.style.display='none'">
     <div style="display:flex;flex-direction:column;gap:2px;">
-        <div style="font-size:1.2em;font-weight:800;color:#001E87;letter-spacing:0.02em;line-height:1.2;">WeaversCanvas</div>
-        <div style="font-size:0.72em;font-weight:500;opacity:0.7;letter-spacing:0.06em;color:#001E87;line-height:1;" id="appVersion">v1.16.2 <span style="color:#ff4444;font-weight:800;">BETA</span> [Build 794]</div>
+        <div style="font-size:1.2em;font-weight:800;color:var(--brand-blue);letter-spacing:0.02em;line-height:1.2;">WeaversCanvas</div>
+        <div style="font-size:0.72em;font-weight:500;opacity:0.7;letter-spacing:0.06em;color:var(--brand-blue);line-height:1;" id="appVersion">v1.16.2 <span style="color:#ff4444;font-weight:800;">BETA</span> [Build 794]</div>
     </div>
 </div>
 
@@ -805,14 +876,14 @@
 
 <header class="no-print">
     <div class="header-actions" style="flex:1;align-self:center;">
-        <button class="btn btn-view" onclick="toggleTooltips()" id="tooltipBtn" title="Toggle tooltips on or off" style="background:#4CAF50;color:white;border-color:#4CAF50;">Tips ON</button>
-        <span style="display:inline-flex;align-items:center;gap:4px;background:#f0f2f8;border:1px solid #ccc;border-radius:6px;padding:4px 8px;">
+        <button class="btn btn-view" onclick="toggleTooltips()" id="tooltipBtn" title="Toggle tooltips on or off" style="background:var(--green);color:white;border-color:var(--green);">Tips ON</button>
+        <span style="display:inline-flex;align-items:center;gap:4px;background:var(--bg);border:1px solid #ccc;border-radius:6px;padding:4px 8px;">
             <button class="btn btn-tool green-style" onclick="openYarnCalc()" title="Calculate yarn requirements for your project" style="padding:6px 10px;">Yarn Calc</button>
             <button class="btn btn-tool green-style" onclick="openSettAdvisor()" title="Get recommended sett values for different yarns" style="padding:6px 10px;">Sett Advisor</button>
             <button class="btn btn-tool green-style" onclick="openYarnLibrary()" title="Browse the Master Yarn Chart 2014 — pick a yarn and apply it to your design" style="padding:6px 10px;">Yarn Library</button>
         </span>
         <span style="width:16px;display:inline-block;"></span>
-        <button class="btn btn-danger" id="clearResetBtn" onclick="openClearResetChoice()" title="Clear the grid or reset to defaults" style="background:#990033;color:#ffffff;border:2px solid #770022;">Clear / Reset</button>
+        <button class="btn btn-danger" id="clearResetBtn" onclick="openClearResetChoice()" title="Clear the grid or reset to defaults" style="background:#990033;color:var(--surface);border:2px solid #770022;">Clear / Reset</button>
         <button class="btn btn-view" onclick="toggleUnderside()" id="undersideBtn" title="Show the underside/back view of the weave">Show Back</button>
         <button class="btn btn-view" onclick="toggleClothView()" id="clothViewBtn" title="View the pattern as it would look in real cloth">Cloth View</button>
 <button class="btn btn-view" onclick="toggleRulers()" id="rulersBtn" title="Show or hide the ruler measurements">Hide Rulers</button>
@@ -824,10 +895,10 @@
         <button class="btn btn-view" id="redoBtn" onclick="redo()" title="Redo (Ctrl+Y)" style="opacity:0.4;pointer-events:none;">Redo</button>
         <span style="width:8px;display:inline-block;"></span>
         
-        <span style="display:inline-flex;align-items:center;gap:4px;background:#f0f2f8;border:1px solid #ccc;border-radius:6px;padding:4px 8px;">
+        <span style="display:inline-flex;align-items:center;gap:4px;background:var(--bg);border:1px solid #ccc;border-radius:6px;padding:4px 8px;">
             <button class="btn btn-generate" onclick="openRandomizePopup()" title="Open randomization options to generate patterns" style="padding:6px 10px;">Randomize</button>
             <div class="rand-slider-item" style="display:flex;align-items:center;gap:2px;">
-                <span style="font-size:9px;color:#6b6b8a;">T</span>
+                <span style="font-size:9px;color:var(--text-muted);">T</span>
                 <div class="stepper" style="height:20px;">
                     <button class="step-btn" title="Decrease treadling density" style="height:20px;width:16px;font-size:10px;" onclick="stepRandDensity('treadlingDensity','treadlingDensityVal',1,10,-1)">−</button>
     <input type="number" id="treadlingDensity" value="4" min="1" max="10" title="Treadling density" style="width:24px;height:20px;font-size:10px;" oninput="var _el=document.getElementById('treadlingDensityVal');if(_el)_el.textContent=this.value;debounceRandomizePattern()" onchange="randomizePattern()">
@@ -835,7 +906,7 @@
                 </div>
             </div>
             <div class="rand-slider-item" style="display:flex;align-items:center;gap:2px;">
-                <span style="font-size:9px;color:#6b6b8a;">Th</span>
+                <span style="font-size:9px;color:var(--text-muted);">Th</span>
                 <div class="stepper" style="height:20px;">
                     <button class="step-btn" title="Decrease threading density" style="height:20px;width:16px;font-size:10px;" onclick="stepRandDensity('threadingDensity','threadingDensityVal',1,8,-1)">−</button>
     <input type="number" id="threadingDensity" value="4" min="1" max="8" title="Threading density" style="width:24px;height:20px;font-size:10px;" oninput="var _el=document.getElementById('threadingDensityVal');if(_el)_el.textContent=this.value;debounceRandomizePattern()" onchange="randomizePattern()">
@@ -857,9 +928,9 @@
 
         <!-- Tools Dropdown (yellow) -->
         <div class="dropdown" style="display:inline-block;position:relative;">
-            <button class="btn btn-tool" id="toolsBtn" onclick="toggleToolsDropdown()" title="Open additional tools menu" style="background:#FFC107;color:#3A3A3A;border:2px solid #E5A800;padding:10px 22px;font-size:14px;font-weight:800;letter-spacing:0.06em;border-radius:7px;box-shadow:0 3px 10px rgba(255,193,7,0.5);text-shadow:0 1px 0 rgba(255,255,255,0.4);" onmouseover="this.style.background='#FFB300';this.style.boxShadow='0 5px 14px rgba(255,193,7,0.65)'" onmouseout="this.style.background='#FFC107';this.style.boxShadow='0 3px 10px rgba(255,193,7,0.5)'">🛠 Tools <span style="font-size:0.75em;">▼</span></button>
+            <button class="btn btn-tool" id="toolsBtn" onclick="toggleToolsDropdown()" title="Open additional tools menu" style="background:#FFC107;color:var(--text);border:2px solid #E5A800;padding:10px 22px;font-size:14px;font-weight:800;letter-spacing:0.06em;border-radius:7px;box-shadow:0 3px 10px rgba(255,193,7,0.5);text-shadow:0 1px 0 rgba(255,255,255,0.4);" onmouseover="this.style.background='#FFB300';this.style.boxShadow='0 5px 14px rgba(255,193,7,0.65)'" onmouseout="this.style.background='#FFC107';this.style.boxShadow='0 3px 10px rgba(255,193,7,0.5)'">🛠 Tools <span style="font-size:0.75em;">▼</span></button>
             <div id="toolsDropdown" class="dropdown-content" style="display:none;position:absolute;right:0;top:100%;background:#fff;min-width:160px;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:1000;">
-                <div style="padding:8px 12px;font-size:10px;font-weight:700;color:#6b6b8a;letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid #eee;">Analysis</div>
+                <div style="padding:8px 12px;font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid #eee;">Analysis</div>
 <button class="dropdown-item" onclick="openLibraryModal()" title="Browse pattern library">Library</button>
                 <button class="dropdown-item" onclick="openAnalysis()" title="Analysis tools for your pattern">Analysis</button>
                 <button class="dropdown-item" onclick="openDrawingTools()" title="Drawing and editing tools">Draw Tools</button>
@@ -873,7 +944,7 @@
             </div>
         </div>
         <button class="btn btn-view" onclick="openFeedback()" title="Send feedback or get support" style="font-weight:700;font-size:1em;padding:6px 12px;">Support</button>
-        <button class="btn btn-admin" id="adminBtn" onclick="openAdmin()" title="Settings" style="font-weight:700;font-size:1em;padding:6px 12px;background:transparent;color:#3A3A3A;border:1.5px solid #b8c0d8;border-radius:6px;cursor:pointer;" onmouseover="this.style.background='#f0f2f8';this.style.borderColor='#4D167C';this.style.color='#4D167C';" onmouseout="this.style.background='transparent';this.style.borderColor='#b8c0d8';this.style.color='#3A3A3A';">Settings</button>
+        <button class="btn btn-admin" id="adminBtn" onclick="openAdmin()" title="Settings" style="font-weight:700;font-size:1em;padding:6px 12px;background:transparent;color:var(--text);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;" onmouseover="this.style.background='var(--bg)';this.style.borderColor='var(--brand-purple)';this.style.color='var(--brand-purple)';" onmouseout="this.style.background='transparent';this.style.borderColor='var(--border)';this.style.color='var(--text)';">Settings</button>
         <span style="flex:1;"></span>
         
         <!-- Help Dropdown -->
@@ -890,14 +961,14 @@
 <!-- Clear / Reset confirmation modal -->
 <div id="clearModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
     <div style="background:white;border-radius:8px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.3);font-family:'Raleway',sans-serif;">
-        <div style="font-size:1.1em;font-weight:700;color:#3A3A3A;margin-bottom:10px;" id="clearModalTitle">⚠ Clear or Reset?</div>
+        <div style="font-size:1.1em;font-weight:700;color:var(--text);margin-bottom:10px;" id="clearModalTitle">⚠ Clear or Reset?</div>
         <div style="font-size:0.9em;color:#666;margin-bottom:20px;" id="clearModalMsg">Choose an action below.</div>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
             <button onclick="executeClearAction('clear')" style="padding:12px 20px;background:#990033;color:white;border:none;border-radius:4px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;text-align:left;">
                 <div style="font-size:0.95em;font-weight:700;">Clear All</div>
                 <div style="font-size:0.75em;opacity:0.85;font-weight:400;">Remove all threading, treadling, tie-up, patterns, and colours.</div>
             </button>
-            <button onclick="executeClearAction('reset')" style="padding:12px 20px;background:#001E87;color:white;border:none;border-radius:4px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;text-align:left;">
+            <button onclick="executeClearAction('reset')" style="padding:12px 20px;background:var(--brand-blue);color:white;border:none;border-radius:4px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;text-align:left;">
                 <div style="font-size:0.95em;font-weight:700;">Reset to Default</div>
                 <div style="font-size:0.75em;opacity:0.85;font-weight:400;">Restore the default 48×48 grid, 8 shafts, 10 treadles and original colours.</div>
             </button>
@@ -911,28 +982,28 @@
 <!-- ═══ YARN LIBRARY MODAL ═══ -->
 <div id="yarnLibraryModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:white;border-radius:12px;width:100%;max-width:1180px;margin:auto;font-family:'Raleway',sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.5);overflow:hidden;display:flex;flex-direction:column;max-height:92vh;">
-    <div style="background:linear-gradient(135deg,#001E87,#4D167C);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+    <div style="background:linear-gradient(135deg,var(--brand-blue),var(--brand-purple));padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
       <div>
         <div style="font-size:1.05em;font-weight:800;color:white;letter-spacing:0.02em;">📚 Yarn Library</div>
         <div style="font-size:0.72em;color:rgba(255,255,255,0.7);margin-top:2px;">Master Yarn Chart 2014 — pick a yarn and apply it to your design</div>
       </div>
       <button onclick="closeYarnLibrary()" style="background:rgba(255,255,255,0.18);border:1.5px solid rgba(255,255,255,0.45);color:white;border-radius:6px;padding:6px 14px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;">Close</button>
     </div>
-    <div style="padding:10px 20px 6px;background:#f8f9ff;border-bottom:1px solid #e8ecf8;flex-shrink:0;">
-      <div style="font-size:0.7em;color:#6b6b8a;font-style:italic;letter-spacing:0.02em;line-height:1.5;">
-        Yarn data courtesy of <strong style="color:#001E87;font-style:normal;">Handwoven Magazine</strong> — Master Yarn Chart, 2014
-        (<a href="https://handwovenmagazine.com" target="_blank" rel="noopener" style="color:#4D167C;text-decoration:none;font-weight:700;font-style:normal;">handwovenmagazine.com</a>)
+    <div style="padding:10px 20px 6px;background:var(--header-bg);border-bottom:1px solid var(--btn-bg);flex-shrink:0;">
+      <div style="font-size:0.7em;color:var(--text-muted);font-style:italic;letter-spacing:0.02em;line-height:1.5;">
+        Yarn data courtesy of <strong style="color:var(--brand-blue);font-style:normal;">Handwoven Magazine</strong> — Master Yarn Chart, 2014
+        (<a href="https://handwovenmagazine.com" target="_blank" rel="noopener" style="color:var(--brand-purple);text-decoration:none;font-weight:700;font-style:normal;">handwovenmagazine.com</a>)
       </div>
       <div class="yl-tabs" style="display:flex;gap:6px;margin-top:8px;">
         <button id="yl_tab_all" class="yl-tab active" onclick="ylSetView('all')">All Yarns</button>
         <button id="yl_tab_fav" class="yl-tab" onclick="ylSetView('favorites')">Favorites</button>
       </div>
       <div class="yl-legend" style="display:flex;flex-wrap:wrap;gap:3px 10px;margin-top:8px;font-size:0.68em;color:#4a4a6a;line-height:1.6;">
-        <span style="font-weight:700;color:#3A3A3A;margin-right:4px;">Card colors:</span>
+        <span style="font-weight:700;color:var(--text);margin-right:4px;">Card colors:</span>
         <span class="yl-leg-item"><span class="yl-leg-dot" style="background:#E8F0FE;"></span>Cotton</span>
         <span class="yl-leg-item"><span class="yl-leg-dot" style="background:#FCE8E8;"></span>Wool &amp; Hair</span>
         <span class="yl-leg-item"><span class="yl-leg-dot" style="background:#FFF8E1;"></span>Silk</span>
-        <span class="yl-leg-item"><span class="yl-leg-dot" style="background:#F5F0E8;"></span>Linen</span>
+        <span class="yl-leg-item"><span class="yl-leg-dot" style="background:var(--surface-warm);"></span>Linen</span>
         <span class="yl-leg-item"><span class="yl-leg-dot" style="background:#F3E5F5;"></span>Rayon</span>
         <span class="yl-leg-item"><span class="yl-leg-dot" style="background:#E0F2F1;"></span>Tencel</span>
         <span class="yl-leg-item"><span class="yl-leg-dot" style="background:#E8F5E9;"></span>Bamboo &amp; Soy</span>
@@ -973,22 +1044,22 @@
   <div style="background:white;border-radius:12px;width:100%;max-width:780px;margin:auto;font-family:'Raleway',sans-serif;overflow:hidden;box-shadow:0 16px 56px rgba(0,0,50,0.3);">
 
     <!-- Header -->
-    <div style="background:linear-gradient(135deg,#001E87,#4D167C);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="background:linear-gradient(135deg,var(--brand-blue),var(--brand-purple));padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
       <div>
         <div style="font-size:1.1em;font-weight:800;color:white;letter-spacing:0.02em;">🧶 Yarn Calculator &amp; Cost Estimator</div>
         <div style="font-size:0.75em;color:rgba(255,255,255,0.7);margin-top:3px;">Estimate yardage, weight and cost for your project</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
-        <select id="yc_currency" onchange="ycUpdateCurrency()" style="font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;padding:5px 8px;border:1.5px solid rgba(255,255,255,0.45);border-radius:6px;background:#001E87;color:white;cursor:pointer;outline:none;">
-          <option value="CAD" data-symbol="CA$" style="background:#001E87;color:white;">🇨🇦 CAD</option>
-          <option value="USD" data-symbol="US$" style="background:#001E87;color:white;">🇺🇸 USD</option>
-          <option value="GBP" data-symbol="£" style="background:#001E87;color:white;">🇬🇧 GBP</option>
-          <option value="EUR" data-symbol="€" style="background:#001E87;color:white;">🇪🇺 EUR</option>
-          <option value="AUD" data-symbol="A$" style="background:#001E87;color:white;">🇦🇺 AUD</option>
-          <option value="NZD" data-symbol="NZ$" style="background:#001E87;color:white;">🇳🇿 NZD</option>
+        <select id="yc_currency" onchange="ycUpdateCurrency()" style="font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;padding:5px 8px;border:1.5px solid rgba(255,255,255,0.45);border-radius:6px;background:var(--brand-blue);color:white;cursor:pointer;outline:none;">
+          <option value="CAD" data-symbol="CA$" style="background:var(--brand-blue);color:white;">🇨🇦 CAD</option>
+          <option value="USD" data-symbol="US$" style="background:var(--brand-blue);color:white;">🇺🇸 USD</option>
+          <option value="GBP" data-symbol="£" style="background:var(--brand-blue);color:white;">🇬🇧 GBP</option>
+          <option value="EUR" data-symbol="€" style="background:var(--brand-blue);color:white;">🇪🇺 EUR</option>
+          <option value="AUD" data-symbol="A$" style="background:var(--brand-blue);color:white;">🇦🇺 AUD</option>
+          <option value="NZD" data-symbol="NZ$" style="background:var(--brand-blue);color:white;">🇳🇿 NZD</option>
         </select>
         <span id="yc_rateIndicator" style="font-size:9px;color:rgba(255,255,255,0.65);font-weight:600;font-family:'Raleway',sans-serif;white-space:nowrap;"></span>
-        <button onclick="ycLoadCurrentPattern()" title="Load current pattern dimensions" style="background:#2E7D32;border:none;color:white;border-radius:6px;padding:6px 14px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:800;font-size:11px;letter-spacing:0.04em;white-space:nowrap;">Use This Pattern</button>
+        <button onclick="ycLoadCurrentPattern()" title="Load current pattern dimensions" style="background:var(--success);border:none;color:white;border-radius:6px;padding:6px 14px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:800;font-size:11px;letter-spacing:0.04em;white-space:nowrap;">Use This Pattern</button>
         <button onclick="closeYarnCalc()" title="Close yarn calculator" style="background:rgba(255,255,255,0.18);border:1.5px solid rgba(255,255,255,0.45);color:white;border-radius:6px;padding:6px 14px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;">Close</button>
       </div>
     </div>
@@ -997,7 +1068,7 @@
 
       <!-- LEFT: Inputs -->
       <div>
-        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#001E87;margin-bottom:14px;border-bottom:2px solid #e8ecf8;padding-bottom:6px;">Project Dimensions</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--brand-blue);margin-bottom:14px;border-bottom:2px solid var(--btn-bg);padding-bottom:6px;">Project Dimensions</div>
 
         <div class="yc-row">
           <label class="yc-label">Warp Width (inches)</label>
@@ -1035,7 +1106,7 @@
           <input class="yc-input" id="yc_weftTakeup" type="number" value="15" min="0" max="50" step="1" oninput="ycCalc()">
         </div>
 
-        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#001E87;margin:18px 0 14px;border-bottom:2px solid #e8ecf8;padding-bottom:6px;">Yarn Specs</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--brand-blue);margin:18px 0 14px;border-bottom:2px solid var(--btn-bg);padding-bottom:6px;">Yarn Specs</div>
 
         <div class="yc-row">
           <label class="yc-label">Yarn weight category</label>
@@ -1054,36 +1125,36 @@
           <input class="yc-input" id="yc_ypp" type="number" value="1500" min="1" step="10" oninput="ycCalc()">
         </div>
 
-        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#001E87;margin:18px 0 12px;border-bottom:2px solid #e8ecf8;padding-bottom:6px;">Shrinkage &amp; Finishing</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--brand-blue);margin:18px 0 12px;border-bottom:2px solid var(--btn-bg);padding-bottom:6px;">Shrinkage &amp; Finishing</div>
         <div class="yc-row">
           <label class="yc-label">Expected shrinkage %</label>
           <input class="yc-input" id="yc_shrinkage" type="number" value="8" min="0" max="40" step="1" oninput="ycCalc()">
         </div>
-        <div style="background:#f8f9fe;border-radius:6px;padding:10px 14px;margin-top:8px;font-size:12px;color:#3A3A3A;line-height:1.6;" id="yc_finishedSizes"></div>
+        <div style="background:var(--header-bg);border-radius:6px;padding:10px 14px;margin-top:8px;font-size:12px;color:var(--text);line-height:1.6;" id="yc_finishedSizes"></div>
 
-        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#001E87;margin:18px 0 14px;border-bottom:2px solid #e8ecf8;padding-bottom:6px;">Colour Split</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--brand-blue);margin:18px 0 14px;border-bottom:2px solid var(--btn-bg);padding-bottom:6px;">Colour Split</div>
         <div id="yc_colorRows" style="display:flex;flex-direction:column;gap:8px;"></div>
-        <button class="yc-add-color" onclick="ycAddColor()" title="Add a colour to your yarn list" style="margin-top:10px;padding:5px 12px;background:#e8ecf8;border:1px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;color:#001E87;">+ Add Colour</button>
-        <button onclick="ycSyncColors()" title="Sync colours from your pattern palette" style="margin-top:10px;margin-left:6px;padding:5px 12px;background:#e8ecf8;border:1px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;color:#4D167C;">↙ Sync palette</button>
+        <button class="yc-add-color" onclick="ycAddColor()" title="Add a colour to your yarn list" style="margin-top:10px;padding:5px 12px;background:var(--btn-bg);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;color:var(--brand-blue);">+ Add Colour</button>
+        <button onclick="ycSyncColors()" title="Sync colours from your pattern palette" style="margin-top:10px;margin-left:6px;padding:5px 12px;background:var(--btn-bg);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;color:var(--brand-purple);">↙ Sync palette</button>
       </div>
 
       <!-- RIGHT: Results -->
       <div>
-        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#001E87;margin-bottom:14px;border-bottom:2px solid #e8ecf8;padding-bottom:6px;">Totals</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--brand-blue);margin-bottom:14px;border-bottom:2px solid var(--btn-bg);padding-bottom:6px;">Totals</div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
           <div class="yc-stat-card"><div class="yc-stat-label">Total Warp Ends</div><div class="yc-stat-val" id="yc_ends">—</div></div>
           <div class="yc-stat-card"><div class="yc-stat-label">Total Warp Yardage</div><div class="yc-stat-val" id="yc_warpYds">—</div></div>
           <div class="yc-stat-card"><div class="yc-stat-label">Total Weft Yardage</div><div class="yc-stat-val" id="yc_weftYds">—</div></div>
-          <div class="yc-stat-card"><div class="yc-stat-label">Grand Total Yardage</div><div class="yc-stat-val" id="yc_totalYds" style="color:#4D167C;">—</div></div>
+          <div class="yc-stat-card"><div class="yc-stat-label">Grand Total Yardage</div><div class="yc-stat-val" id="yc_totalYds" style="color:var(--brand-purple);">—</div></div>
           <div class="yc-stat-card"><div class="yc-stat-label">Total Weight</div><div class="yc-stat-val" id="yc_grams">—</div></div>
           <div class="yc-stat-card"><div class="yc-stat-label">Skeins Needed</div><div class="yc-stat-val" id="yc_skeins">—</div></div>
         </div>
 
-        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#001E87;margin-bottom:12px;border-bottom:2px solid #e8ecf8;padding-bottom:6px;">Per-Colour Breakdown</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--brand-blue);margin-bottom:12px;border-bottom:2px solid var(--btn-bg);padding-bottom:6px;">Per-Colour Breakdown</div>
         <div id="yc_breakdown" style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;"></div>
 
-        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#001E87;margin-bottom:12px;border-bottom:2px solid #e8ecf8;padding-bottom:6px;">Cost Estimate</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--brand-blue);margin-bottom:12px;border-bottom:2px solid var(--btn-bg);padding-bottom:6px;">Cost Estimate</div>
         <div class="yc-row">
           <label class="yc-label">Skein size (yards)</label>
           <input class="yc-input" id="yc_skeinSize" type="number" value="400" min="1" step="10" oninput="ycCalc()">
@@ -1092,20 +1163,20 @@
           <label class="yc-label">Price per skein (<span id="yc_currencySymbol">CA$</span>)</label>
           <input class="yc-input" id="yc_pricePerSkein" type="number" value="12" min="0" step="0.50" oninput="ycCalc()">
         </div>
-        <div id="yc_costCard" style="background:#f0f2f8;border-radius:8px;padding:14px 16px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
+        <div id="yc_costCard" style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#6b6b8a;text-transform:uppercase;letter-spacing:0.06em;">Estimated Total Cost</div>
-            <div id="yc_totalCost" style="font-size:1.8em;font-weight:800;color:#2E7D32;margin-top:4px;">—</div>
+            <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Estimated Total Cost</div>
+            <div id="yc_totalCost" style="font-size:1.8em;font-weight:800;color:var(--success);margin-top:4px;">—</div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:10px;color:#9ba3c0;font-weight:600;" id="yc_costNote"></div>
+            <div style="font-size:10px;color:var(--text-faint);font-weight:600;" id="yc_costNote"></div>
           </div>
         </div>
 
-        <button onclick="ycPrint()" title="Print yarn estimate" style="margin-top:16px;width:100%;padding:9px 14px;background:#2E7D32;color:white;border:none;border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.04em;">Print Estimate</button>
+        <button onclick="ycPrint()" title="Print yarn estimate" style="margin-top:16px;width:100%;padding:9px 14px;background:var(--success);color:white;border:none;border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.04em;">Print Estimate</button>
         <div style="display:flex;gap:8px;margin-top:8px;">
-          <button onclick="ycResetDefault()" style="flex:1;padding:8px;background:#f0f2f8;color:#001E87;border:1.5px solid #b8c0d8;border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.03em;">Default</button>
-          <button onclick="ycClear()" style="flex:1;padding:8px;background:#fff0f3;color:#cc0033;border:1.5px solid #ffb3c1;border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.03em;">Clear</button>
+          <button onclick="ycResetDefault()" style="flex:1;padding:8px;background:var(--bg);color:var(--brand-blue);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.03em;">Default</button>
+          <button onclick="ycClear()" style="flex:1;padding:8px;background:#fff0f3;color:var(--danger);border:1.5px solid #ffb3c1;border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.03em;">Clear</button>
         </div>
       </div>
     </div>
@@ -1114,40 +1185,40 @@
 
 <style>
 .yc-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-.yc-label { font-size:11px; font-weight:600; color:#6b6b8a; flex:1; letter-spacing:0.02em; }
+.yc-label { font-size:11px; font-weight:600; color:var(--text-muted); flex:1; letter-spacing:0.02em; }
 .yc-input {
-  width:90px; padding:5px 7px; border:1.5px solid #b8c0d8; border-radius:5px;
-  font-family:'Raleway',sans-serif; font-size:12px; font-weight:600; color:#3A3A3A;
+  width:90px; padding:5px 7px; border:1.5px solid var(--border); border-radius:5px;
+  font-family:'Raleway',sans-serif; font-size:12px; font-weight:600; color:var(--text);
   outline:none; text-align:right; background:white;
   -webkit-user-select:text !important; user-select:text !important;
 }
-.yc-input:focus { border-color:#4D167C; }
-.yc-sync { padding:3px 7px; background:#e8ecf8; border:1px solid #b8c0d8; border-radius:4px; cursor:pointer; font-size:9px; font-weight:700; color:#4D167C; font-family:'Raleway',sans-serif; white-space:nowrap; }
-.yc-sync:hover { background:#d0d8f0; }
-.yc-stat-card { background:#f8f9fe; border:1px solid #dde2f2; border-radius:7px; padding:10px 12px; }
-.yc-stat-label { font-size:9px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#9ba3c0; margin-bottom:4px; }
-.yc-stat-val { font-size:1.15em; font-weight:800; color:#001E87; }
-.yc-color-row { display:flex; flex-direction:column; gap:6px; background:#f8f9fe; border:1px solid #dde2f2; border-radius:6px; padding:8px 10px; }
-.yc-breakdown-row { background:#f8f9fe; border:1px solid #dde2f2; border-radius:6px; padding:9px 12px; }
+.yc-input:focus { border-color:var(--brand-purple); }
+.yc-sync { padding:3px 7px; background:var(--btn-bg); border:1px solid var(--border); border-radius:4px; cursor:pointer; font-size:9px; font-weight:700; color:var(--brand-purple); font-family:'Raleway',sans-serif; white-space:nowrap; }
+.yc-sync:hover { background:var(--btn-hover); }
+.yc-stat-card { background:var(--header-bg); border:1px solid var(--shaft-bg); border-radius:7px; padding:10px 12px; }
+.yc-stat-label { font-size:9px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:4px; }
+.yc-stat-val { font-size:1.15em; font-weight:800; color:var(--brand-blue); }
+.yc-color-row { display:flex; flex-direction:column; gap:6px; background:var(--header-bg); border:1px solid var(--shaft-bg); border-radius:6px; padding:8px 10px; }
+.yc-breakdown-row { background:var(--header-bg); border:1px solid var(--shaft-bg); border-radius:6px; padding:9px 12px; }
 </style>
 
 <!-- AI Generate Modal -->
 <div id="colorToolsModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:white;border-radius:12px;width:100%;max-width:560px;margin:auto;font-family:'Raleway',sans-serif;overflow:hidden;box-shadow:0 16px 56px rgba(0,0,50,0.35);max-height:90vh;display:flex;flex-direction:column;">
-    <div style="background:#4D167C;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="background:var(--brand-purple);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
       <div style="color:white;font-weight:800;font-size:1em;letter-spacing:0.06em;">🎨 COLOUR TOOLS</div>
       <button onclick="closeColorTools()" title="Close colour tools" style="background:none;border:none;color:rgba(255,255,255,0.7);font-size:20px;cursor:pointer;line-height:1;">×</button>
     </div>
     <div style="overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:20px;">
 
       <!-- HARMONY GENERATOR -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Colour Harmony Generator</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Colour Harmony Generator</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:12px;">
           <div style="display:flex;align-items:center;gap:12px;">
-            <label style="font-size:0.82em;font-weight:600;color:#3A3A3A;min-width:80px;">Base Colour</label>
-            <input type="color" id="harmonyBaseColor" value="#001E87" style="width:44px;height:32px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;padding:2px;">
-            <select id="harmonyType" style="flex:1;padding:6px 10px;border:1.5px solid #b8c0d8;border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.82em;">
+            <label style="font-size:0.82em;font-weight:600;color:var(--text);min-width:80px;">Base Colour</label>
+            <input type="color" id="harmonyBaseColor" value="var(--brand-blue)" style="width:44px;height:32px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;padding:2px;">
+            <select id="harmonyType" style="flex:1;padding:6px 10px;border:1.5px solid var(--border);border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.82em;">
               <option value="complementary">Complementary</option>
               <option value="analogous">Analogous</option>
               <option value="triadic">Triadic</option>
@@ -1155,49 +1226,49 @@
               <option value="split">Split Complementary</option>
               <option value="tints">Tints & Shades</option>
             </select>
-            <button onclick="generateHarmony()" title="Generate colour harmony" style="padding:6px 14px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Generate</button>
+            <button onclick="generateHarmony()" title="Generate colour harmony" style="padding:6px 14px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Generate</button>
           </div>
           <div id="harmonyResult" style="display:flex;gap:6px;flex-wrap:wrap;min-height:44px;align-items:center;">
-            <span style="font-size:0.78em;color:#9ba3c0;">Click Generate to create a harmony palette</span>
+            <span style="font-size:0.78em;color:var(--text-faint);">Click Generate to create a harmony palette</span>
           </div>
         </div>
       </div>
 
       <!-- GRADIENT WARP -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Gradient Warp</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Gradient Warp</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:12px;">
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <label style="font-size:0.82em;font-weight:600;color:#3A3A3A;">From</label>
-              <input type="color" id="gradFrom" value="#001E87" style="width:44px;height:32px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;padding:2px;">
+              <label style="font-size:0.82em;font-weight:600;color:var(--text);">From</label>
+              <input type="color" id="gradFrom" value="var(--brand-blue)" style="width:44px;height:32px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;padding:2px;">
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
-              <label style="font-size:0.82em;font-weight:600;color:#3A3A3A;">To</label>
-              <input type="color" id="gradTo" value="#f5f0e0" style="width:44px;height:32px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;padding:2px;">
+              <label style="font-size:0.82em;font-weight:600;color:var(--text);">To</label>
+              <input type="color" id="gradTo" value="#f5f0e0" style="width:44px;height:32px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;padding:2px;">
             </div>
-            <select id="gradTarget" style="padding:6px 10px;border:1.5px solid #b8c0d8;border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.82em;">
+            <select id="gradTarget" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.82em;">
               <option value="warp">Warp threads</option>
               <option value="weft">Weft threads</option>
               <option value="both">Both</option>
             </select>
-            <button onclick="applyGradient()" title="Apply gradient to pattern" style="padding:6px 14px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Apply</button>
+            <button onclick="applyGradient()" title="Apply gradient to pattern" style="padding:6px 14px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Apply</button>
           </div>
-          <div id="gradPreview" style="height:20px;border-radius:4px;background:linear-gradient(to right,#001E87,#f5f0e0);border:1px solid #e0e4f0;"></div>
+          <div id="gradPreview" style="height:20px;border-radius:4px;background:linear-gradient(to right,var(--brand-blue),#f5f0e0);border:1px solid var(--surface-2);"></div>
         </div>
       </div>
 
       <!-- IMAGE PALETTE EXTRACTOR -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Extract Palette from Image</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Extract Palette from Image</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:12px;">
-          <div id="imgDropZone" onclick="document.getElementById('imgPaletteInput').click()" style="border:2px dashed #b8c0d8;border-radius:7px;padding:20px;text-align:center;cursor:pointer;transition:border-color 0.15s;background:#fafbff;"
-            ondragover="event.preventDefault();this.style.borderColor='#001E87'"
-            ondragleave="this.style.borderColor='#b8c0d8'"
+          <div id="imgDropZone" onclick="document.getElementById('imgPaletteInput').click()" style="border:2px dashed var(--border);border-radius:7px;padding:20px;text-align:center;cursor:pointer;transition:border-color 0.15s;background:#fafbff;"
+            ondragover="event.preventDefault();this.style.borderColor='var(--brand-blue)'"
+            ondragleave="this.style.borderColor='var(--border)'"
             ondrop="handleImgDrop(event)">
             <div style="font-size:1.5em;margin-bottom:6px;">🖼</div>
-            <div style="font-size:0.82em;color:#6b6b8a;font-weight:600;">Drop an image or click to browse</div>
-            <div style="font-size:0.75em;color:#9ba3c0;margin-top:2px;">JPG, PNG, GIF, WebP</div>
+            <div style="font-size:0.82em;color:var(--text-muted);font-weight:600;">Drop an image or click to browse</div>
+            <div style="font-size:0.75em;color:var(--text-faint);margin-top:2px;">JPG, PNG, GIF, WebP</div>
           </div>
           <input type="file" id="imgPaletteInput" accept="image/*" style="display:none" onchange="extractPaletteFromFile(event)">
           <div id="imgPaletteResult" style="display:none;flex-direction:column;gap:10px;">
@@ -1208,7 +1279,7 @@
       </div>
 
     </div>
-    <div style="padding:12px 20px;border-top:1px solid #e0e4f0;display:flex;justify-content:flex-end;">
+    <div style="padding:12px 20px;border-top:1px solid var(--surface-2);display:flex;justify-content:flex-end;">
       <button onclick="closeColorTools()" title="Close colour tools" style="padding:7px 20px;border:1px solid #ccc;background:white;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:0.88em;">Close</button>
     </div>
   </div>
@@ -1216,103 +1287,103 @@
 
 <div id="analysisModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:white;border-radius:12px;width:100%;max-width:900px;margin:auto;font-family:'Raleway',sans-serif;overflow:hidden;box-shadow:0 16px 56px rgba(0,0,50,0.35);max-height:90vh;display:flex;flex-direction:column;">
-    <div style="background:#4D167C;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+    <div style="background:var(--brand-purple);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
       <div style="color:white;font-weight:800;font-size:1em;letter-spacing:0.06em;">📊 ANALYSIS</div>
       <button onclick="closeAnalysis()" title="Close analysis tools" style="background:none;border:none;color:rgba(255,255,255,0.7);font-size:20px;cursor:pointer;line-height:1;">×</button>
     </div>
     <div style="overflow-y:auto;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
 
       <!-- FLOAT LENGTH CHECKER -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Float Length Checker</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Float Length Checker</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
-          <div style="font-size:0.82em;color:#6b6b8a;line-height:1.5;">Highlights warp and weft floats exceeding your maximum. Floats longer than 4–5 threads can snag and weaken fabric.</div>
+          <div style="font-size:0.82em;color:var(--text-muted);line-height:1.5;">Highlights warp and weft floats exceeding your maximum. Floats longer than 4–5 threads can snag and weaken fabric.</div>
           <div style="display:flex;align-items:center;gap:10px;">
-            <label style="font-size:0.82em;font-weight:600;color:#3A3A3A;white-space:nowrap;">Max float length</label>
-            <input type="number" id="floatLimit" value="4" min="1" max="20" style="width:60px;padding:5px 8px;border:1.5px solid #b8c0d8;border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.9em;">
+            <label style="font-size:0.82em;font-weight:600;color:var(--text);white-space:nowrap;">Max float length</label>
+            <input type="number" id="floatLimit" value="4" min="1" max="20" style="width:60px;padding:5px 8px;border:1.5px solid var(--border);border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.9em;">
           </div>
           <div style="display:flex;gap:8px;">
-            <button onclick="runFloatCheck()" title="Check for floated threads" style="padding:7px 18px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Check Floats</button>
-            <button onclick="clearFloatHighlights()" title="Clear float highlights" style="padding:7px 14px;background:white;color:#6b6b8a;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:0.82em;">Clear</button>
+            <button onclick="runFloatCheck()" title="Check for floated threads" style="padding:7px 18px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Check Floats</button>
+            <button onclick="clearFloatHighlights()" title="Clear float highlights" style="padding:7px 14px;background:white;color:var(--text-muted);border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:0.82em;">Clear</button>
           </div>
-          <div id="floatResult" style="font-size:0.82em;color:#3A3A3A;min-height:18px;"></div>
+          <div id="floatResult" style="font-size:0.82em;color:var(--text);min-height:18px;"></div>
         </div>
       </div>
 
       <!-- THREAD COUNT / EPI / PPI -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Thread Count — EPI / PPI</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Thread Count — EPI / PPI</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
           <div style="display:flex;gap:16px;flex-wrap:wrap;">
             <div style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:120px;">
-              <label style="font-size:0.78em;font-weight:700;color:#6b6b8a;text-transform:uppercase;letter-spacing:0.06em;">Warp width (in)</label>
-              <input type="number" id="warpWidthIn" value="12" min="1" max="200" step="0.5" style="padding:6px 10px;border:1.5px solid #b8c0d8;border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.9em;">
+              <label style="font-size:0.78em;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Warp width (in)</label>
+              <input type="number" id="warpWidthIn" value="12" min="1" max="200" step="0.5" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.9em;">
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:120px;">
-              <label style="font-size:0.78em;font-weight:700;color:#6b6b8a;text-transform:uppercase;letter-spacing:0.06em;">Woven length (in)</label>
-              <input type="number" id="wovenLenIn" value="12" min="1" max="2000" step="0.5" style="padding:6px 10px;border:1.5px solid #b8c0d8;border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.9em;">
+              <label style="font-size:0.78em;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Woven length (in)</label>
+              <input type="number" id="wovenLenIn" value="12" min="1" max="2000" step="0.5" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.9em;">
             </div>
           </div>
-          <button onclick="calcThreadCount()" title="Calculate thread count" style="align-self:flex-start;padding:6px 14px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Calculate</button>
-          <div id="threadCountResult" style="display:none;background:#f0f2f8;border-radius:6px;padding:12px;display:none;gap:12px;flex-wrap:wrap;"></div>
+          <button onclick="calcThreadCount()" title="Calculate thread count" style="align-self:flex-start;padding:6px 14px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Calculate</button>
+          <div id="threadCountResult" style="display:none;background:var(--bg);border-radius:6px;padding:12px;display:none;gap:12px;flex-wrap:wrap;"></div>
         </div>
       </div>
 
       <!-- SELVEDGE PREVIEW -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;grid-column:1/-1;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Selvedge Preview</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;grid-column:1/-1;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Selvedge Preview</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
-          <div style="font-size:0.82em;color:#6b6b8a;">Shows the first and last N warp ends to preview how the edges will look. A good selvedge has consistent interlacement at the edges.</div>
+          <div style="font-size:0.82em;color:var(--text-muted);">Shows the first and last N warp ends to preview how the edges will look. A good selvedge has consistent interlacement at the edges.</div>
           <div style="display:flex;align-items:center;gap:12px;">
-            <label style="font-size:0.82em;font-weight:600;color:#3A3A3A;">Edge threads to show</label>
-            <input type="number" id="selvedgeWidth" value="8" min="2" max="24" oninput="runSelvedgePreview()" style="width:60px;padding:5px 8px;border:1.5px solid #b8c0d8;border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.9em;">
-            <button onclick="runSelvedgePreview()" title="Preview selvedge structure" style="padding:6px 14px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Preview</button>
+            <label style="font-size:0.82em;font-weight:600;color:var(--text);">Edge threads to show</label>
+            <input type="number" id="selvedgeWidth" value="8" min="2" max="24" oninput="runSelvedgePreview()" style="width:60px;padding:5px 8px;border:1.5px solid var(--border);border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.9em;">
+            <button onclick="runSelvedgePreview()" title="Preview selvedge structure" style="padding:6px 14px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Preview</button>
           </div>
           <div id="selvedgeResult" style="display:flex;gap:16px;flex-wrap:wrap;"></div>
         </div>
       </div>
 
       <!-- STRUCTURE IDENTIFIER -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Structure Identifier</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Structure Identifier</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
-          <div style="font-size:0.82em;color:#6b6b8a;">Analyses the threading and tie-up to identify the weave structure.</div>
-          <button onclick="runStructureIdentifier()" title="Identify weave structure type" style="padding:7px 18px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;align-self:flex-start;">Identify Structure</button>
+          <div style="font-size:0.82em;color:var(--text-muted);">Analyses the threading and tie-up to identify the weave structure.</div>
+          <button onclick="runStructureIdentifier()" title="Identify weave structure type" style="padding:7px 18px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;align-self:flex-start;">Identify Structure</button>
           <div id="structureResult" style="display:none;font-size:0.85em;line-height:1.7;"></div>
         </div>
       </div>
 
       <!-- REPEAT FINDER -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Threading Repeat Finder</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Threading Repeat Finder</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
-          <div style="font-size:0.82em;color:#6b6b8a;">Detects the smallest repeating unit in the threading sequence.</div>
-          <button onclick="runRepeatFinder()" title="Find repeat pattern" style="padding:7px 18px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;align-self:flex-start;">Find Repeat</button>
+          <div style="font-size:0.82em;color:var(--text-muted);">Detects the smallest repeating unit in the threading sequence.</div>
+          <button onclick="runRepeatFinder()" title="Find repeat pattern" style="padding:7px 18px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;align-self:flex-start;">Find Repeat</button>
           <div id="repeatResult" style="display:none;font-size:0.85em;line-height:1.7;"></div>
         </div>
       </div>
 
       <!-- TIE-UP COMPLEXITY -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;grid-column:1/-1;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Tie-Up Complexity</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;grid-column:1/-1;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Tie-Up Complexity</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
-          <div style="font-size:0.82em;color:#6b6b8a;">Checks how many shafts must be lifted simultaneously and flags any combinations that may exceed your loom's capacity.</div>
+          <div style="font-size:0.82em;color:var(--text-muted);">Checks how many shafts must be lifted simultaneously and flags any combinations that may exceed your loom's capacity.</div>
           <div style="display:flex;align-items:center;gap:10px;">
-            <label style="font-size:0.82em;font-weight:600;color:#3A3A3A;">Loom type</label>
-            <select id="complexityLoomType" style="padding:5px 8px;border:1.5px solid #b8c0d8;border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.82em;">
+            <label style="font-size:0.82em;font-weight:600;color:var(--text);">Loom type</label>
+            <select id="complexityLoomType" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.82em;">
               <option value="floor">Floor loom (unlimited lifts)</option>
               <option value="table">Table loom (max 4 simultaneous)</option>
               <option value="rigid">Rigid heddle (max 2)</option>
               <option value="dobby">Dobby (unlimited but flags density)</option>
             </select>
-            <button onclick="runComplexityCheck()" title="Check pattern complexity" style="padding:7px 18px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Check</button>
+            <button onclick="runComplexityCheck()" title="Check pattern complexity" style="padding:7px 18px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Check</button>
           </div>
           <div id="complexityResult" style="display:none;font-size:0.85em;line-height:1.7;"></div>
         </div>
       </div>
 
     </div>
-    <div style="padding:12px 20px;border-top:1px solid #e0e4f0;display:flex;justify-content:flex-end;flex-shrink:0;grid-column:1/-1;">
+    <div style="padding:12px 20px;border-top:1px solid var(--surface-2);display:flex;justify-content:flex-end;flex-shrink:0;grid-column:1/-1;">
       <button onclick="closeAnalysis()" title="Close analysis" style="padding:7px 20px;border:1px solid #ccc;background:white;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:0.88em;">Close</button>
     </div>
   </div>
@@ -1320,45 +1391,45 @@
 
 <div id="drawingToolsModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:white;border-radius:12px;width:100%;max-width:560px;margin:auto;font-family:'Raleway',sans-serif;overflow:hidden;box-shadow:0 16px 56px rgba(0,0,50,0.35);max-height:90vh;display:flex;flex-direction:column;">
-    <div style="background:#4D167C;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+    <div style="background:var(--brand-purple);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
       <div style="color:white;font-weight:800;font-size:1em;letter-spacing:0.06em;">✏️ DRAWING TOOLS</div>
       <button onclick="closeDrawingTools()" title="Close drawing tools" style="background:none;border:none;color:rgba(255,255,255,0.7);font-size:20px;cursor:pointer;line-height:1;">×</button>
     </div>
     <div style="overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:20px;">
 
       <!-- SYMMETRY MODE -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;display:flex;align-items:center;justify-content:space-between;">
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);display:flex;align-items:center;justify-content:space-between;">
           <span>Symmetry Mode</span>
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:0.9em;text-transform:none;letter-spacing:0;">
             <input type="checkbox" id="symmetryToggle" onchange="toggleSymmetry(this.checked)" style="width:16px;height:16px;cursor:pointer;">
             <span id="symmetryLabel">Off</span>
           </label>
         </div>
-        <div style="padding:12px 14px;font-size:0.82em;color:#6b6b8a;">
+        <div style="padding:12px 14px;font-size:0.82em;color:var(--text-muted);">
           When on, painting any cell in the main drawdown mirrors across all four quadrants simultaneously. Paint one quadrant to fill the whole draft with perfect 4-way symmetry.
         </div>
         <div style="padding:0 14px 12px;display:flex;gap:8px;">
-          <button onclick="setSymmetryType('h')" id="symBtnH" title="Mirror horizontally" style="flex:1;padding:6px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">↔ Horizontal</button>
-          <button onclick="setSymmetryType('v')" id="symBtnV" title="Mirror vertically" style="flex:1;padding:6px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">↕ Vertical</button>
-          <button onclick="setSymmetryType('4')" id="symBtn4" title="Mirror both directions" style="flex:1;padding:6px;border:1.5px solid #001E87;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:#001E87;color:white;">⊞ 4-Way</button>
+          <button onclick="setSymmetryType('h')" id="symBtnH" title="Mirror horizontally" style="flex:1;padding:6px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">↔ Horizontal</button>
+          <button onclick="setSymmetryType('v')" id="symBtnV" title="Mirror vertically" style="flex:1;padding:6px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">↕ Vertical</button>
+          <button onclick="setSymmetryType('4')" id="symBtn4" title="Mirror both directions" style="flex:1;padding:6px;border:1.5px solid var(--brand-blue);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:var(--brand-blue);color:white;">⊞ 4-Way</button>
         </div>
       </div>
 
       <!-- FIND & REPLACE COLOUR -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Find &amp; Replace Colour</div>
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Find &amp; Replace Colour</div>
         <div style="padding:14px;display:flex;flex-direction:column;gap:12px;">
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <label style="font-size:0.82em;font-weight:600;color:#3A3A3A;">Find</label>
-              <input type="color" id="findColor" value="#001E87" style="width:44px;height:32px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;padding:2px;">
+              <label style="font-size:0.82em;font-weight:600;color:var(--text);">Find</label>
+              <input type="color" id="findColor" value="var(--brand-blue)" style="width:44px;height:32px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;padding:2px;">
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
-              <label style="font-size:0.82em;font-weight:600;color:#3A3A3A;">Replace with</label>
-              <input type="color" id="replaceColor" value="#4D167C" style="width:44px;height:32px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;padding:2px;">
+              <label style="font-size:0.82em;font-weight:600;color:var(--text);">Replace with</label>
+              <input type="color" id="replaceColor" value="var(--brand-purple)" style="width:44px;height:32px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;padding:2px;">
             </div>
-            <select id="findReplaceTarget" style="padding:6px 10px;border:1.5px solid #b8c0d8;border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.82em;">
+            <select id="findReplaceTarget" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:5px;font-family:'Raleway',sans-serif;font-size:0.82em;">
               <option value="both">Warp &amp; Weft</option>
               <option value="warp">Warp only</option>
               <option value="weft">Weft only</option>
@@ -1366,56 +1437,56 @@
             </select>
           </div>
           <div style="display:flex;gap:8px;">
-            <button onclick="runFindReplace()" title="Replace all matching colours" style="padding:6px 14px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Replace All</button>
-            <button onclick="pickColorForField('find')" style="padding:6px 12px;background:white;color:#001E87;border:1.5px solid #001E87;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:0.82em;" title="Click a thread to set the Find colour">Pick Find ↗</button>
-            <button onclick="pickColorForField('replace')" style="padding:6px 12px;background:white;color:#4D167C;border:1.5px solid #4D167C;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:0.82em;" title="Click a thread to set the Replace colour">Pick Replace ↗</button>
+            <button onclick="runFindReplace()" title="Replace all matching colours" style="padding:6px 14px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:0.82em;">Replace All</button>
+            <button onclick="pickColorForField('find')" style="padding:6px 12px;background:white;color:var(--brand-blue);border:1.5px solid var(--brand-blue);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:0.82em;" title="Click a thread to set the Find colour">Pick Find ↗</button>
+            <button onclick="pickColorForField('replace')" style="padding:6px 12px;background:white;color:var(--brand-purple);border:1.5px solid var(--brand-purple);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:0.82em;" title="Click a thread to set the Replace colour">Pick Replace ↗</button>
           </div>
-          <div id="findReplaceResult" style="font-size:0.82em;color:#3A3A3A;min-height:16px;"></div>
+          <div id="findReplaceResult" style="font-size:0.82em;color:var(--text);min-height:16px;"></div>
         </div>
       </div>
 
       <!-- PAINT BUCKET -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;display:flex;align-items:center;justify-content:space-between;">
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);display:flex;align-items:center;justify-content:space-between;">
           <span>Paint Bucket</span>
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:0.9em;text-transform:none;letter-spacing:0;">
             <input type="checkbox" id="bucketToggle" onchange="toggleBucket(this.checked)" style="width:16px;height:16px;cursor:pointer;">
             <span id="bucketLabel">Off</span>
           </label>
         </div>
-        <div style="padding:12px 14px;font-size:0.82em;color:#6b6b8a;">
+        <div style="padding:12px 14px;font-size:0.82em;color:var(--text-muted);">
           When on, clicking a warp or weft colour cell fills the entire row or column with the current colour instead of painting one cell at a time.
         </div>
         <div style="padding:0 14px 12px;display:flex;gap:8px;">
-          <button onclick="fillAllWarp()" style="flex:1;padding:7px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">Fill All Warp</button>
-          <button onclick="fillAllWeft()" style="flex:1;padding:7px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">Fill All Weft</button>
-          <button onclick="fillAllBoth()" style="flex:1;padding:7px;border:1.5px solid #001E87;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:#001E87;color:white;">Fill Both</button>
+          <button onclick="fillAllWarp()" style="flex:1;padding:7px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">Fill All Warp</button>
+          <button onclick="fillAllWeft()" style="flex:1;padding:7px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">Fill All Weft</button>
+          <button onclick="fillAllBoth()" style="flex:1;padding:7px;border:1.5px solid var(--brand-blue);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:var(--brand-blue);color:white;">Fill Both</button>
         </div>
       </div>
 
       <!-- MARQUEE SELECT info (already built in) -->
-      <div style="border:1.5px solid #e0e4f0;border-radius:8px;overflow:hidden;">
-        <div style="background:#f0f2f8;padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:#001E87;">Marquee Select</div>
-        <div style="padding:12px 14px;font-size:0.82em;color:#6b6b8a;line-height:1.6;">
+      <div style="border:1.5px solid var(--surface-2);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--bg);padding:10px 14px;font-weight:700;font-size:0.82em;letter-spacing:0.06em;text-transform:uppercase;color:var(--brand-blue);">Marquee Select</div>
+        <div style="padding:12px 14px;font-size:0.82em;color:var(--text-muted);line-height:1.6;">
           Switch to the <b>□ Select</b> tool in the toolbar, then drag on the drawdown to select a rectangle. Or click the button below to switch now.
         </div>
         <div style="padding:0 14px 10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <button onclick="selectTool('select');closeDrawingTools();" style="padding:6px 14px;background:#001E87;color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.82em;font-weight:700;">Switch to Select Tool</button>
-          <span style="font-size:0.78em;color:#9ba3c0;">then drag on drawdown</span>
+          <button onclick="selectTool('select');closeDrawingTools();" style="padding:6px 14px;background:var(--brand-blue);color:white;border:none;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.82em;font-weight:700;">Switch to Select Tool</button>
+          <span style="font-size:0.78em;color:var(--text-faint);">then drag on drawdown</span>
         </div>
         <div style="padding:0 14px 12px;display:flex;gap:8px;flex-wrap:wrap;">
-          <button onclick="selectionAction('copy')" title="Copy selection to clipboard" style="padding:6px 12px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">📋 Copy</button>
-          <button onclick="selectionAction('paste')" title="Paste from clipboard" style="padding:6px 12px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">📌 Paste</button>
-          <button onclick="selectionAction('fill1')" style="padding:6px 12px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">■ Fill On</button>
-          <button onclick="selectionAction('fill0')" style="padding:6px 12px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">Fill Off</button>
-          <button onclick="selectionAction('invert')" style="padding:6px 12px;border:1.5px solid #b8c0d8;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">Invert</button>
-          <button onclick="selectionAction('clear')" style="padding:6px 12px;border:1.5px solid #ffb3c1;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;color:#cc0033;">Clear sel.</button>
+          <button onclick="selectionAction('copy')" title="Copy selection to clipboard" style="padding:6px 12px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">📋 Copy</button>
+          <button onclick="selectionAction('paste')" title="Paste from clipboard" style="padding:6px 12px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">📌 Paste</button>
+          <button onclick="selectionAction('fill1')" style="padding:6px 12px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">■ Fill On</button>
+          <button onclick="selectionAction('fill0')" style="padding:6px 12px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">Fill Off</button>
+          <button onclick="selectionAction('invert')" style="padding:6px 12px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;">Invert</button>
+          <button onclick="selectionAction('clear')" style="padding:6px 12px;border:1.5px solid #ffb3c1;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:0.78em;font-weight:700;background:white;color:var(--danger);">Clear sel.</button>
         </div>
-        <div id="selectionStatus" style="padding:0 14px 10px;font-size:0.78em;color:#6b6b8a;"></div>
+        <div id="selectionStatus" style="padding:0 14px 10px;font-size:0.78em;color:var(--text-muted);"></div>
       </div>
 
     </div>
-    <div style="padding:12px 20px;border-top:1px solid #e0e4f0;display:flex;justify-content:flex-end;flex-shrink:0;">
+    <div style="padding:12px 20px;border-top:1px solid var(--surface-2);display:flex;justify-content:flex-end;flex-shrink:0;">
       <button onclick="closeDrawingTools()" title="Close drawing tools" style="padding:7px 20px;border:1px solid #ccc;background:white;border-radius:5px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:0.88em;">Close</button>
     </div>
   </div>
@@ -1424,46 +1495,46 @@
 <!-- Randomize Popup -->
 <div id="randomizePopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:white;border-radius:10px;padding:24px 28px;width:320px;box-shadow:0 12px 40px rgba(0,0,0,0.3);font-family:'Raleway',sans-serif;" onclick="event.stopPropagation()">
-    <div style="font-size:13px;font-weight:800;color:#001E87;letter-spacing:0.04em;margin-bottom:18px;">🎲 Randomize Settings</div>
+    <div style="font-size:13px;font-weight:800;color:var(--brand-blue);letter-spacing:0.04em;margin-bottom:18px;">🎲 Randomize Settings</div>
 
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
       <div style="display:flex;align-items:center;justify-content:space-between;">
-        <label style="font-size:11px;font-weight:700;color:#6b6b8a;letter-spacing:0.06em;text-transform:uppercase;">Colours</label>
+        <label style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;">Colours</label>
         <div style="display:flex;align-items:center;gap:6px;">
-          <button onclick="randAdj('colours',-1)" title="Decrease number of colours by 1" style="width:24px;height:24px;border:1px solid #b8c0d8;background:#e8ecf8;border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">−</button>
-          <span id="randColoursVal" style="font-size:14px;font-weight:800;color:#001E87;width:20px;text-align:center;">6</span>
-          <button onclick="randAdj('colours',1)" title="Increase number of colours by 1" style="width:24px;height:24px;border:1px solid #b8c0d8;background:#e8ecf8;border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">+</button>
+          <button onclick="randAdj('colours',-1)" title="Decrease number of colours by 1" style="width:24px;height:24px;border:1px solid var(--border);background:var(--btn-bg);border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">−</button>
+          <span id="randColoursVal" style="font-size:14px;font-weight:800;color:var(--brand-blue);width:20px;text-align:center;">6</span>
+          <button onclick="randAdj('colours',1)" title="Increase number of colours by 1" style="width:24px;height:24px;border:1px solid var(--border);background:var(--btn-bg);border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">+</button>
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;">
-        <label style="font-size:11px;font-weight:700;color:#6b6b8a;letter-spacing:0.06em;text-transform:uppercase;">Treadles</label>
+        <label style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;">Treadles</label>
         <div style="display:flex;align-items:center;gap:6px;">
-          <button onclick="randAdj('treadles',-1)" title="Decrease number of treadles by 1" style="width:24px;height:24px;border:1px solid #b8c0d8;background:#e8ecf8;border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">−</button>
-          <span id="randTreadlesVal" style="font-size:14px;font-weight:800;color:#001E87;width:20px;text-align:center;">4</span>
-          <button onclick="randAdj('treadles',1)" title="Increase number of treadles by 1" style="width:24px;height:24px;border:1px solid #b8c0d8;background:#e8ecf8;border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">+</button>
+          <button onclick="randAdj('treadles',-1)" title="Decrease number of treadles by 1" style="width:24px;height:24px;border:1px solid var(--border);background:var(--btn-bg);border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">−</button>
+          <span id="randTreadlesVal" style="font-size:14px;font-weight:800;color:var(--brand-blue);width:20px;text-align:center;">4</span>
+          <button onclick="randAdj('treadles',1)" title="Increase number of treadles by 1" style="width:24px;height:24px;border:1px solid var(--border);background:var(--btn-bg);border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">+</button>
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;">
-        <label style="font-size:11px;font-weight:700;color:#6b6b8a;letter-spacing:0.06em;text-transform:uppercase;">Shafts</label>
+        <label style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;">Shafts</label>
         <div style="display:flex;align-items:center;gap:6px;">
-          <button onclick="randAdj('shafts',-1)" title="Decrease number of shafts by 1" style="width:24px;height:24px;border:1px solid #b8c0d8;background:#e8ecf8;border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">−</button>
-          <span id="randShaftsVal" style="font-size:14px;font-weight:800;color:#001E87;width:20px;text-align:center;">4</span>
-          <button onclick="randAdj('shafts',1)" title="Increase number of shafts by 1" style="width:24px;height:24px;border:1px solid #b8c0d8;background:#e8ecf8;border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">+</button>
+          <button onclick="randAdj('shafts',-1)" title="Decrease number of shafts by 1" style="width:24px;height:24px;border:1px solid var(--border);background:var(--btn-bg);border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">−</button>
+          <span id="randShaftsVal" style="font-size:14px;font-weight:800;color:var(--brand-blue);width:20px;text-align:center;">4</span>
+          <button onclick="randAdj('shafts',1)" title="Increase number of shafts by 1" style="width:24px;height:24px;border:1px solid var(--border);background:var(--btn-bg);border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">+</button>
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;">
-        <label style="font-size:11px;font-weight:700;color:#6b6b8a;letter-spacing:0.06em;text-transform:uppercase;">Randomness %</label>
+        <label style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;">Randomness %</label>
         <div style="display:flex;align-items:center;gap:6px;">
-          <button onclick="randAdj('randomness',-5)" title="Decrease randomness by 5%" style="width:24px;height:24px;border:1px solid #b8c0d8;background:#e8ecf8;border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">−</button>
-          <span id="randRandomnessVal" style="font-size:14px;font-weight:800;color:#001E87;width:36px;text-align:center;">50%</span>
-          <button onclick="randAdj('randomness',5)" title="Increase randomness by 5%" style="width:24px;height:24px;border:1px solid #b8c0d8;background:#e8ecf8;border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">+</button>
+          <button onclick="randAdj('randomness',-5)" title="Decrease randomness by 5%" style="width:24px;height:24px;border:1px solid var(--border);background:var(--btn-bg);border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">−</button>
+          <span id="randRandomnessVal" style="font-size:14px;font-weight:800;color:var(--brand-blue);width:36px;text-align:center;">50%</span>
+          <button onclick="randAdj('randomness',5)" title="Increase randomness by 5%" style="width:24px;height:24px;border:1px solid var(--border);background:var(--btn-bg);border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;line-height:1;">+</button>
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-        <label style="font-size:11px;font-weight:700;color:#6b6b8a;letter-spacing:0.06em;text-transform:uppercase;">Mode</label>
+        <label style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;">Mode</label>
         <div style="display:flex;align-items:center;gap:6px;">
-      <button id="randModeStructured" onclick="setRandMode('structured')" title="Repeatable cloth-like structures" style="height:26px;padding:0 10px;border:1px solid #4D167C;background:#4D167C;color:white;border-radius:4px;cursor:pointer;font-weight:700;font-size:10px;letter-spacing:0.04em;">Structured</button>
-      <button id="randModeExperimental" onclick="setRandMode('experimental')" title="Wilder and less predictable randomization" style="height:26px;padding:0 10px;border:1px solid #b8c0d8;background:#f0f2f8;color:#6b6b8a;border-radius:4px;cursor:pointer;font-weight:700;font-size:10px;letter-spacing:0.04em;">Experimental</button>
+      <button id="randModeStructured" onclick="setRandMode('structured')" title="Repeatable cloth-like structures" style="height:26px;padding:0 10px;border:1px solid var(--brand-purple);background:var(--brand-purple);color:white;border-radius:4px;cursor:pointer;font-weight:700;font-size:10px;letter-spacing:0.04em;">Structured</button>
+      <button id="randModeExperimental" onclick="setRandMode('experimental')" title="Wilder and less predictable randomization" style="height:26px;padding:0 10px;border:1px solid var(--border);background:var(--bg);color:var(--text-muted);border-radius:4px;cursor:pointer;font-weight:700;font-size:10px;letter-spacing:0.04em;">Experimental</button>
 
       
         </div>
@@ -1472,11 +1543,11 @@
 
     <!-- Palette selector -->
     <!-- Back button removed as requested -->
-    <div style="border-top:1px solid #e8ecf8;padding-top:14px;margin-bottom:16px;">
-      <div style="font-size:10px;font-weight:700;color:#6b6b8a;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;">Colour Palette</div>
+    <div style="border-top:1px solid var(--btn-bg);padding-top:14px;margin-bottom:16px;">
+      <div style="font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;">Colour Palette</div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-        <label style="font-size:10px;font-weight:700;color:#6b6b8a;letter-spacing:0.08em;text-transform:uppercase;">Colors</label>
-        <select id="randColoursCount" onchange="onRandColoursCountChange()" style="font-family:'Raleway',sans-serif;font-size:11px;border:1px solid #b8c0d8;border-radius:4px;">
+        <label style="font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;">Colors</label>
+        <select id="randColoursCount" onchange="onRandColoursCountChange()" style="font-family:'Raleway',sans-serif;font-size:11px;border:1px solid var(--border);border-radius:4px;">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -1489,8 +1560,8 @@
     </div>
 
     <div style="display:flex;gap:8px;">
-      <button onclick="closeRandomizePopup()" title="Cancel and close the randomization dialog" style="flex:2;padding:8px;border:1px solid #b8c0d8;background:#f0f2f8;border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;color:#6b6b8a;">Cancel</button>
-      <button onclick="confirmRandomize()" title="Generate a random weave pattern with current settings" style="flex:3;padding:8px;background:linear-gradient(135deg,#4D167C,#001E87);color:white;border:none;border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.04em;">Randomize</button>
+      <button onclick="closeRandomizePopup()" title="Cancel and close the randomization dialog" style="flex:2;padding:8px;border:1px solid var(--border);background:var(--bg);border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;color:var(--text-muted);">Cancel</button>
+      <button onclick="confirmRandomize()" title="Generate a random weave pattern with current settings" style="flex:3;padding:8px;background:linear-gradient(135deg,var(--brand-purple),var(--brand-blue));color:white;border:none;border-radius:6px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.04em;">Randomize</button>
     </div>
   </div>
 </div>
@@ -1693,6 +1764,9 @@
 
 <script>
   // Restore saved randomize mode from localStorage on page load
+// ════════════════════════════════════════════════════════════════════════════
+// INITIALISATION & EVENT WIRING
+// ════════════════════════════════════════════════════════════════════════════
   (function initRandMode(){
     try {
       const saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('fibre_rand_mode') : null;
@@ -2366,7 +2440,90 @@
 <script>
     let currentTool = 'point';
 
+    // ── Error boundaries ──────────────────────────────────────────────────────
+    // A thrown error in any handler must never leave the app in a half-applied
+    // state with no feedback. Log it, tell the user, carry on.
+    (function installErrorBoundaries() {
+        function report(label, err) {
+            try { console.error('[WeaversCanvas] ' + label, err); } catch (_) {}
+            try {
+                if (typeof _toast === 'function') {
+                    _toast(label + ': ' + ((err && err.message) || 'unexpected error'), 'error');
+                } else {
+                    console.warn('[WeaversCanvas] ' + label + ':', (err && err.message) || err);
+                }
+            } catch (_) {}
+        }
+
+        window.addEventListener('error', function (e) {
+            report('Unexpected error', (e && e.error) || new Error(e && e.message));
+        });
+
+        window.addEventListener('unhandledrejection', function (e) {
+            report('Operation failed', (e && e.reason) || new Error('Unhandled promise rejection'));
+        });
+
+        // Run an async task, swallowing and reporting any failure.
+        window._safeAsync = async function (label, fn) {
+            try { return await fn(); }
+            catch (err) { report(label, err); return null; }
+        };
+
+        // Run a sync task, swallowing and reporting any failure.
+        window._safe = function (label, fn) {
+            try { return fn(); }
+            catch (err) { report(label, err); return null; }
+        };
+    })();
+
+    // ── Toast notifications ───────────────────────────────────────────────────
+    // Lightweight, self-cleaning, screen-reader friendly.
+    (function installToasts() {
+        let host = null;
+        function ensureHost() {
+            if (host && document.body.contains(host)) return host;
+            host = document.createElement('div');
+            host.id = '_toastHost';
+            host.setAttribute('role', 'status');
+            host.setAttribute('aria-live', 'polite');
+            host.style.cssText = [
+                'position:fixed', 'left:50%', 'transform:translateX(-50%)',
+                'bottom:24px', 'z-index:100000', 'display:flex',
+                'flex-direction:column', 'gap:8px', 'align-items:center',
+                'pointer-events:none', 'max-width:90vw'
+            ].join(';');
+            document.body.appendChild(host);
+            return host;
+        }
+        window._toast = function (message, kind) {
+            try {
+                const h = ensureHost();
+                const el = document.createElement('div');
+                const isErr = kind === 'error';
+                el.textContent = message;
+                el.style.cssText = [
+                    'pointer-events:auto', 'padding:10px 18px', 'border-radius:8px',
+                    'font-family:Raleway,sans-serif', 'font-size:13px', 'font-weight:600',
+                    'color:#fff', 'box-shadow:0 6px 20px rgba(0,0,0,0.28)',
+                    'background:' + (isErr ? '#cc0033' : '#4D167C'),
+                    'opacity:0', 'transition:opacity .18s ease'
+                ].join(';');
+                h.appendChild(el);
+                requestAnimationFrame(() => { el.style.opacity = '1'; });
+                setTimeout(() => {
+                    el.style.opacity = '0';
+                    setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 220);
+                }, isErr ? 6000 : 3200);
+            } catch (_) {
+                try { console.warn('[WeaversCanvas] ' + message); } catch (__) {}
+            }
+        };
+    })();
+
     // ── HTML escape helper (prevents XSS in innerHTML) ────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+// CORE — helpers, error boundaries & toasts
+// ════════════════════════════════════════════════════════════════════════════
     function escHtml(s) {
         if (s == null) return '';
         return String(s).replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
@@ -2377,6 +2534,9 @@
     const NOTE_TABS = 4;
 
     // ── Yarn Calculator ───────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+// YARN CALCULATOR — yardage, weight & cost
+// ════════════════════════════════════════════════════════════════════════════
     const YC_WEIGHT_YPP = { laceweight:1800, fingering:1500, sport:1200, dk:1000, worsted:800, bulky:400 };
 
     let ycColors = [
@@ -2397,8 +2557,19 @@
     async function ycFetchRates() {
       if (_ycRates) return _ycRates;
       try {
-        const res = await fetch('https://api.frankfurter.dev/v1/latest?base=CAD&symbols=USD,GBP,EUR,AUD,NZD,CAD');
-        if (!res.ok) throw new Error('Rate fetch failed');
+        // Timeout so a hanging request can never freeze the calculator UI.
+        const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+        const timer = ctrl ? setTimeout(() => ctrl.abort(), 8000) : null;
+        let res;
+        try {
+          res = await fetch(
+            'https://api.frankfurter.dev/v1/latest?base=CAD&symbols=USD,GBP,EUR,AUD,NZD,CAD',
+            ctrl ? { signal: ctrl.signal } : undefined
+          );
+        } finally {
+          if (timer) clearTimeout(timer);
+        }
+        if (!res.ok) throw new Error('Rate fetch failed (HTTP ' + res.status + ')');
         const data = await res.json();
         _ycRates = data.rates || {};
         _ycRates['CAD'] = 1;
@@ -2411,7 +2582,19 @@
     }
 
     async function ycUpdateCurrency() {
+      try {
+        await _ycUpdateCurrencyInner();
+      } catch (err) {
+        console.error('[WeaversCanvas] Currency update failed', err);
+        if (typeof _toast === 'function') {
+          _toast('Could not update currency: ' + ((err && err.message) || err), 'error');
+        }
+      }
+    }
+
+    async function _ycUpdateCurrencyInner() {
       const sel = document.getElementById('yc_currency');
+      if (!sel) return;
       const newCurrency = sel.value;
       const sym = ycGetSymbol();
 
@@ -2970,8 +3153,12 @@
 
     // ── Undo / Redo ───────────────────────────────────────────────────────────
     const UNDO_LIMIT = 50;
+    const UNDO_MAX_CELLS = 200000; // total cell budget across undo + redo stacks
     let _undoStack = [], _redoStack = [];
 
+// ════════════════════════════════════════════════════════════════════════════
+// UNDO / REDO — snapshot history
+// ════════════════════════════════════════════════════════════════════════════
     function _snapshot() {
         return {
             threading: {...threading},
@@ -2983,9 +3170,36 @@
         };
     }
 
+    // Cheap proxy for snapshot memory: how many cells the snapshot holds.
+    function _snapCells(s) {
+        return Object.keys(s.threading).length
+             + Object.keys(s.treadling).length
+             + Object.keys(s.tieup).length
+             + Object.keys(s.warpColors).length
+             + Object.keys(s.weftColors).length
+             + s.colorPalette.length;
+    }
+
+    function _stackCells(stack) {
+        let n = 0;
+        for (let i = 0; i < stack.length; i++) n += _snapCells(stack[i]);
+        return n;
+    }
+
+    function _totalUndoCells() { return _stackCells(_undoStack) + _stackCells(_redoStack); }
+
+    // Drop the oldest undo entries until back under budget. The redo stack is
+    // left alone so a pending redo is never silently discarded.
+    function _enforceUndoBudget() {
+        while (_undoStack.length && _totalUndoCells() > UNDO_MAX_CELLS) {
+            _undoStack.shift();
+        }
+    }
+
     function pushUndo() {
         _undoStack.push(_snapshot());
         if (_undoStack.length > UNDO_LIMIT) _undoStack.shift();
+        _enforceUndoBudget();
         _redoStack = [];
         _updateUndoRedoBtns();
     }
@@ -3008,6 +3222,7 @@
         if (!_undoStack.length) return;
         _redoStack.push(_snapshot());
         _applySnapshot(_undoStack.pop());
+        _enforceUndoBudget();
         _updateUndoRedoBtns();
     }
 
@@ -3015,6 +3230,7 @@
         if (!_redoStack.length) return;
         _undoStack.push(_snapshot());
         _applySnapshot(_redoStack.pop());
+        _enforceUndoBudget();
         _updateUndoRedoBtns();
     }
 
@@ -3139,6 +3355,62 @@
             if (e.key === 'Escape') clearSelection();
             if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
             if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); redo(); }
+
+            // ── Keyboard grid navigation ────────────────────────────────────
+            // Arrow keys move a roving focus across the drawdown; Enter/Space
+            // toggles the focused cell. Makes the canvas usable without a mouse.
+            const navKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter', ' '];
+            if (navKeys.indexOf(e.key) !== -1) {
+                const grid = document.getElementById('mainGrid');
+                if (!grid) return;
+                const focused = document.activeElement;
+                const inGrid = focused && focused.closest && focused.closest('#mainGrid');
+                // Only take over when the grid has focus, or when the user is
+                // clearly driving the canvas (nothing else focused).
+                const bodyFocused = focused === document.body;
+                if (!inGrid && !bodyFocused) return;
+
+                let pick = 0, end = 0;
+                if (inGrid && focused.dataset && focused.dataset.pick !== undefined) {
+                    pick = parseInt(focused.dataset.pick) || 0;
+                    end = parseInt(focused.dataset.end) || 0;
+                } else if (_kbCursor) {
+                    pick = _kbCursor.pick; end = _kbCursor.end;
+                }
+
+                if (e.key === 'ArrowUp') pick -= 1;
+                else if (e.key === 'ArrowDown') pick += 1;
+                else if (e.key === 'ArrowLeft') end -= 1;
+                else if (e.key === 'ArrowRight') end += 1;
+
+                pick = Math.max(0, Math.min(weftThreads - 1, pick));
+                end = Math.max(0, Math.min(warpThreads - 1, end));
+                _kbCursor = { pick, end };
+
+                const target = mainGridCells[pick * warpThreads + end];
+                if (!target) return;
+
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    pushUndo();
+                    const cur = !!mainPattern[`${pick}-${end}`];
+                    setMainPatternCell(pick, end, !cur);
+                    if (_symmetryOn) applySymmetry(pick, end, !cur);
+                    updateDrawdownCells();
+                    if (typeof _refreshClothIfOn === 'function') _refreshClothIfOn();
+                    target.focus({ preventScroll: true });
+                    return;
+                }
+
+                e.preventDefault();
+                // Keep the roving tabindex in sync so Tab always returns to the
+                // cell the user last navigated to.
+                const prev = mainGridCells[_kbCursor.pick * warpThreads + _kbCursor.end];
+                if (prev) prev.tabIndex = -1;
+                target.tabIndex = 0;
+                target.focus({ preventScroll: true });
+                target.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            }
         });
 
         document.addEventListener('mousedown', e => {
@@ -3488,7 +3760,21 @@ function toggleRulers() {
         return { col: sc + steps * signC, row: sr + steps * signR };
     }
     
-    // Bresenham's line algorithm - fills all cells along a line for crisp diagonals
+    /**
+     * Bresenham's line algorithm - fills all cells along a line for crisp diagonals.
+     *
+     * NOTE the axis convention: x is the COLUMN (warp end index), y is the ROW
+     * (pick index). Returned points use { col, row } keys, NOT { x, y }.
+     *
+     * @param {number} x0 start column (warp end index)
+     * @param {number} y0 start row (pick index)
+     * @param {number} x1 end column
+     * @param {number} y1 end row
+     * @returns {{col:number,row:number}[]} cells from start to end inclusive
+     */
+// ════════════════════════════════════════════════════════════════════════════
+// DRAWING — line preview & geometry
+// ════════════════════════════════════════════════════════════════════════════
     function bresenhamLine(x0, y0, x1, y1) {
         const cells = [];
         const dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0);
@@ -3878,6 +4164,20 @@ function toggleRulers() {
         return '#' + r.map(x => parseInt(x).toString(16).padStart(2,'0')).join('');
     }
 
+    /**
+     * Recompute the drawdown from the current threading / tie-up / treadling.
+     *
+     * Data model:
+     *   threading[warpEnd] -> shaft number (1-based) that warp end passes through
+     *   treadling[pick]    -> treadle number (1-based) pressed for that pick
+     *   tieup[`${shaft}-${treadle}`] -> true when that shaft is lifted by that treadle
+     *   mainPattern[`${pick}-${warpEnd}`] -> true when the warp thread is on top
+     *
+     * @returns {void}
+     */
+// ════════════════════════════════════════════════════════════════════════════
+// DRAWDOWN ENGINE — interlacement
+// ════════════════════════════════════════════════════════════════════════════
     function calculateDrawdown() {
         for (let p = 0; p < weftThreads; p++) {
             const treadle = treadling[p];
@@ -3967,14 +4267,22 @@ function toggleRulers() {
         createMainGrid(); createTreadlingDraft();
     }
 
+// ════════════════════════════════════════════════════════════════════════════
+// GRID RENDERING — draft canvases
+// ════════════════════════════════════════════════════════════════════════════
     function createWarpColorRow() {
         const c = document.getElementById('warpColorRow');
         c.innerHTML = '';
+        c.setAttribute('role', 'row');
+        c.setAttribute('aria-label', 'Warp end colours');
         for (let i = 0; i < warpThreads; i++) {
             const cell = document.createElement('div');
             cell.className = 'color-cell';
             cell.style.backgroundColor = warpColors[i] || 'white';
             cell.dataset.warpIndex = i;
+            cell.setAttribute('role', 'gridcell');
+            cell.setAttribute('aria-colindex', String(i + 1));
+            cell.setAttribute('aria-label', `Warp end ${i + 1}: ${warpColors[i] || 'no colour'}`);
             cell.onmousedown = e => { e.preventDefault(); isDragging = true; dragMode = 'warp-color'; pushUndo(); setWarpColor(i, cell); _lastDraggingCell = cell; cell.classList.add('dragging'); };
             cell.onmouseenter = () => { if (isDragging && dragMode === 'warp-color') { setWarpColor(i, cell); clearAllDragHighlights(); _lastDraggingCell = cell; cell.classList.add('dragging'); } };
             cell.oncontextmenu = e => { e.preventDefault(); pickColorFromCell(warpColors[i]); highlightColorBarCell('warp', i); };
@@ -3986,11 +4294,16 @@ function toggleRulers() {
     function createWeftColorColumn() {
         const c = document.getElementById('weftColorColumn');
         c.innerHTML = '';
+        c.setAttribute('role', 'columnheader');
+        c.setAttribute('aria-label', 'Weft pick colours');
         for (let i = 0; i < weftThreads; i++) {
             const cell = document.createElement('div');
             cell.className = 'color-cell';
             cell.style.backgroundColor = weftColors[i] || 'white';
             cell.dataset.weftIndex = i;
+            cell.setAttribute('role', 'gridcell');
+            cell.setAttribute('aria-rowindex', String(i + 1));
+            cell.setAttribute('aria-label', `Weft pick ${i + 1}: ${weftColors[i] || 'no colour'}`);
             cell.onmousedown = e => { e.preventDefault(); isDragging = true; dragMode = 'weft-color'; pushUndo(); setWeftColor(i, cell); _lastDraggingCell = cell; cell.classList.add('dragging'); };
             cell.onmouseenter = () => { if (isDragging && dragMode === 'weft-color') { setWeftColor(i, cell); clearAllDragHighlights(); _lastDraggingCell = cell; cell.classList.add('dragging'); } };
             cell.oncontextmenu = e => { e.preventDefault(); pickColorFromCell(weftColors[i]); highlightColorBarCell('weft', i); };
@@ -4056,11 +4369,18 @@ function toggleRulers() {
         threadingCells = {};
         c.style.gridTemplateColumns = `repeat(${warpThreads}, var(--cell-size))`;
         c.style.gridTemplateRows = `repeat(${shafts}, var(--cell-size))`;
+        c.setAttribute('role', 'grid');
+        c.setAttribute('aria-label', `Threading draft, ${warpThreads} warp ends by ${shafts} shafts`);
+        c.setAttribute('aria-rowcount', String(shafts));
+        c.setAttribute('aria-colcount', String(warpThreads));
         for (let shaft = shafts; shaft >= 1; shaft--) {
             for (let warp = 0; warp < warpThreads; warp++) {
                 const cell = document.createElement('div');
                 cell.className = 'threading-cell';
                 cell.dataset.warp = warp; cell.dataset.shaft = shaft;
+                cell.setAttribute('role', 'gridcell');
+                cell.setAttribute('aria-rowindex', String(shafts - shaft + 1));
+                cell.setAttribute('aria-colindex', String(warp + 1));
                 if (!threadingCells[warp]) threadingCells[warp] = {};
                 threadingCells[warp][shaft] = cell;
                 cell.onmousedown = e => {
@@ -4116,11 +4436,18 @@ function toggleRulers() {
         tieupCells = {};
         c.style.gridTemplateColumns = `repeat(${treadles}, var(--cell-size))`;
         c.style.gridTemplateRows = `repeat(${shafts}, var(--cell-size))`;
+        c.setAttribute('role', 'grid');
+        c.setAttribute('aria-label', `Tie-up, ${shafts} shafts by ${treadles} treadles`);
+        c.setAttribute('aria-rowcount', String(shafts));
+        c.setAttribute('aria-colcount', String(treadles));
         for (let shaft = shafts; shaft >= 1; shaft--) {
             for (let treadle = 1; treadle <= treadles; treadle++) {
                 const cell = document.createElement('div');
                 cell.className = 'tieup-cell';
                 cell.dataset.shaft = shaft; cell.dataset.treadle = treadle;
+                cell.setAttribute('role', 'gridcell');
+                cell.setAttribute('aria-rowindex', String(shafts - shaft + 1));
+                cell.setAttribute('aria-colindex', String(treadle));
                 if (!tieupCells[shaft]) tieupCells[shaft] = {};
                 tieupCells[shaft][treadle] = cell;
                 cell.onmousedown = e => {
@@ -4158,11 +4485,24 @@ function toggleRulers() {
         c.innerHTML = '';
         c.style.gridTemplateColumns = `repeat(${warpThreads}, var(--cell-size))`;
         c.style.gridTemplateRows = `repeat(${weftThreads}, var(--cell-size))`;
+        // ARIA grid semantics: role on the container, integer row/col indices on
+        // each cell (cheap — avoids a large string per cell on big grids).
+        c.setAttribute('role', 'grid');
+        c.setAttribute('aria-label', `Drawdown, ${warpThreads} warp ends by ${weftThreads} weft picks`);
+        c.setAttribute('aria-rowcount', String(weftThreads));
+        c.setAttribute('aria-colcount', String(warpThreads));
         for (let pick = 0; pick < weftThreads; pick++) {
             for (let end = 0; end < warpThreads; end++) {
                 const cell = document.createElement('div');
                 cell.className = 'weaving-cell' + (showGrid ? '' : ' no-grid');
                 cell.dataset.pick = pick; cell.dataset.end = end;
+                cell.setAttribute('role', 'gridcell');
+                cell.setAttribute('aria-rowindex', String(pick + 1));
+                cell.setAttribute('aria-colindex', String(end + 1));
+                cell.setAttribute('aria-selected', 'false');
+                // Roving tabindex: only one cell is a tab stop, the rest are
+                // reached with the arrow keys. Avoids thousands of tab stops.
+                cell.tabIndex = (pick === 0 && end === 0) ? 0 : -1;
                 cell.onmousedown = e => {
                     if (e.shiftKey) {
                         e.preventDefault();
@@ -4250,11 +4590,18 @@ function toggleRulers() {
         treadlingCells = {};
         c.style.gridTemplateColumns = `repeat(${treadles}, var(--cell-size))`;
         c.style.gridTemplateRows = `repeat(${weftThreads}, var(--cell-size))`;
+        c.setAttribute('role', 'grid');
+        c.setAttribute('aria-label', `Treadling, ${weftThreads} picks by ${treadles} treadles`);
+        c.setAttribute('aria-rowcount', String(weftThreads));
+        c.setAttribute('aria-colcount', String(treadles));
         for (let pick = 0; pick < weftThreads; pick++) {
             for (let treadle = 1; treadle <= treadles; treadle++) {
                 const cell = document.createElement('div');
                 cell.className = 'treadling-cell';
                 cell.dataset.pick = pick; cell.dataset.treadle = treadle;
+                cell.setAttribute('role', 'gridcell');
+                cell.setAttribute('aria-rowindex', String(pick + 1));
+                cell.setAttribute('aria-colindex', String(treadle));
                 if (!treadlingCells[pick]) treadlingCells[pick] = {};
                 treadlingCells[pick][treadle] = cell;
                 cell.onmousedown = e => {
@@ -4315,6 +4662,12 @@ function toggleRulers() {
         const paintState = (isUp ? '1' : '0') + '|' + (isUp ? (wc || '') : (wfc || ''));
         if (cell._paintState === paintState) return;
         cell._paintState = paintState;
+        // Keep the accessible state in step with the visual state.
+        cell.setAttribute('aria-selected', isUp ? 'true' : 'false');
+        cell.setAttribute(
+            'aria-label',
+            `Pick ${pick + 1}, end ${end + 1}: ${isUp ? 'warp up' : 'weft up'}`
+        );
         const cs = cell.classList;
         if (isUp) {
             if (wc && wc !== 'white') { 
@@ -4488,6 +4841,16 @@ function toggleRulers() {
         }
     }
 
+    /**
+     * Flood-fill a contiguous region of the drawdown with a new value.
+     * Operates on mainPattern keyed `${pick}-${end}`.
+     *
+     * @param {number} startPick starting pick (row) index
+     * @param {number} startEnd starting warp end (column) index
+     * @param {boolean} targetVal the value to flood over
+     * @param {boolean} newVal the value to write
+     * @returns {void}
+     */
     function floodFill(startPick, startEnd, targetVal, newVal) {
         if (targetVal === newVal) return;
         const visited = new Set();
@@ -4607,6 +4970,21 @@ function toggleRulers() {
         if (toolbar && toolbar.parentElement !== document.body) document.body.appendChild(toolbar);
     }
 
+    /**
+     * Set the active marquee selection and highlight it.
+     *
+     * The meaning of r0/c0/r1/c1 depends on `type`:
+     *   'main'      -> r = pick (row),  c = warp end (column)
+     *   'threading' -> c = warp end (column), r unused (all shafts selected)
+     *   'treadling' -> r = pick (row),  c unused (all treadles selected)
+     *
+     * @param {'main'|'threading'|'treadling'} type which grid is being selected
+     * @param {number} r0 first row (or 0 for non-row-aware types)
+     * @param {number} c0 first column (or 0 for non-column-aware types)
+     * @param {number} r1 last row
+     * @param {number} c1 last column
+     * @returns {void}
+     */
     function setSelection(type, r0, c0, r1, c1) {
         ensureSelectionControlsOnTop();
         selection = { type, r0, c0, r1, c1 };
@@ -4673,6 +5051,12 @@ function toggleRulers() {
         document.getElementById('selToolbar').style.display = 'none';
     }
 
+    /**
+     * Tile the current selection repeatedly across the whole grid.
+     * Uses the selection rectangle as the repeating unit for both the
+     * threading (columns) and the treadling (rows).
+     * @returns {void}
+     */
     function tileSelection() {
         if (!selection) return;
         pushUndo();
@@ -4744,6 +5128,9 @@ function toggleRulers() {
     }
 
 let _randInProgress = false;
+// ════════════════════════════════════════════════════════════════════════════
+// PATTERN GENERATION — randomiser
+// ════════════════════════════════════════════════════════════════════════════
   function randomizePattern() {
   if (_randInProgress) return;
   _randInProgress = true;
@@ -4898,26 +5285,77 @@ let _randInProgress = false;
         if (!file) return;
         const reader = new FileReader();
         reader.onload = e => {
-            try { parseWIF(e.target.result); }
-            catch (err) { alert('Error importing WIF file: ' + err.message); }
+            try {
+                parseWIF(e.target.result);
+                if (typeof _toast === 'function') _toast('WIF file imported', 'ok');
+            } catch (err) {
+                console.error('[WeaversCanvas] WIF import failed', err);
+                alert('Error importing WIF file: ' + ((err && err.message) || err));
+            }
+        };
+        reader.onerror = () => {
+            alert('Error reading WIF file.');
         };
         reader.readAsText(file);
         event.target.value = '';
     }
 
+    // Maximum grid size we accept from an imported file. Protects against
+    // malformed or hostile WIF headers claiming enormous thread counts.
+    const WIF_MAX_THREADS = 2000;
+
+    /**
+     * Parse a WIF (Weaving Information File) document into the editor state.
+     *
+     * WIF is an INI-like format: [SECTION] headers followed by key=value lines.
+     * The sections we consume are WEAVING, THREADING, TREADLING and TIEUP.
+     * Comments start with ';'. Values may themselves contain '='.
+     *
+     * @param {string} content raw file text
+     * @throws {Error} if the file is empty or contains no recognisable sections
+     * @returns {void}
+     */
+// ════════════════════════════════════════════════════════════════════════════
+// IMPORT / EXPORT — WIF interchange
+// ════════════════════════════════════════════════════════════════════════════
     function parseWIF(content) {
-        const lines = content.split('\n');
+        if (typeof content !== 'string' || !content.trim()) {
+            throw new Error('The file appears to be empty.');
+        }
+        const lines = content.split(/\r?\n/);
         const sections = {};
         let cur = null;
         lines.forEach(line => {
             line = line.trim();
             if (!line || line.startsWith(';')) return;
-            if (line.startsWith('[') && line.endsWith(']')) { cur = line.slice(1,-1).toLowerCase(); sections[cur] = {}; }
-            else if (cur && line.includes('=')) { const [k,v] = line.split('=').map(s=>s.trim()); sections[cur][k.toLowerCase()] = v; }
+            if (line.startsWith('[') && line.endsWith(']')) {
+                cur = line.slice(1,-1).toLowerCase();
+                if (!sections[cur]) sections[cur] = {};
+            }
+            else if (cur && line.includes('=')) {
+                // Split on the FIRST '=' only — values may contain '=' themselves.
+                const eq = line.indexOf('=');
+                const k = line.slice(0, eq).trim().toLowerCase();
+                const v = line.slice(eq + 1).trim();
+                if (k) sections[cur][k] = v;
+            }
         });
+
+        if (!Object.keys(sections).length) {
+            throw new Error('No WIF sections were found in this file.');
+        }
+
         const w = sections['weaving'] || {};
-        const ns = parseInt(w['shafts']) || shafts, nt = parseInt(w['treadles']) || treadles;
-        const nw = parseInt(w['threads']) || warpThreads, nwf = parseInt(w['picks']) || weftThreads;
+        const clampInt = (val, fallback) => {
+            const n = parseInt(val);
+            if (isNaN(n) || n <= 0) return fallback;
+            return Math.min(n, WIF_MAX_THREADS);
+        };
+        const ns = clampInt(w['shafts'], shafts);
+        const nt = clampInt(w['treadles'], treadles);
+        const nw = clampInt(w['threads'], warpThreads);
+        const nwf = clampInt(w['picks'], weftThreads);
+
         document.getElementById('warpThreads').value = nw;
         document.getElementById('weftThreads').value = nwf;
         document.getElementById('shafts').value = ns;
@@ -4936,8 +5374,11 @@ let _randInProgress = false;
         tieup = {};
         Object.keys(sections['tieup']||{}).forEach(k => {
             const tn = parseInt(k);
-            sections['tieup'][k].split(',').map(s=>parseInt(s.trim())).forEach(sn => {
-                if (!isNaN(tn) && !isNaN(sn)) tieup[`${sn}-${tn}`] = true;
+            const raw = sections['tieup'][k];
+            if (isNaN(tn) || typeof raw !== 'string') return;
+            raw.split(',').forEach(part => {
+                const sn = parseInt(part.trim());
+                if (!isNaN(sn) && sn >= 1 && sn <= ns) tieup[`${sn}-${tn}`] = true;
             });
         });
         warpColors = {}; weftColors = {};
@@ -4946,6 +5387,10 @@ let _randInProgress = false;
         createGrids(); updatePatternInfo(); calculateDrawdown();
     }
 
+    /**
+     * Export the current draft as a WIF 1.1 file download.
+     * @returns {void}
+     */
     function exportWIF() {
         let w = '[WIF]\nVersion=1.1\nDate=' + new Date().toISOString().split('T')[0] + '\nDevelopers=Web WeaversCanvas\nSource Program=Web WeaversCanvas\n\n';
         w += '[CONTENTS]\nWeaving=yes\nThreading=yes\nTreadling=yes\nTieup=yes\n\n';
@@ -5550,6 +5995,9 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
     let _patternSlots = []; // [{name, snap, thumb}]
     let _activeWfTab = 'slots';
 
+// ════════════════════════════════════════════════════════════════════════════
+// WORKFLOW — loom profiles & warp calculator
+// ════════════════════════════════════════════════════════════════════════════
     function openWorkflow() {
         document.getElementById('workflowModal').style.display = 'flex';
         switchWfTab(_activeWfTab);
@@ -5931,6 +6379,9 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
 
     // ── PATTERN TOOLS ────────────────────────────────────────────────────────
 
+// ════════════════════════════════════════════════════════════════════════════
+// PATTERN TOOLS — flip, rotate, tile
+// ════════════════════════════════════════════════════════════════════════════
     function openPatternTools() {
         document.getElementById('patternToolsModal').style.display = 'flex';
         // Sync selection block size if selection exists
@@ -6052,6 +6503,9 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
 
     // ── DRAWING TOOLS ────────────────────────────────────────────────────────
 
+// ════════════════════════════════════════════════════════════════════════════
+// DRAW TOOLS — symmetry, find/replace, bucket
+// ════════════════════════════════════════════════════════════════════════════
     function openDrawingTools() {
         document.getElementById('drawingToolsModal').style.display = 'flex';
         updateSelectionStatus();
@@ -6068,6 +6522,9 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
 
     let _symmetryOn = false;
     let _symmetryType = '4'; // 'h', 'v', '4'
+
+    // Roving keyboard cursor over the drawdown grid.
+    let _kbCursor = { pick: 0, end: 0 };
 
     function toggleSymmetry(on) {
         _symmetryOn = on;
@@ -6324,6 +6781,9 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
 
     // ── EXPORT & SHARE ───────────────────────────────────────────────────────
 
+// ════════════════════════════════════════════════════════════════════════════
+// EXPORT & SHARE — PNG, PDF, tile, peg plan
+// ════════════════════════════════════════════════════════════════════════════
     function openExportShare() { document.getElementById('exportShareModal').style.display = 'flex'; }
     function closeExportShare() { document.getElementById('exportShareModal').style.display = 'none'; }
     document.addEventListener('click', e => { if (e.target === document.getElementById('exportShareModal')) closeExportShare(); });
@@ -6619,6 +7079,9 @@ pre{white-space:pre-wrap;word-break:break-word;}
 
     // ── COLOUR TOOLS ─────────────────────────────────────────────────────────
 
+// ════════════════════════════════════════════════════════════════════════════
+// COLOUR TOOLS — harmony, gradient, image extract
+// ════════════════════════════════════════════════════════════════════════════
     function openColorTools() {
         document.getElementById('colorToolsModal').style.display = 'flex';
         updateGradPreview();
@@ -6851,6 +7314,9 @@ pre{white-space:pre-wrap;word-break:break-word;}
 
     // ── ANALYSIS ─────────────────────────────────────────────────────────────
 
+// ════════════════════════════════════════════════════════════════════════════
+// ANALYSIS — floats, repeats & structure
+// ════════════════════════════════════════════════════════════════════════════
     function openAnalysis() {
         document.getElementById('analysisModal').style.display = 'flex';
         setTimeout(runSelvedgePreview, 50);
@@ -7731,6 +8197,9 @@ pre{white-space:pre-wrap;word-break:break-word;}
       return canvas.toDataURL('image/png');
     }
 
+// ════════════════════════════════════════════════════════════════════════════
+// PATTERN LIBRARY — templates & saved drafts
+// ════════════════════════════════════════════════════════════════════════════
     function openLibraryModal() {
       document.getElementById('libraryModal').style.display='flex';
       renderTemplates();
@@ -7967,6 +8436,9 @@ pre{white-space:pre-wrap;word-break:break-word;}
 
     let _sa_balEPI = 18;
 
+// ════════════════════════════════════════════════════════════════════════════
+// SETT ADVISOR — recommended EPI
+// ════════════════════════════════════════════════════════════════════════════
     function openSettAdvisor() {
         document.getElementById('settAdvisorModal').style.display = 'flex';
         // Initialise the detail line from the currently selected option
@@ -8034,6 +8506,58 @@ pre{white-space:pre-wrap;word-break:break-word;}
     document.getElementById('_loader_').textContent = 'DOM ready, calling init...';
     init();
 });
+
+    // ── Public API surface ────────────────────────────────────────────────────
+    // Everything above lives in one script block because WeaversCanvas ships as
+    // a single self-contained HTML file that must work offline. This namespace
+    // is the seam: it is the only supported way to reach the app from outside,
+    // which keeps the internals free to be split into modules later without
+    // breaking anything that depends on them.
+    window.WC = {
+        version: '1.16.2',
+        build: 794,
+
+        // ── State (read-only snapshots) ──────────────────────────────────
+        getState: function () {
+            return {
+                warpThreads: warpThreads,
+                weftThreads: weftThreads,
+                shafts: shafts,
+                treadles: treadles,
+                threading: { ...threading },
+                treadling: { ...treadling },
+                tieup: { ...tieup },
+                warpColors: { ...warpColors },
+                weftColors: { ...weftColors },
+                colorPalette: [...colorPalette]
+            };
+        },
+
+        // ── Lifecycle ────────────────────────────────────────────────────
+        init: init,
+        recalculate: calculateDrawdown,
+        undo: undo,
+        redo: redo,
+
+        // ── Import / export ──────────────────────────────────────────────
+        exportWIF: exportWIF,
+        parseWIF: parseWIF,
+        saveProject: saveProject,
+        loadProject: loadProject,
+        exportPattern: exportPattern,
+
+        // ── Tools ────────────────────────────────────────────────────────
+        randomizePattern: randomizePattern,
+        clearAll: function () { executeClearAction('clear'); },
+        resetToDefaults: function () { executeClearAction('reset'); },
+        toggleClothView: toggleClothView,
+        toggleUnderside: toggleUnderside,
+
+        // ── Feedback ─────────────────────────────────────────────────────
+        toast: function (msg, kind) { if (typeof _toast === 'function') _toast(msg, kind); },
+        safe: window._safe,
+        safeAsync: window._safeAsync
+    };
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // YARN LIBRARY — Master Yarn Chart 2014 (Handwoven magazine)
@@ -8841,6 +9365,9 @@ function ylApplyYarnCalc(idx) {
 
 <script>
   // ----- Resources Modal -----
+// ════════════════════════════════════════════════════════════════════════════
+// RESOURCES — community links
+// ════════════════════════════════════════════════════════════════════════════
   function openResources() {
     const m = document.getElementById('resourcesModal');
     m.style.display = 'flex';
@@ -8860,6 +9387,9 @@ function ylApplyYarnCalc(idx) {
   });
 
   // ----- Settings Panel -----
+// ════════════════════════════════════════════════════════════════════════════
+// SETTINGS / THEME — region colours
+// ════════════════════════════════════════════════════════════════════════════
   const _ADMIN_COLORS_KEY = 'weaversCanvas_adminColors';
   const _ADMIN_DEFAULTS = { header: '#f8f9ff', controls: '#f0f2f8', workspace: '#ffffff', footer: '#2A2A2A', logoBar: '#ffffff' };
 
@@ -8908,16 +9438,22 @@ function ylApplyYarnCalc(idx) {
     const w = document.getElementById('adminWorkspaceColor').value;
     const f = document.getElementById('adminFooterColor').value;
     const l = document.getElementById('adminLogoBarColor').value;
-    document.documentElement.style.setProperty('--header-bg', h);
-    document.documentElement.style.setProperty('--controlsbar-bg', c);
-    document.documentElement.style.setProperty('--workspace-bg', w);
-    document.documentElement.style.setProperty('--footer-bg', f);
-    document.documentElement.style.setProperty('--logo-bar-bg', l);
+    _applyRegionColors(h, c, w, f, l);
     document.getElementById('adminHeaderSwatch').style.background = h;
     document.getElementById('adminControlsSwatch').style.background = c;
     document.getElementById('adminWorkspaceSwatch').style.background = w;
     document.getElementById('adminFooterSwatch').style.background = f;
     document.getElementById('adminLogoBarSwatch').style.background = l;
+  }
+
+  // Single place that pushes region colours onto the CSS custom properties.
+  function _applyRegionColors(h, c, w, f, l) {
+    const root = document.documentElement.style;
+    root.setProperty('--header-bg', h);
+    root.setProperty('--controlsbar-bg', c);
+    root.setProperty('--workspace-bg', w);
+    root.setProperty('--footer-bg', f);
+    root.setProperty('--logo-bar-bg', l);
   }
 
   function saveAdminColors() {
@@ -8951,11 +9487,7 @@ function ylApplyYarnCalc(idx) {
   // Restore saved colors on load
   document.addEventListener('DOMContentLoaded', () => {
     const c = _loadAdminColors();
-    document.documentElement.style.setProperty('--header-bg', c.header);
-    document.documentElement.style.setProperty('--controlsbar-bg', c.controls);
-    document.documentElement.style.setProperty('--workspace-bg', c.workspace);
-    document.documentElement.style.setProperty('--footer-bg', c.footer);
-    document.documentElement.style.setProperty('--logo-bar-bg', c.logoBar);
+    _applyRegionColors(c.header, c.controls, c.workspace, c.footer, c.logoBar);
     // Wire backdrop click for admin modal
     const am = document.getElementById('adminModal');
     if (am) am.addEventListener('click', (e) => { if (e.target === am) closeAdmin(); });
