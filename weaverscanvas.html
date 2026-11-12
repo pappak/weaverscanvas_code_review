@@ -2463,6 +2463,8 @@
     let threading = {}, treadling = {}, tieup = {}, mainPattern = {}, warpColors = {}, weftColors = {};
     let colorPalette = ['#cc0033','#ffffff','#001E87'];
     let _vpTranslateX = 0, _vpTranslateY = 0, _vpZoom = 1;
+    // Dimensions the grid DOM was last built for.
+    let _gridDims = { w: 0, f: 0, s: 0, t: 0 };
     const ZOOM_MIN = 0.2, ZOOM_MAX = 5, ZOOM_STEP = 0.1;
     let _openPickerForNewSwatch = false;
     let _pendingSharedDraft = null;
@@ -3264,8 +3266,7 @@
         createColorPalette();
         // The snapshot never changes the grid dimensions, so the existing DOM
         // can be repainted rather than rebuilt.
-        if (mainGridCells && mainGridCells.length) refreshGridsInPlace();
-        else createGrids();
+        refreshGridsInPlace();
         calculateDrawdown();
         updatePatternInfo();
     }
@@ -3343,7 +3344,7 @@
             for (let i = 0; i < weftThreads; i++) { if (!weftColors[i]) weftColors[i] = null; }
         }
         createColorPalette();
-        createGrids();
+        refreshGridsInPlace();
         calculateDrawdown();
         updatePatternInfo();
         updateCellSize();
@@ -4081,7 +4082,7 @@ function toggleRulers() {
                         if ((weftColors[j]||'').toLowerCase()===removedColor) { weftColors[j]=fallback; changed=true; }
                     }
                     createColorPalette();
-                    if (changed) { createGrids(); calculateDrawdown(); }
+                    if (changed) { refreshGridsInPlace(); calculateDrawdown(); }
                 };
 
                 wrapper.appendChild(picker);
@@ -4303,20 +4304,32 @@ function toggleRulers() {
         createWarpColorRow(); createWeftColorColumn();
         createThreadingDraft(); createTieupGrid();
         createMainGrid(); createTreadlingDraft();
+        // Remember the shape the DOM was built for, so refreshGridsInPlace()
+        // knows whether it can simply repaint or has to rebuild.
+        _gridDims = { w: warpThreads, f: weftThreads, s: shafts, t: treadles };
     }
 
     /**
      * Refresh the existing grid DOM in place from the current state.
      *
      * Rebuilding every cell (createGrids) costs several milliseconds and
-     * churns thousands of DOM nodes and event-handler closures. That is fine
-     * when the grid dimensions change, but undo/redo never changes them - the
-     * undo snapshot holds threading, treadling, tie-up and colours, not the
-     * dimensions - so undo can simply repaint what is already there.
+     * churns thousands of DOM nodes and event-handler closures. That is
+     * necessary when the grid dimensions change, but undo/redo and the
+     * randomiser never change them - an undo snapshot holds threading,
+     * treadling, tie-up and colours, not the dimensions - so those paths can
+     * simply repaint what is already there.
+     *
+     * Falls back to a full rebuild if the dimensions have moved since the
+     * DOM was last created.
      *
      * @returns {void}
      */
     function refreshGridsInPlace() {
+        if (_gridDims.w !== warpThreads || _gridDims.f !== weftThreads ||
+            _gridDims.s !== shafts || _gridDims.t !== treadles) {
+            createGrids();
+            return;
+        }
         // Colour bars
         for (let i = 0; i < warpThreads; i++) {
             const cell = warpColorCells[i];
@@ -4757,7 +4770,13 @@ function toggleRulers() {
         // from the ARIA grid attributes set at creation, so a per-cell label
         // string would be redundant - and building one for every cell on every
         // repaint is expensive enough to notice on large grids.
-        cell.setAttribute('aria-selected', isUp ? 'true' : 'false');
+        // The write is skipped when the value is unchanged, so a recolour does
+        // not touch 2,304 attributes.
+        const ariaSel = isUp ? 'true' : 'false';
+        if (cell._ariaSel !== ariaSel) {
+            cell._ariaSel = ariaSel;
+            cell.setAttribute('aria-selected', ariaSel);
+        }
         const cs = cell.classList;
         if (isUp) {
             if (wc && wc !== 'white') { 
@@ -5167,7 +5186,7 @@ function toggleRulers() {
         }
 
         clearSelection();
-        createGrids();
+        refreshGridsInPlace();
         calculateDrawdown();
         updatePatternInfo();
     }
@@ -5201,7 +5220,7 @@ function toggleRulers() {
             currentColor = colorPalette[0];
             initializeData();
             createColorPalette();
-            createGrids();
+            refreshGridsInPlace();
             calculateDrawdown();
             updatePatternInfo();
             syncResizeBtnHighlight();
@@ -5212,7 +5231,7 @@ function toggleRulers() {
             createColorPalette();
             initializeData();
             calculateDrawdown();
-            createGrids();
+            refreshGridsInPlace();
             updatePatternInfo();
         }
     }
@@ -5346,7 +5365,10 @@ let _randInProgress = false;
         currentColor = colorPalette[0];
         createColorPalette();
 
-        createGrids();
+        // The randomiser never changes the grid dimensions, so the existing
+        // DOM can be repainted rather than rebuilt. refreshGridsInPlace()
+        // falls back to a rebuild if the dimensions have moved.
+        refreshGridsInPlace();
         calculateDrawdown();
         updatePatternInfo();
         _randInProgress = false;
@@ -5640,7 +5662,7 @@ let _randInProgress = false;
                     document.getElementById('cellSizeValue').textContent = cellSize + 'px';
                 }
                 createColorPalette();
-                createGrids();
+                refreshGridsInPlace();
                 updatePatternInfo();
             } catch(err) {
                 alert('Failed to load project: ' + err.message);
@@ -6179,7 +6201,7 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
         document.getElementById('weftThreads').value = weftThreads;
         document.getElementById('shafts').value = shafts;
         document.getElementById('treadles').value = treadles;
-        createColorPalette(); createGrids(); calculateDrawdown(); updatePatternInfo();
+        createColorPalette(); refreshGridsInPlace(); calculateDrawdown(); updatePatternInfo();
         closeWorkflow();
     }
 
@@ -6287,7 +6309,7 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
             document.getElementById('weftThreads').value = weftThreads;
             document.getElementById('shafts').value = shafts;
             document.getElementById('treadles').value = treadles;
-            createColorPalette(); createGrids(); calculateDrawdown(); updatePatternInfo();
+            createColorPalette(); refreshGridsInPlace(); calculateDrawdown(); updatePatternInfo();
             msgEl.style.color = '#1a7a3a';
             msgEl.textContent = '✓ Draft loaded successfully!';
             setTimeout(() => closeWorkflow(), 800);
@@ -6397,7 +6419,7 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
         weftColors = {...slot.snap.weftColors}; colorPalette = [...slot.snap.colorPalette];
         mainPattern = {...slot.snap.mainPattern};
         currentColor = colorPalette[0];
-        createColorPalette(); createGrids(); calculateDrawdown(); updatePatternInfo();
+        createColorPalette(); refreshGridsInPlace(); calculateDrawdown(); updatePatternInfo();
         closeWorkflow();
     }
 
@@ -6701,7 +6723,7 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
         }
         if (count === 0 && target !== 'palette') { _undoStack.pop(); _updateUndoRedoBtns(); document.getElementById('findReplaceResult').innerHTML = '<span style="color:#c48500;">No threads found with that colour.</span>'; return; }
         createColorPalette();
-        createGrids();
+        refreshGridsInPlace();
         calculateDrawdown();
         document.getElementById('findReplaceResult').innerHTML = `<span style="color:#1a7a3a;font-weight:700;">✓ Replaced ${count} thread${count !== 1 ? 's' : ''}</span>`;
     }
@@ -7295,7 +7317,7 @@ pre{white-space:pre-wrap;word-break:break-word;}
         // Add gradient endpoints to palette
         colorPalette[0] = from; colorPalette[1] = to;
         createColorPalette();
-        createGrids();
+        refreshGridsInPlace();
         calculateDrawdown();
         updatePatternInfo();
     }
@@ -8400,7 +8422,7 @@ pre{white-space:pre-wrap;word-break:break-word;}
       if (!colorPalette.length) colorPalette = [...tmpl.palette];
       currentColor = colorPalette[0];
       createColorPalette();
-      createGrids();
+      refreshGridsInPlace();
       calculateDrawdown();
       updatePatternInfo();
       closeLibraryModal();
@@ -8458,7 +8480,7 @@ pre{white-space:pre-wrap;word-break:break-word;}
       if (p.colorPalette) colorPalette = [...p.colorPalette];
       currentColor = colorPalette[0] || '#001E87';
       createColorPalette();
-      createGrids();
+      refreshGridsInPlace();
       calculateDrawdown();
       updatePatternInfo();
       closeLibraryModal();
