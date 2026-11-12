@@ -2438,6 +2438,43 @@
 <input type="file" id="projectLoad" class="file-input" accept=".wjson" onchange="loadProject(event)">
 
 <script>
+
+    // ============================================================================
+    // Shared state.
+    //
+    // These bindings are read by code in several different feature regions,
+    // so they are declared and initialised here, at the top of the script,
+    // rather than next to the feature that happens to own them.
+    //
+    // A `let` binding sits in its temporal dead zone until its initialiser
+    // has run, so reading one before that point throws "Cannot access
+    // <name> before initialization". Initialising everything up front
+    // removes that whole class of ordering bug.
+    // ============================================================================
+    let warpThreads = 48;
+    let weftThreads = 48;
+    let shafts = 8;
+    let treadles = 10;
+    let cellSize = 15;
+    let currentColor = '#cc0033';
+    let showGrid = true;
+    let showUnderside = false;
+    let dragFillMode = null;
+    let threading = {}, treadling = {}, tieup = {}, mainPattern = {}, warpColors = {}, weftColors = {};
+    let colorPalette = ['#cc0033','#ffffff','#001E87'];
+    let _vpTranslateX = 0, _vpTranslateY = 0, _vpZoom = 1;
+    const ZOOM_MIN = 0.2, ZOOM_MAX = 5, ZOOM_STEP = 0.1;
+    let _openPickerForNewSwatch = false;
+    let _pendingSharedDraft = null;
+    let _symmetryOn = false;
+    let _symmetryType = '4'; // 'h', 'v', '4'
+    let _kbCursor = { pick: 0, end: 0 };
+    let _pickingColorForFind = false;
+    let _pickTarget = 'find'; // 'find' or 'replace'
+    let _suppressDrawingToolsClose = false;
+    let _bucketOn = false;
+    let _floatHighlightedCells = [];
+
     let currentTool = 'point';
 
     // ── Error boundaries ──────────────────────────────────────────────────────
@@ -2958,10 +2995,21 @@
     }
 
     function openNotepad() {
-      document.getElementById('notepadModal').style.display = 'flex';
+      const modal = document.getElementById('notepadModal');
+      if (!modal) {
+        // The notepad modal markup is not present in this build. Fail softly
+        // instead of throwing a TypeError from a menu click.
+        console.warn('[WeaversCanvas] Notes modal is missing from this document.');
+        if (typeof _toast === 'function') {
+          _toast('Notes are unavailable in this build', 'error');
+        }
+        return;
+      }
+      modal.style.display = 'flex';
       loadNoteTab(notepadCurrentTab);
       updateNotepadStatus();
       const ed = document.getElementById('notepadEditor');
+      if (!ed) return;
       ed.style.webkitUserSelect = 'text';
       ed.style.userSelect = 'text';
       ed.style.cursor = 'text';
@@ -2969,7 +3017,8 @@
     }
     function closeNotepad() {
       saveNotepad();
-      document.getElementById('notepadModal').style.display = 'none';
+      const m = document.getElementById('notepadModal');
+      if (m) m.style.display = 'none';
     }
     function saveNotepad() {
       const editor = document.getElementById('notepadEditor');
@@ -3265,20 +3314,7 @@
     }
     function markDirty() {}
     function flushVersion() {}
-    let warpThreads = 48;
-    let weftThreads = 48;
-    let shafts = 8;
-    let treadles = 10;
-    let cellSize = 15;
-    let currentColor = '#cc0033';
-    let showGrid = true;
-    let showUnderside = false;
-    let dragFillMode = null;
 
-    let threading = {}, treadling = {}, tieup = {}, mainPattern = {}, warpColors = {}, weftColors = {};
-    let colorPalette = ['#cc0033','#ffffff','#001E87'];
-    let _vpTranslateX = 0, _vpTranslateY = 0, _vpZoom = 1;
-    const ZOOM_MIN = 0.2, ZOOM_MAX = 5, ZOOM_STEP = 0.1;
 
     function stepInput(id, delta) {
         const el = document.getElementById(id);
@@ -4136,7 +4172,6 @@ function toggleRulers() {
     }
 
     let _highlightedColorCell = null;
-    let _openPickerForNewSwatch = false;
     function highlightColorBarCell(type, idx) {
         // Clear previous highlight
         if (_highlightedColorCell) { _highlightedColorCell.classList.remove('selected'); _highlightedColorCell = null; }
@@ -5646,15 +5681,20 @@ let _randInProgress = false;
 
     // Close modal on backdrop click
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('libraryModal').addEventListener('click', function(e) {
-            if (e.target === this) closeLibraryModal();
-        });
-        document.getElementById('notepadModal').addEventListener('click', function(e) {
-            if (e.target === this) closeNotepad();
-        });
-        document.getElementById('yarnCalcModal').addEventListener('click', function(e) {
-            if (e.target === this) closeYarnCalc();
-        });
+        // Guarded: a missing modal element must not abort the rest of this
+        // handler. The notepad modal markup has been absent from the document
+        // for several builds, and one null here used to throw and stop the
+        // yarn-calculator listener below from ever being attached.
+        const onBackdrop = (id, close) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('click', function(e) {
+                if (e.target === this) close();
+            });
+        };
+        onBackdrop('libraryModal', closeLibraryModal);
+        onBackdrop('notepadModal', closeNotepad);
+        onBackdrop('yarnCalcModal', closeYarnCalc);
     });
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -6203,7 +6243,6 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
     }
 
     // On page load, check for ?draft= in URL
-    let _pendingSharedDraft = null;
     (function checkURLDraft() {
         const params = new URLSearchParams(window.location.search);
         const b64 = params.get('draft');
@@ -6520,11 +6559,8 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
 
     // ── Symmetry Mode ────────────────────────────────────────────────────────
 
-    let _symmetryOn = false;
-    let _symmetryType = '4'; // 'h', 'v', '4'
 
     // Roving keyboard cursor over the drawdown grid.
-    let _kbCursor = { pick: 0, end: 0 };
 
     function toggleSymmetry(on) {
         _symmetryOn = on;
@@ -6563,8 +6599,6 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
 
     // ── Find & Replace Colour ────────────────────────────────────────────────
 
-    let _pickingColorForFind = false;
-    let _pickTarget = 'find'; // 'find' or 'replace'
 
     function pickColorForField(target) {
         _pickTarget = target;
@@ -6575,7 +6609,6 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
         closeDrawingTools();
     }
 
-    let _suppressDrawingToolsClose = false;
 
     function _applyPickedColor(hex) {
         _pickingColorForFind = false;
@@ -6620,7 +6653,6 @@ strong{color:#001E87;}@media print{body{padding:10px;}}</style></head>
 
     // ── Paint Bucket ─────────────────────────────────────────────────────────
 
-    let _bucketOn = false;
 
     function toggleBucket(on) {
         _bucketOn = on;
@@ -7502,7 +7534,6 @@ pre{white-space:pre-wrap;word-break:break-word;}
 
     // ── Float Length Checker ─────────────────────────────────────────────────
 
-    let _floatHighlightedCells = [];
 
     function runFloatCheck() {
         clearFloatHighlights();
