@@ -1,0 +1,19 @@
+# Secrets - never commit these.
+# send-email-config.php holds the SMTP password and lives only on the server.
+send-email-config.php
+.env
+.env.*
+*.pem
+*.key
+
+# Local scratch
+.DS_Store
+Thumbs.db
+*.bak
+*.bak.*
+.backup-*/
+node_modules/
+.DS_Store
+
+# Local tooling output
+*.log
