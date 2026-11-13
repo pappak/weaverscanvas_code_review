@@ -1052,17 +1052,27 @@
         .threading-cell.sel-highlight { background: rgba(204,0,51,0.12) !important; box-shadow: inset 0 0 0 1px var(--danger); z-index: 1; }
         .treadling-cell.sel-highlight { background: rgba(204,0,51,0.12) !important; box-shadow: inset 0 0 0 1px var(--danger); z-index: 1; }
 
+        /* The Tile button appears over a finished selection. It is made
+           deliberately large and pulsing for a couple of seconds so it is
+           obvious that a further action is needed - previously it was a
+           small button parked off to the side that was easy to miss. */
         #tileBtn, #selToolbar {
             display: none; position: fixed; z-index: 999;
-            font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
-            padding: 6px 14px; background: var(--brand-purple); color: white;
-            border: none; border-radius: 6px; cursor: pointer;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-            letter-spacing: 0.04em;
+            font-family: 'Raleway', sans-serif; font-size: 13px; font-weight: 700;
+            padding: 11px 18px; background: var(--brand-purple); color: white;
+            border: 2px solid #fff; border-radius: 10px; cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.38);
+            letter-spacing: 0.03em;
+        }
+        #tileBtn { font-size: 14px; padding: 12px 20px; }
+        #tileBtn.tile-pulse { animation: tilePulse 0.9s ease-in-out 3; }
+        @keyframes tilePulse {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.08); }
         }
         #tileBtn:hover, #selToolbar:hover { background: var(--brand-purple-deep); }
         #selToolbar {
-            display: none; gap: 4px; padding: 4px 8px;
+            gap: 4px; padding: 6px 8px;
         }
         #selToolbar button {
             padding: 5px 10px; font-size: 10px; background: var(--brand-purple); color: white;
@@ -1127,8 +1137,8 @@
 <div style="padding:6px 16px;display:flex;align-items:center;gap:12px;background:var(--logo-bar-bg,var(--surface));">
     <img src="weaverscanvas-logo.png" alt="Weaver's Canvas" style="height:60px;width:auto;display:inline-block;" onerror="this.style.display='none'">
     <div style="display:flex;flex-direction:column;gap:2px;">
-        <div style="font-size:1.2em;font-weight:800;color:var(--brand-blue);letter-spacing:0.02em;line-height:1.2;">WeaversCanvas</div>
-        <div style="font-size:0.72em;font-weight:500;opacity:0.7;letter-spacing:0.06em;color:var(--brand-blue);line-height:1;" id="appVersion">v1.16.2 <span style="color:#ff4444;font-weight:800;">BETA</span> [Build 794]</div>
+        <div style="font-size:0.72em;font-weight:800;color:var(--brand-blue);letter-spacing:0.02em;line-height:1.2;">WeaversCanvas</div>
+        <div style="font-size:0.72em;font-weight:500;opacity:0.7;letter-spacing:0.06em;color:var(--brand-blue);line-height:1;" id="appVersion">v1.17.0 <span style="color:#ff4444;font-weight:800;">BETA</span> [Build 800]</div>
     </div>
 </div>
 
@@ -1147,6 +1157,7 @@
             <button class="btn btn-tool green-style" onclick="openSettAdvisor()" title="Get recommended sett values for different yarns">Sett Advisor</button>
             <button class="btn btn-tool green-style" onclick="openYarnLibrary()" title="Browse the Master Yarn Chart 2014 — pick a yarn and apply it to your design">Yarn Library</button>
         </span>
+        <button class="btn btn-accent" id="patternLibraryBtn" onclick="openLibraryModal()" title="Browse classic weaves and your saved patterns">Pattern Library</button>
         <span style="width:16px;display:inline-block;"></span>
         <button class="btn btn-danger" id="clearResetBtn" onclick="openClearResetChoice()" title="Clear the grid or reset to defaults">Clear / Reset</button>
         <button class="btn btn-view" onclick="toggleUnderside()" id="undersideBtn" title="Show the underside/back view of the weave">Show Back</button>
@@ -1193,11 +1204,10 @@
 
         <!-- Tools Dropdown (yellow) -->
         <div class="dropdown" style="display:inline-block;position:relative;">
-            <button class="btn btn-tool btn-accent" id="toolsBtn" onclick="toggleToolsDropdown()" title="Open additional tools menu" onmouseover="this.style.background='#FFB300';this.style.boxShadow='0 5px 14px rgba(255,193,7,0.65)'" onmouseout="this.style.background='#FFC107';this.style.boxShadow='0 3px 10px rgba(255,193,7,0.5)'">🛠 Tools <span style="font-size:0.75em;">▼</span></button>
+            <button class="btn btn-tool btn-accent" id="toolsBtn" onclick="toggleToolsDropdown()" title="Open additional tools menu" onmouseover="this.style.background='var(--brand-purple-hover)';this.style.boxShadow='0 5px 14px rgba(255,193,7,0.65)'" onmouseout="this.style.background='var(--brand-purple)';this.style.boxShadow='0 3px 10px rgba(255,193,7,0.5)'">🛠 Tools <span style="font-size:0.75em;">▼</span></button>
             <div id="toolsDropdown" class="dropdown-content" style="display:none;position:absolute;right:0;top:100%;min-width:190px;z-index:1000;">
                 <div style="padding:8px 12px;font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid #eee;">Analysis</div>
-<button class="dropdown-item" onclick="openLibraryModal()" title="Browse pattern library">Library</button>
-                <button class="dropdown-item" onclick="openAnalysis()" title="Analysis tools for your pattern">Analysis</button>
+<button class="dropdown-item" onclick="openAnalysis()" title="Analysis tools for your pattern">Analysis</button>
                 <button class="dropdown-item" onclick="openDrawingTools()" title="Drawing and editing tools">Draw Tools</button>
                 <button class="dropdown-item" onclick="openPatternTools()" title="Pattern transformation tools">Pattern Tools</button>
                 <button class="dropdown-item" onclick="openWorkflow()" title="Weaving workflow tools">Workflow</button>
@@ -2745,7 +2755,7 @@
   </div>
 </div>
 
-<button class="btn" id="tileBtn" onclick="tileSelection()">⊞ Tile Selection</button>
+<button class="btn" id="tileBtn" onclick="tileSelection()" title="Repeat this selection across the whole grid">▦ Tile this selection</button>
 <div id="selToolbar">
     <button class="btn" onclick="selectionAction('copy')">📋 Copy</button>
     <button class="btn" onclick="selectionAction('paste')">📌 Paste</button>
@@ -3637,12 +3647,12 @@
     }
     // ─────────────────────────────────────────────────────────────────────────
     // Build number — auto-increments on each load
-    let _buildNum = 794;
+    let _buildNum = 800;
     function incrementVersion() {
         _buildNum++;
     }
     function renderVersion() {
-        const BUILD = 'v1.16.2 <span style="color:#ff4444;font-weight:800;">BETA</span> [Build ' + _buildNum + ']';
+        const BUILD = 'v1.17.0 <span style="color:#ff4444;font-weight:800;">BETA</span> [Build ' + _buildNum + ']';
         const el = document.getElementById('appVersion');
         if (el) el.innerHTML = BUILD;
     }
@@ -4116,11 +4126,11 @@ function toggleRulers() {
         if (!lineLockedDir) return { col: cc, row: cr };
         if (lineLockedDir === 'h') return { col: cc, row: sr };
         if (lineLockedDir === 'v') return { col: sc, row: cr };
-        // Exact 45° diagonal - step exactly 1:1
-        const steps = Math.max(Math.abs(dc), Math.abs(dr));
-        const signC = dc >= 0 ? 1 : -1;
-        const signR = lineLockedDir === 'd1' ? signC : -signC;
-        return { col: sc + steps * signC, row: sr + steps * signR };
+        // Diagonal - follow the actual drag direction. Bresenham draws a
+        // crisp connected path between the start and wherever the pointer is,
+        // so the line always matches the angle the user is drawing instead
+        // of snapping onto a 45-degree step that may bear no relation to it.
+        return { col: cc, row: cr };
     }
     
     /**
@@ -4162,24 +4172,17 @@ function toggleRulers() {
 
         const absCol = Math.abs(dc);
         const absRow = Math.abs(dr);
-        const horizontalCost = absRow;
-        const verticalCost = absCol;
-        const diagonalCost = Math.abs(absCol - absRow) / Math.SQRT2;
-
-        if (horizontalCost <= verticalCost && horizontalCost <= diagonalCost) {
-            return { col, row: startRow };
-        }
-        if (verticalCost <= diagonalCost) {
-            return { col: startCol, row };
-        }
-
-        const colSign = dc >= 0 ? 1 : -1;
-        const rowSign = dr >= 0 ? 1 : -1;
-        const requestedSteps = Math.max(1, Math.round((absCol + absRow) / 2));
-        const maxColSteps = colSign > 0 ? warpThreads - 1 - startCol : startCol;
-        const maxRowSteps = rowSign > 0 ? weftThreads - 1 - startRow : startRow;
-        const steps = Math.min(requestedSteps, maxColSteps, maxRowSteps);
-        return { col: startCol + steps * colSign, row: startRow + steps * rowSign };
+        // Snap to a perfectly straight line only when the drag is within a
+        // cell or two of horizontal or vertical. Anything else is a diagonal,
+        // and the line follows the direction the user is actually drawing -
+        // Bresenham renders it as a crisp connected path between the two
+        // endpoints. Previously the endpoint was snapped to the nearest of
+        // H / V / 45-degree, which forced a shallow or steep diagonal onto a
+        // 45-degree line that bore no resemblance to the drag.
+        const TOLERANCE = 2;
+        if (absRow <= TOLERANCE) return { col, row: startRow };
+        if (absCol <= TOLERANCE) return { col: startCol, row };
+        return { col, row };
     }
 
     function clearLinePreview() {
@@ -5488,15 +5491,21 @@ function toggleRulers() {
         const margin = 8;
         const gap = 7;
         const btnRect = btn.getBoundingClientRect();
-        let left = anchorRect.right + gap;
-        if (left + btnRect.width > window.innerWidth - margin) {
-            left = anchorRect.left - btnRect.width - gap;
-        }
+
+        // Place the button directly above the centre of the selection -
+        // roughly where the pointer finished the drag - so the next action
+        // is under the eye rather than parked off to one side.
+        const centreX = anchorRect.left + anchorRect.width / 2;
+        let left = centreX - btnRect.width / 2;
+        let top = anchorRect.top - btnRect.height - 12;
+        if (top < margin) top = anchorRect.bottom + 12;
         left = Math.max(margin, Math.min(left, window.innerWidth - btnRect.width - margin));
-        let top = Math.max(margin, Math.min(anchorRect.top, window.innerHeight - btnRect.height - margin));
+        top = Math.max(margin, Math.min(top, window.innerHeight - btnRect.height - margin));
 
         btn.style.left = left + 'px';
         btn.style.top = top + 'px';
+        btn.classList.add('tile-pulse');
+        setTimeout(() => btn.classList.remove('tile-pulse'), 2800);
 
         if (type === 'main') {
             const toolbarRect = selToolbar.getBoundingClientRect();
@@ -7208,19 +7217,19 @@ strong{color:var(--brand-blue);}@media print{body{padding:10px;}}</style></head>
                         </div>
                         <div style="background:var(--bg);border-radius:8px;padding:14px;">
                             <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">🖌 Drawing Tools</div>
-                            <div style="font-size:0.85em;color:var(--text-muted);">Point, Line, Freehand, Select, and Fill tools for pattern creation.</div>
+                            <div style="font-size:0.85em;color:var(--text-muted);">Point, Line (free angle), Freehand, Select, and Fill tools for pattern creation.</div>
+                        </div>
+                        <div style="background:var(--bg);border-radius:8px;padding:14px;">
+                            <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">🎨 Colour Palette</div>
+                            <div style="font-size:0.85em;color:var(--text-muted);">Customisable warp and weft colors with harmony generator and image extraction.</div>
                         </div>
                         <div style="background:var(--bg);border-radius:8px;padding:14px;">
                             <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">🎲 Randomize</div>
                             <div style="font-size:0.85em;color:var(--text-muted);">Generate random patterns with adjustable density controls.</div>
                         </div>
                         <div style="background:var(--bg);border-radius:8px;padding:14px;">
-                            <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">🎨 Colour Palette</div>
-                            <div style="font-size:0.85em;color:var(--text-muted);">Customizable warp and weft colors with harmony generator.</div>
-                        </div>
-                        <div style="background:var(--bg);border-radius:8px;padding:14px;">
                             <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">🧶 Yarn Calculator</div>
-                            <div style="font-size:0.85em;color:var(--text-muted);">Calculate yarn requirements, EPI, and cost estimates.</div>
+                            <div style="font-size:0.85em;color:var(--text-muted);">Calculate yarn requirements, EPI, and cost estimates with live exchange rates.</div>
                         </div>
                         <div style="background:var(--bg);border-radius:8px;padding:14px;">
                             <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">📐 Sett Advisor</div>
@@ -7249,6 +7258,18 @@ strong{color:var(--brand-blue);}@media print{body{padding:10px;}}</style></head>
                         <div style="background:var(--bg);border-radius:8px;padding:14px;">
                             <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">🔀 Pattern Tools</div>
                             <div style="font-size:0.85em;color:var(--text-muted);">Flip, rotate, invert, tile, and transform patterns.</div>
+                        </div>
+                        <div style="background:var(--bg);border-radius:8px;padding:14px;">
+                            <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">📝 Notes</div>
+                            <div style="font-size:0.85em;color:var(--text-muted);">Four-tab notepad for project notes, saved per browser.</div>
+                        </div>
+                        <div style="background:var(--bg);border-radius:8px;padding:14px;">
+                            <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">🔗 Share Links</div>
+                            <div style="font-size:0.85em;color:var(--text-muted);">Encode the whole draft into a URL that anyone can open — no file needed.</div>
+                        </div>
+                        <div style="background:var(--bg);border-radius:8px;padding:14px;">
+                            <div style="font-weight:700;color:var(--brand-blue);margin-bottom:6px;">⌨ Keyboard</div>
+                            <div style="font-size:0.85em;color:var(--text-muted);">Arrow keys to move across the drawdown, Enter or Space to toggle a cell, Ctrl+Z/Y for undo and redo.</div>
                         </div>
                     </div>
                 </div>
@@ -10218,7 +10239,7 @@ window.__wcBoot = 'ok';
       </div>
     </div>
     <div style="text-align:right;flex-shrink:0;">
-      <div style="font-size:0.72em;color:var(--text-muted);letter-spacing:0.04em;">v1.16.2 · build 794</div>
+      <div style="font-size:0.72em;color:var(--text-muted);letter-spacing:0.04em;">v1.17.0 · build 800</div>
     </div>
   </div>
 </footer>
@@ -10284,11 +10305,32 @@ window.__wcBoot = 'ok';
   #yarnCalcModal #yc_totalYds { color:var(--brand-purple)!important; }
   #yarnCalcModal #yc_costCard { background:var(--surface-2)!important; border:1px solid var(--border); }
   #yarnCalcModal #yc_totalCost { color:var(--success-text)!important; }
-  #yarnCalcModal button { color:var(--brand-purple)!important; border-color:var(--border)!important; }
-  #yarnCalcModal button:hover:not(:disabled) { background:var(--bg)!important; }
-  #yarnCalcModal button[onclick*="ycLoadCurrentPattern"],
-  #yarnCalcModal button[onclick*="ycPrint"] { color:var(--success-text)!important; border-color:var(--border)!important; }
-  #yarnCalcModal button[onclick*="ycClear"] { color:var(--danger)!important; border-color:var(--border)!important; }
+  /* Button text in the yarn calculator.
+     The header sits on the dark brand gradient, the body on white - so the
+     two need different text colours. One blanket rule used to force the
+     same colour onto both, leaving dark text on the navy buttons.
+     The .btn family already fills the body buttons navy, so white is
+     readable on them; the ghost button needs brand-coloured text instead. */
+  #yarnCalcModal>div>div:first-child button {
+    color:var(--surface)!important;
+    border-color:rgba(255,255,255,0.35)!important;
+  }
+  #yarnCalcModal>div>div:first-child button:hover:not(:disabled) {
+    background:rgba(255,255,255,0.18)!important;
+  }
+  #yarnCalcModal>div>div:nth-child(2) button {
+    color:var(--surface)!important;
+  }
+  #yarnCalcModal>div>div:nth-child(2) button:hover:not(:disabled) {
+    background:var(--brand-blue-hover)!important;
+  }
+  #yarnCalcModal>div>div:nth-child(2) button.btn-ghost {
+    color:var(--brand-blue)!important;
+    background:transparent!important;
+  }
+  #yarnCalcModal>div>div:nth-child(2) button.btn-ghost:hover:not(:disabled) {
+    background:var(--surface-2)!important;
+  }
 </style>
 <style id="selection-popup-fix">
   #tileBtn {
