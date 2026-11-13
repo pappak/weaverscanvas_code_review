@@ -308,14 +308,15 @@
         }
 
         /* Tooltips */
-        .tooltip-enabled [title] { position: relative; }
-        
-        .tooltip-enabled [title]:hover::after {
-            content: attr(title);
+        .tooltip-enabled [title],
+        .tooltip-enabled [data-tip-text] { position: relative; }
+
+        .tooltip-enabled [data-tip-text]:hover::after {
+            content: attr(data-tip-text);
             position: absolute;
             bottom: 100%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-15%);
             background: var(--text);
             color: white;
             padding: 6px 12px;
@@ -328,8 +329,9 @@
             font-family: 'Raleway', sans-serif;
             pointer-events: none;
         }
-        
-        .tooltip-disabled [title]:hover::after {
+
+        .tooltip-disabled [title]:hover::after,
+        .tooltip-disabled [data-tip-text]:hover::after {
             display: none !important;
         }
         
@@ -4059,6 +4061,26 @@ function toggleRulers() {
                 document.body.classList.add('tooltip-disabled');
             }
         }
+        // Suppress the browser's built-in white tooltip while our custom
+        // (black) ones are on: hovering temporarily moves the title attribute
+        // into data-tip-text, which the CSS reads instead. On mouse-out the
+        // original title is restored, so screen readers and Tips OFF mode
+        // still see it.
+        document.addEventListener('mouseover', function(e) {
+            if (!document.body.classList.contains('tooltip-enabled')) return;
+            const el = e.target.closest && e.target.closest('[title]');
+            if (el && el.hasAttribute('title') && !el.dataset.tipText) {
+                el.dataset.tipText = el.getAttribute('title');
+                el.removeAttribute('title');
+            }
+        });
+        document.addEventListener('mouseout', function(e) {
+            const el = e.target.closest && e.target.closest('[data-tip-text]');
+            if (el && !(e.relatedTarget && el.contains(e.relatedTarget))) {
+                el.setAttribute('title', el.dataset.tipText);
+                delete el.dataset.tipText;
+            }
+        });
         // Tulips and celebration animations removed per request
     
     function toggleToolsDropdown() {
