@@ -4073,7 +4073,9 @@ function toggleRulers() {
     
     // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
-        if (!e.target.closest('.dropdown')) {
+        // The Tools button and its dropdown both live inside the tool group
+        // box, not inside a .dropdown wrapper — so check for them by id.
+        if (!e.target.closest('.dropdown') && !e.target.closest('#toolsBtn') && !e.target.closest('#toolsDropdown')) {
             document.getElementById('toolsDropdown').style.display = 'none';
         }
     });
