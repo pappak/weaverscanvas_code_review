@@ -2103,7 +2103,7 @@
         <label>Warp</label>
         <div class="stepper">
             <button class="step-btn" onclick="stepInput('warpThreads',-1)" title="Decrease warp threads by 1">−</button>
-            <input type="number" id="warpThreads" value="48" min="1" max="100" oninput="resizeGrid()" onchange="resizeGrid()" title="Set number of warp threads">
+            <input type="number" id="warpThreads" value="48" min="1" max="100" oninput="scheduleResize()" title="Set number of warp threads">
             <button class="step-btn" onclick="stepInput('warpThreads',1)" title="Increase warp threads by 1">+</button>
         </div>
     </div>
@@ -2111,7 +2111,7 @@
         <label>Weft</label>
         <div class="stepper">
             <button class="step-btn" onclick="stepInput('weftThreads',-1)" title="Decrease weft threads by 1">−</button>
-            <input type="number" id="weftThreads" value="48" min="1" max="100" oninput="resizeGrid()" onchange="resizeGrid()" title="Set number of weft threads">
+            <input type="number" id="weftThreads" value="48" min="1" max="100" oninput="scheduleResize()" title="Set number of weft threads">
             <button class="step-btn" onclick="stepInput('weftThreads',1)" title="Increase weft threads by 1">+</button>
         </div>
     </div>
@@ -2119,7 +2119,7 @@
         <label>Shafts</label>
         <div class="stepper">
             <button class="step-btn" onclick="stepInput('shafts',-1)" title="Decrease shafts by 1">−</button>
-            <input type="number" id="shafts" value="8" min="2" max="32" oninput="resizeGrid()" onchange="resizeGrid()" title="Set number of shafts">
+            <input type="number" id="shafts" value="8" min="2" max="32" oninput="scheduleResize()" title="Set number of shafts">
             <button class="step-btn" onclick="stepInput('shafts',1)" title="Increase shafts by 1">+</button>
         </div>
     </div>
@@ -2127,7 +2127,7 @@
         <label>Treadles</label>
         <div class="stepper">
             <button class="step-btn" onclick="stepInput('treadles',-1)" title="Decrease treadles by 1">−</button>
-            <input type="number" id="treadles" value="10" min="2" max="32" oninput="resizeGrid()" onchange="resizeGrid()" title="Set number of treadles">
+            <input type="number" id="treadles" value="10" min="2" max="32" oninput="scheduleResize()" title="Set number of treadles">
             <button class="step-btn" onclick="stepInput('treadles',1)" title="Increase treadles by 1">+</button>
         </div>
     </div>
@@ -2633,6 +2633,11 @@
 <input type="file" id="projectLoad" class="file-input" accept=".wjson" onchange="loadProject(event)">
 
 <script>
+    // Set before anything else: the boot check in a later, separate script
+    // block looks for this to become 'ok'. If this whole block fails to
+    // parse, the flag stays 'pending' and the check explains the real problem
+    // instead of the user hitting a confusing temporal dead zone error.
+    window.__wcBoot = 'pending';
 
     // ============================================================================
     // Shared state.
@@ -4497,12 +4502,49 @@ function toggleRulers() {
     }
 
     function createGrids() {
+        // Full rebuild - every grid, whatever the dimensions are. Use this
+        // whenever the DATA may have changed, not just the size.
         createShaftLabels(); createTreadleLabels(); createWarpRuler(); createWeftRuler();
         createWarpColorRow(); createWeftColorColumn();
         createThreadingDraft(); createTieupGrid();
         createMainGrid(); createTreadlingDraft();
         // Remember the shape the DOM was built for, so refreshGridsInPlace()
         // knows whether it can simply repaint or has to rebuild.
+        _gridDims = { w: warpThreads, f: weftThreads, s: shafts, t: treadles };
+    }
+
+    /**
+     * Rebuild only the grids whose dimensions actually changed.
+     *
+     * Clicking "+" on the shaft count must not throw away and recreate the
+     * drawdown - its size is unaffected by the shaft count, and at 48x48 that
+     * is 2,304 cells rebuilt for nothing. The colour bars, threading, tie-up,
+     * drawdown and treadling grids each depend on a specific pair of
+     * dimensions, so each is rebuilt exactly when one of those changes.
+     *
+     * The caller is responsible for refreshing the content of the grids that
+     * were not rebuilt (calculateDrawdown() does this for the drawdown).
+     *
+     * @returns {void}
+     */
+    function resizeGrids() {
+        const d = _gridDims;
+        const wChanged = d.w !== warpThreads;
+        const fChanged = d.f !== weftThreads;
+        const sChanged = d.s !== shafts;
+        const tChanged = d.t !== treadles;
+
+        if (sChanged) createShaftLabels();
+        if (tChanged) createTreadleLabels();
+        if (wChanged) createWarpRuler();
+        if (fChanged) createWeftRuler();
+        if (wChanged) createWarpColorRow();
+        if (fChanged) createWeftColorColumn();
+        if (wChanged || sChanged) createThreadingDraft();
+        if (sChanged || tChanged) createTieupGrid();
+        if (wChanged || fChanged) createMainGrid();
+        if (fChanged || tChanged) createTreadlingDraft();
+
         _gridDims = { w: warpThreads, f: weftThreads, s: shafts, t: treadles };
     }
 
@@ -5580,7 +5622,20 @@ let _randInProgress = false;
             return;
         }
         preserveDataOnResize(nw, nwf, ns, nt);
-        createGrids(); updatePatternInfo(); calculateDrawdown();
+        resizeGrids(); updatePatternInfo(); calculateDrawdown();
+        if (typeof window._resetViewport === 'function') window._resetViewport();
+    }
+
+    // Typing in a size box, or holding a spinner arrow, fires a stream of
+    // events. Coalesce them into a single rebuild so the grid does not
+    // thrash while the value is being changed.
+    let _resizeTimer = null;
+    function scheduleResize() {
+        if (_resizeTimer) clearTimeout(_resizeTimer);
+        _resizeTimer = setTimeout(function () {
+            _resizeTimer = null;
+            resizeGrid();
+        }, 120);
     }
 
     function updatePatternInfo() {
@@ -9583,6 +9638,46 @@ function ylApplyYarnCalc(idx) {
   closeYarnLibrary();
   if (typeof openYarnCalc === 'function') openYarnCalc();
 }
+
+// Mark the app as started. The boot check below lives in its own script block
+// so it still runs if this block fails to parse.
+window.__wcBoot = 'ok';
+</script>
+
+<!-- ═══ BOOT CHECK ═══ -->
+<!-- Lives outside the main script block on purpose: if the main block has a
+     syntax error the whole block never executes, and every const it declares
+     stays in its temporal dead zone. That produces confusing errors like
+     "Cannot access 'SA_STRUCT' before initialization" when a user clicks
+     something. This block detects that case and says what is actually wrong. -->
+<script>
+(function () {
+  function fail(reason) {
+    var el = document.createElement('div');
+    el.id = '_wcBootError';
+    el.setAttribute('role', 'alert');
+    el.style.cssText = [
+      'position:fixed', 'left:50%', 'transform:translateX(-50%)', 'bottom:16px',
+      'z-index:100001', 'background:#990033', 'color:#fff', 'padding:16px 22px',
+      'border-radius:10px', 'font-family:Raleway,sans-serif', 'font-size:13px',
+      'font-weight:600', 'line-height:1.6', 'box-shadow:0 10px 30px rgba(0,0,0,.35)',
+      'max-width:min(620px,92vw)'
+    ].join(';');
+    el.innerHTML =
+      '<strong>WeaversCanvas could not start.</strong><br>' + reason +
+      '<br><br>Press <b>Ctrl</b>+<b>Shift</b>+<b>R</b> to hard-refresh, or add ' +
+      '<code>?v=' + Date.now() + '</code> to the address to bypass the cache.';
+    document.body.appendChild(el);
+  }
+
+  function check() {
+    if (window.__wcBoot === 'ok') return;
+    fail('The app script did not run - this is usually a stale or partially cached copy of the page.');
+  }
+
+  if (document.readyState === 'complete') setTimeout(check, 0);
+  else document.addEventListener('DOMContentLoaded', check);
+})();
 </script>
 
 <!-- ═══ SETT ADVISOR MODAL ═══ -->
