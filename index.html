@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>WeaversCanvas | Precision Weaving Drafts for Handweavers</title>
+    <meta name="description" content="Design weaving drafts with precision. Threading, tie-up, treadling and a live cloth simulation, plus a yarn calculator, sett advisor and WIF import/export. Free for handweavers.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#4D167C">
+    <link rel="canonical" href="https://weaverscanvas.ca/">
+
+    <!-- Open Graph / social sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WeaversCanvas">
+    <meta property="og:title" content="WeaversCanvas — Precision Weaving Drafts">
+    <meta property="og:description" content="See exactly how your digital pattern translates to real woven cloth. Thread by thread, with precision and clarity.">
+    <meta property="og:url" content="https://weaverscanvas.ca/">
+    <meta property="og:image" content="https://weaverscanvas.ca/weaverscanvas-logo.png">
+    <meta property="og:image:alt" content="WeaversCanvas logo">
+    <meta property="og:locale" content="en_CA">
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="WeaversCanvas — Precision Weaving Drafts">
+    <meta name="twitter:description" content="See exactly how your digital pattern translates to real woven cloth. Thread by thread, with precision and clarity.">
+    <meta name="twitter:image" content="https://weaverscanvas.ca/weaverscanvas-logo.png">
+
+    <link rel="icon" type="image/png" href="weaverscanvas-logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Raleway:wght@400;500;600;700;800&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* ═══════════════════════════════════════════════════════════════
+               WEAVERSCANVAS BRAND TOKENS
+
+               The same three brand colours as the app: navy, purple and the
+               lavender ground. The landing page used to carry its own
+               separate palette (parchment, brass, burgundy), which is why the
+               two pages felt like different products.
+               ═══════════════════════════════════════════════════════════════ */
+
+            /* Brand */
+            --brand-blue: #001E87;
+            --brand-purple: #4D167C;
+            --brand-purple-hover: #5d1f96;
+            --brand-blue-hover: #0028b0;
+
+            /* Ground & surfaces */
+            --ground: #F0F2F8;
+            --surface: #FFFFFF;
+            --surface-2: #E0E4F0;
+            --surface-3: #E8ECF8;
+
+            /* Text */
+            --ink: #33343A;
+            --muted: #6B6B8A;
+            --faint: #9BA3C0;
+
+            /* Lines */
+            --line: #B8C0D8;
+
+            /* Status - reserved, never decorative */
+            --danger: #CC0033;
+            --danger-dark: #880022;
+        }
+
+        .wc-btn-base {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            line-height: 1;
+            padding: 12px 24px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 9px;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.14),
+                0 1px 1px rgba(0, 0, 0, 0.05),
+                0 2px 6px rgba(0, 0, 0, 0.09);
+            transition:
+                background-color 0.15s ease,
+                border-color 0.15s ease,
+                color 0.15s ease,
+                box-shadow 0.15s ease,
+                transform 0.06s ease;
+        }
+        .wc-btn-base:hover {
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.18),
+                0 2px 4px rgba(0, 0, 0, 0.07),
+                0 5px 12px rgba(0, 0, 0, 0.14);
+            transform: translateY(-1px);
+        }
+        .wc-btn-base:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.18);
+        }
+        .wc-btn-base:focus-visible {
+            outline: 2px solid var(--brand-purple);
+            outline-offset: 2px;
+        }
+        .wc-btn-base--primary {
+            background: var(--brand-blue);
+            color: var(--surface);
+        }
+        .wc-btn-base--primary:hover { background: var(--brand-blue-hover); }
+        .wc-btn-base--accent {
+            background: var(--brand-purple);
+            color: var(--surface);
+        }
+        .wc-btn-base--accent:hover { background: var(--brand-purple-hover); }
+        .wc-btn-base--secondary {
+            background: var(--surface);
+            color: var(--brand-blue);
+            border-color: var(--line);
+        }
+        .wc-btn-base--secondary:hover {
+            background: var(--surface-3);
+            border-color: var(--brand-blue);
+        }
+        .wc-btn-base--danger {
+            background: var(--danger);
+            color: var(--surface);
+        }
+        .wc-btn-base--danger:hover { background: var(--danger-dark); }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background:
+                linear-gradient(rgba(0,30,135,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,30,135,0.05) 1px, transparent 1px),
+                var(--ground);
+            background-size: 12px 12px;
+            color: var(--ink);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before { display: none; }
+        body::after { display: none; }
+        .texture { display: none; }
+
+        .coming-soon-banner {
+            background: linear-gradient(135deg, var(--brand-purple) 0%, var(--brand-blue) 100%);
+            padding: 1.2rem;
+            text-align: center;
+            border-bottom: 3px solid var(--danger);
+        }
+
+        .coming-soon-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .closed-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: #fff;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-left: 1rem;
+            border-radius: 2px;
+        }
+
+        header {
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(153, 0, 51, 0.2);
+        }
+
+        .logo {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-emblem {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--brand-purple), var(--brand-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo-emblem::before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--ground);
+            border-radius: 2px;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            min-height: calc(100vh - 180px);
+        }
+
+        .hero-tagline {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--brand-purple);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-side {
+            padding-right: 2rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+            color: var(--ink);
+        }
+
+        h1 .accent {
+            font-style: italic;
+            color: var(--brand-purple);
+        }
+
+        .tagline {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .description {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            max-width: 480px;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Raleway', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            padding: 13px 26px;
+            background: var(--brand-blue);
+            color: var(--surface);
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: 9px;
+            cursor: pointer;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.14),
+                0 1px 1px rgba(0, 0, 0, 0.05),
+                0 2px 6px rgba(0, 0, 0, 0.09);
+            transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.06s ease;
+        }
+        .cta-btn:hover {
+            background: var(--brand-blue-hover);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.07), 0 5px 12px rgba(0,0,0,0.14);
+            transform: translateY(-1px);
+        }
+        .cta-btn:active { transform: translateY(1px); box-shadow: inset 0 1px 3px rgba(0,0,0,0.18); }
+        .cta-btn:focus-visible { outline: 2px solid var(--brand-purple); outline-offset: 2px; }
+
+        .cta-note {
+            display: block;
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .visual-side {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .frame {
+            background: var(--surface-2);
+            padding: 1.5rem;
+            box-shadow: 0 25px 80px rgba(44, 36, 24, 0.15);
+            position: relative;
+        }
+
+        .frame::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 1px solid var(--brand-purple);
+            pointer-events: none;
+        }
+
+        .weave-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
+            width: 320px;
+            height: 320px;
+        }
+
+        .grid-square {
+            border-radius: 1px;
+        }
+
+        .deco-line {
+            position: absolute;
+            background: var(--danger);
+            opacity: 0.4;
+        }
+
+        .deco-1 {
+            width: 100px;
+            height: 1px;
+            top: 20%;
+            left: -30px;
+            transform: rotate(-30deg);
+        }
+
+        .deco-2 {
+            width: 80px;
+            height: 1px;
+            bottom: 25%;
+            right: -25px;
+            transform: rotate(25deg);
+        }
+
+        .corner-ornament {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--danger);
+            opacity: 0.4;
+        }
+
+        .co-tl { top: -10px; left: -10px; border-right: none; border-bottom: none; }
+        .co-tr { top: -10px; right: -10px; border-left: none; border-bottom: none; }
+        .co-bl { bottom: -10px; left: -10px; border-right: none; border-top: none; }
+        .co-br { bottom: -10px; right: -10px; border-left: none; border-top: none; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(153, 0, 51, 0.15);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(58, 58, 58, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .login-box {
+            background: var(--ground);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            position: relative;
+        }
+
+        .login-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        .login-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--brand-purple);
+            margin-bottom: 0.3rem;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .admin-box {
+            background: var(--ground);
+            padding: 2rem;
+            width: 100%;
+            max-width: 580px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .admin-close {
+            position: absolute;
+            top: 0.8rem;
+            right: 0.8rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        .admin-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--brand-purple);
+            margin-bottom: 0.3rem;
+        }
+
+        .admin-subtitle {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin-list {
+            border: 1px solid var(--surface-2);
+            border-radius: 4px;
+            overflow: hidden;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .admin-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0.9rem;
+            border-bottom: 1px solid var(--surface-2);
+            font-size: 0.9rem;
+            gap: 0.8rem;
+        }
+
+        .admin-row:last-child { border-bottom: none; }
+
+        .admin-row-email {
+            color: var(--ink);
+            word-break: break-all;
+        }
+
+        .admin-row-date {
+            color: var(--muted);
+            font-size: 0.72rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .admin-empty {
+            color: var(--muted);
+            font-style: italic;
+            text-align: center;
+            padding: 1.8rem 1rem;
+        }
+
+        .admin-count {
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-top: 0.6rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Raleway', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            padding: 9px 16px;
+            background: var(--surface);
+            color: var(--brand-blue);
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.06s ease;
+        }
+        .admin-btn:hover {
+            background: var(--surface-3);
+            border-color: var(--brand-blue);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
+        }
+        .admin-btn:active { transform: translateY(1px); }
+        .admin-btn:focus-visible { outline: 2px solid var(--brand-purple); outline-offset: 2px; }
+
+        .admin-btn-primary {
+            background: var(--brand-blue);
+            color: var(--surface);
+            border-color: var(--brand-blue);
+        }
+        .admin-btn-primary:hover { background: var(--brand-blue-hover); border-color: var(--brand-blue-hover); }
+
+        .admin-btn-primary:hover { background: var(--brand-blue); border-color: var(--brand-blue); }
+
+        .admin-btn-secondary {
+            background: var(--brand-purple);
+            color: var(--surface);
+            border-color: var(--brand-purple);
+        }
+        .admin-btn-secondary:hover { background: var(--brand-purple-hover); border-color: var(--brand-purple-hover); }
+
+        .admin-btn-secondary:hover { background: var(--brand-purple); color: #fff; }
+
+        .admin-btn-danger {
+            background: var(--surface);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+        .admin-btn-danger:hover { background: var(--danger); color: var(--surface); }
+
+        .admin-btn-danger:hover { background: var(--danger); color: #fff; }
+
+        .admin-footer-link {
+            color: var(--muted);
+            text-decoration: underline dotted;
+            text-underline-offset: 3px;
+        }
+
+        .admin-footer-link:hover { color: var(--brand-purple); }
+
+        .form-field label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 0.75rem 0.9rem;
+            border: 1px solid var(--surface-2);
+            background: var(--surface-2);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-field input:focus {
+            outline: none;
+            border-color: var(--brand-purple);
+        }
+
+        .login-submit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Raleway', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            padding: 13px 24px;
+            background: var(--brand-blue);
+            color: var(--surface);
+            border: 1px solid transparent;
+            border-radius: 9px;
+            cursor: pointer;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.14),
+                0 1px 1px rgba(0, 0, 0, 0.05),
+                0 2px 6px rgba(0, 0, 0, 0.09);
+            transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.06s ease;
+        }
+        .login-submit:hover {
+            background: var(--brand-blue-hover);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.07), 0 5px 12px rgba(0,0,0,0.14);
+            transform: translateY(-1px);
+        }
+        .login-submit:active { transform: translateY(1px); box-shadow: inset 0 1px 3px rgba(0,0,0,0.18); }
+        .login-submit:focus-visible { outline: 2px solid var(--brand-purple); outline-offset: 2px; }
+
+        .login-submit:hover {
+            background: var(--brand-blue);
+        }
+
+        .login-error {
+            color: var(--danger);
+            font-size: 0.8rem;
+            text-align: center;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        .beta-welcome-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(58, 58, 58, 0.95);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .beta-welcome-modal.active {
+            display: flex;
+        }
+
+        .welcome-card {
+            background: var(--ground);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .welcome-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted);
+            line-height: 1;
+        }
+
+        .maple-leaf {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--brand-purple);
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-message {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-message strong {
+            color: var(--ink);
+        }
+
+        .welcome-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Raleway', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            padding: 12px 24px;
+            background: var(--brand-purple);
+            color: var(--surface);
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: 9px;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.14),
+                0 1px 1px rgba(0, 0, 0, 0.05),
+                0 2px 6px rgba(0, 0, 0, 0.09);
+            transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.06s ease;
+        }
+        .welcome-cta:hover {
+            background: var(--brand-purple-hover);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.07), 0 5px 12px rgba(0,0,0,0.14);
+            transform: translateY(-1px);
+        }
+        .welcome-cta:active { transform: translateY(1px); box-shadow: inset 0 1px 3px rgba(0,0,0,0.18); }
+        .welcome-cta:focus-visible { outline: 2px solid var(--brand-blue); outline-offset: 2px; }
+
+        .welcome-cta:hover {
+            background: var(--brand-blue);
+        }
+
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                padding: 3rem 1.5rem;
+            }
+
+            h1 { font-size: 3rem; }
+            .weave-grid { width: 260px; height: 260px; }
+            header { padding: 1.5rem 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="weaverscanvas-logo.png" alt="Weaver's Canvas" style="height:60px;width:auto;display:inline-block;">
+        </div>
+    </header>
+
+    <main>
+        <div class="content-side">
+            <div class="hero-tagline">Coming Soon</div>
+            <h1>From Pixel to <span class="accent">Loom</span></h1>
+            <p class="tagline">The comprehensive tool for weavers who demand precision</p>
+
+            <p class="description">
+                From pixel to fabric—see exactly how your digital pattern translates
+                to real woven cloth. Thread by thread, your vision takes shape with
+                precision and clarity.
+            </p>
+
+            <a href="#" class="cta-btn">
+                Enter the Studio
+            </a>
+            <span class="cta-note">Sign up for early access</span>
+        </div>
+
+        <div class="visual-side">
+            <div class="deco-line deco-1"></div>
+            <div class="deco-line deco-2"></div>
+
+            <div class="frame">
+                <div class="corner-ornament co-tl"></div>
+                <div class="corner-ornament co-tr"></div>
+                <div class="corner-ornament co-bl"></div>
+                <div class="corner-ornament co-br"></div>
+
+                <div class="weave-grid">
+                    <script>
+                        (function() {
+                            var grid = document.querySelector('.weave-grid');
+                            if (!grid) return;
+                            var cols = ['var(--ink)', '#4D167C', '#001E87', 'var(--danger)'];
+                            var pat = [
+                                0,1,2,3,0,1,2,3,0,1,
+                                3,0,1,2,3,0,1,2,3,0,
+                                2,3,0,1,2,3,0,1,2,3,
+                                1,2,3,0,1,2,3,0,1,2,
+                                0,1,2,3,0,1,2,3,0,1,
+                                3,0,1,2,3,0,1,2,3,0,
+                                2,3,0,1,2,3,0,1,2,3,
+                                1,2,3,0,1,2,3,0,1,2,
+                                0,1,2,3,0,1,2,3,0,1,
+                                3,0,1,2,3,0,1,2,3,0
+                            ];
+                            pat.forEach(function(i) {
+                                var div = document.createElement('div');
+                                div.className = 'grid-square';
+                                div.style.background = cols[i];
+                                div.setAttribute('aria-hidden', 'true');
+                                grid.appendChild(div);
+                            });
+                        })();
+                    </script>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>
+            WeaversCanvas &copy; 2026 — Crafted with care for weavers
+            &nbsp;&middot;&nbsp;
+            <a href="#" class="admin-footer-link">Sign-ups</a>
+        </p>
+    </footer>
+
+    <div class="modal-overlay" id="loginModal">
+        <div class="login-box">
+            <button class="login-close" aria-label="Close">&times;</button>
+            <h2 class="login-title">Welcome</h2>
+            <p class="login-subtitle">Enter your email to get started</p>
+            <p style="font-size:0.7em;color:var(--muted);margin-bottom:12px;text-align:center;">v1.16.2 · Build 794</p>
+            <form class="login-form" id="loginForm" action="#">
+                <div class="form-field">
+                    <label for="testerEmail">Email</label>
+                    <input type="email" id="testerEmail" placeholder="your@email.com" required>
+                </div>
+                <!-- Honeypot: hidden from people, tempting to bots. If this is
+                     filled in, the submission is silently discarded. -->
+                <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;overflow:hidden;">
+                    <label for="companyField">Company</label>
+                    <input type="text" id="companyField" name="company" tabindex="-1" autocomplete="off" value="">
+                </div>
+                <button type="submit" class="login-submit">Enter the Studio</button>
+                <p class="login-error" id="loginError">Please enter a valid email address.</p>
+            </form>
+        </div>
+    </div>
+
+    <div class="beta-welcome-modal" id="betaWelcomeModal">
+        <div class="welcome-card">
+            <button class="welcome-close" aria-label="Close">&times;</button>
+            <span class="maple-leaf">🍁</span>
+            <h2 class="welcome-title">Welcome!</h2>
+            <p class="welcome-subtitle">You're now signed in</p>
+            <p class="welcome-message">
+                Thanks for your interest in WeaversCanvas. We've saved your email
+                and will keep you updated on our progress.
+                <br><br>
+                In the meantime, feel free to explore the studio!
+            </p>
+            <a href="weaverscanvas.html" class="welcome-cta">Enter the Studio</a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="adminModal">
+        <div class="admin-box">
+            <button class="admin-close" aria-label="Close">&times;</button>
+            <h2 class="admin-title">Sign-ups</h2>
+            <p class="admin-subtitle" id="adminSubtitle">Enter the admin passcode</p>
+
+            <!-- Passcode gate. The plain passcode is never stored in this page;
+                 only a SHA-256 hash of it is, so the source does not reveal it. -->
+            <div id="adminGate">
+                <div class="form-field">
+                    <label for="adminPasscode">Passcode</label>
+                    <input type="password" id="adminPasscode" placeholder="Admin passcode"
+                           autocomplete="current-password" spellcheck="false">
+                </div>
+                <p class="login-error" id="adminPasscodeError">That passcode is not correct.</p>
+                <button class="login-submit" id="adminUnlockBtn" type="button">Unlock</button>
+            </div>
+
+            <div id="adminContent" style="display:none;">
+                <p class="admin-subtitle">Emails collected on this browser</p>
+                <div id="adminList"></div>
+                <p class="admin-count" id="adminCount"></p>
+                <div class="admin-actions">
+                    <button class="admin-btn admin-btn-primary">⬇ Download CSV</button>
+                    <button class="admin-btn admin-btn-secondary">⧉ Copy Emails</button>
+                <button class="admin-btn admin-btn-danger">Clear List</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            var _BETA_UNLOCK_KEY = 'weaversCanvas_betaUnlocked';
+            var _BETA_EMAILS_KEY = 'weaversCanvas_betaEmails';
+            var _EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            function openLogin(e) {
+                if (e) e.preventDefault();
+                document.getElementById('loginModal').classList.add('active');
+                setTimeout(function() { document.getElementById('testerEmail').focus(); }, 50);
+            }
+
+            function closeLogin() {
+                document.getElementById('loginModal').classList.remove('active');
+                document.getElementById('loginError').classList.remove('show');
+                document.getElementById('testerEmail').value = '';
+            }
+
+            function openWelcome() {
+                document.getElementById('betaWelcomeModal').classList.add('active');
+            }
+
+            function closeWelcome() {
+                document.getElementById('betaWelcomeModal').classList.remove('active');
+            }
+
+            function getEmails() {
+                try {
+                    var raw = localStorage.getItem(_BETA_EMAILS_KEY);
+                    if (!raw) return [];
+                    var arr = JSON.parse(raw);
+                    return Array.isArray(arr) ? arr : [];
+                } catch(_) { return []; }
+            }
+
+            function saveEmail(email) {
+                try {
+                    var list = getEmails();
+                    var lower = email.toLowerCase();
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].email.toLowerCase() === lower) return false;
+                    }
+                    list.push({ email: email, timestamp: new Date().toISOString() });
+                    localStorage.setItem(_BETA_EMAILS_KEY, JSON.stringify(list));
+                    return true;
+                } catch(_) { return false; }
+            }
+
+            function sendEmailToServer(email) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'https://weaverscanvas.ca/send-email.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify({
+                    email: email,
+                    timestamp: new Date().toISOString(),
+                    // Honeypot - empty for a real person, filled by naive bots.
+                    company: (document.getElementById('companyField') || {}).value || ''
+                }));
+            }
+
+            function handleLogin(e) {
+                e.preventDefault();
+                var email = document.getElementById('testerEmail').value.trim();
+                var err = document.getElementById('loginError');
+
+                if (!email || !_EMAIL_RE.test(email)) {
+                    err.textContent = 'Please enter a valid email address.';
+                    err.classList.add('show');
+                    return;
+                }
+
+                try {
+                    localStorage.setItem('weavingDesigner_user', JSON.stringify({
+                        email: email,
+                        loginTime: new Date().toISOString()
+                    }));
+                    localStorage.setItem(_BETA_UNLOCK_KEY, 'true');
+                    saveEmail(email);
+                    sendEmailToServer(email);
+                } catch(_) {}
+                closeLogin();
+                setTimeout(openWelcome, 180);
+            }
+
+            // ── Admin passcode gate ────────────────────────────────────────────
+            // The plain passcode is never stored in this page - only a
+            // SHA-256 hash of it. Change the passcode by replacing the hash
+            // below with the hash of your new one:
+            //   echo -n "your-new-passcode" | sha256sum
+            var _ADMIN_PASSCODE_HASH =
+                '73f52c18e647e5ec669653cf4cd5198dbc1d5724a22b0011856bef5ab3a3625e';
+            var _ADMIN_UNLOCK_KEY = 'weaversCanvas_adminUnlocked';
+
+            function _sha256Hex(text) {
+                // Returns a hex digest, or null if Web Crypto is unavailable
+                // (e.g. the page was opened over file:// in some browsers).
+                if (window.crypto && window.crypto.subtle && window.TextEncoder) {
+                    return window.crypto.subtle.digest('SHA-256',
+                        new TextEncoder().encode(text)
+                    ).then(function(buf) {
+                        return Array.prototype.map.call(new Uint8Array(buf),
+                            function(b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+                    });
+                }
+                return null;
+            }
+
+            function _adminIsUnlocked() {
+                try { return sessionStorage.getItem(_ADMIN_UNLOCK_KEY) === 'true'; }
+                catch(_) { return false; }
+            }
+
+            function _setAdminUnlocked() {
+                try { sessionStorage.setItem(_ADMIN_UNLOCK_KEY, 'true'); } catch(_) {}
+            }
+
+            function _renderAdminGate() {
+                var unlocked = _adminIsUnlocked();
+                document.getElementById('adminGate').style.display = unlocked ? 'none' : 'block';
+                document.getElementById('adminContent').style.display = unlocked ? 'block' : 'none';
+                document.getElementById('adminSubtitle').textContent = unlocked
+                    ? 'Sign-ups'
+                    : 'Enter the admin passcode';
+                if (unlocked) renderAdminList();
+            }
+
+            function _tryAdminUnlock() {
+                var input = document.getElementById('adminPasscode');
+                var err = document.getElementById('adminPasscodeError');
+                var val = (input.value || '').trim();
+                if (!val) { err.textContent = 'Enter the passcode.'; err.classList.add('show'); return; }
+
+                var digest = _sha256Hex(val);
+                if (!digest) {
+                    err.textContent = 'Could not verify the passcode in this browser.';
+                    err.classList.add('show');
+                    return;
+                }
+                digest.then(function(hex) {
+                    if (hex === _ADMIN_PASSCODE_HASH) {
+                        err.classList.remove('show');
+                        input.value = '';
+                        _setAdminUnlocked();
+                        _renderAdminGate();
+                    } else {
+                        err.textContent = 'That passcode is not correct.';
+                        err.classList.add('show');
+                        input.value = '';
+                        input.focus();
+                    }
+                });
+            }
+
+            function openAdminPanel(e) {
+                if (e) e.preventDefault();
+                _renderAdminGate();
+                document.getElementById('adminModal').classList.add('active');
+                setTimeout(function() {
+                    var p = document.getElementById('adminPasscode');
+                    if (p && !_adminIsUnlocked()) p.focus();
+                }, 50);
+            }
+
+            function closeAdminPanel() {
+                document.getElementById('adminModal').classList.remove('active');
+            }
+
+            function escapeHtml(s) {
+                return String(s).replace(/[&<>"']/g, function(c) {
+                    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+                });
+            }
+
+            function renderAdminList() {
+                var list = getEmails();
+                var listEl = document.getElementById('adminList');
+                var countEl = document.getElementById('adminCount');
+
+                if (list.length === 0) {
+                    listEl.innerHTML = '<div class="admin-empty">No sign-ups yet.</div>';
+                    countEl.textContent = '';
+                    return;
+                }
+
+                var html = '<div class="admin-list">';
+                for (var i = 0; i < list.length; i++) {
+                    var entry = list[i];
+                    var d = new Date(entry.timestamp);
+                    var dateStr = isNaN(d.getTime()) ? entry.timestamp : d.toLocaleString();
+                    html += '<div class="admin-row">';
+                    html += '<span class="admin-row-email">' + escapeHtml(entry.email) + '</span>';
+                    html += '<span class="admin-row-date">' + dateStr + '</span>';
+                    html += '</div>';
+                }
+                html += '</div>';
+                listEl.innerHTML = html;
+                countEl.textContent = list.length + ' sign-up' + (list.length === 1 ? '' : 's') + ' registered';
+            }
+
+            function downloadEmailsCSV() {
+                var list = getEmails();
+                if (list.length === 0) return;
+                var csv = 'Email,Timestamp\n';
+                for (var i = 0; i < list.length; i++) {
+                    csv += '"' + list[i].email.replace(/"/g, '""') + '","' + list[i].timestamp + '"\n';
+                }
+                var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'sign-ups-' + new Date().toISOString().slice(0, 10) + '.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            function copyEmailsToClipboard(ev) {
+                var list = getEmails();
+                if (list.length === 0) return;
+                var text = [];
+                for (var i = 0; i < list.length; i++) {
+                    text.push(list[i].email);
+                }
+                text = text.join('\n');
+                var btn = ev && ev.currentTarget;
+                var orig = btn ? btn.textContent : '';
+                var done = function() {
+                    if (btn) {
+                        btn.textContent = '\u2713 Copied!';
+                        setTimeout(function() { btn.textContent = orig; }, 1500);
+                    }
+                };
+                var fail = function() {
+                    if (btn) {
+                        btn.textContent = '\u2717 Copy failed';
+                        setTimeout(function() { btn.textContent = orig; }, 1500);
+                    }
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(done).catch(fail);
+                } else {
+                    var ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try { document.execCommand('copy'); done(); } catch(_) { fail(); }
+                    document.body.removeChild(ta);
+                }
+            }
+
+            function clearEmailList() {
+                if (!confirm('Clear all registered sign-ups? This cannot be undone.')) return;
+                try { localStorage.removeItem(_BETA_EMAILS_KEY); } catch(_) {}
+                renderAdminList();
+            }
+
+            // --- Wire up event listeners ---
+
+            document.addEventListener('DOMContentLoaded', function() {
+
+                // Admin passcode gate
+                var unlockBtn = document.getElementById('adminUnlockBtn');
+                if (unlockBtn) unlockBtn.addEventListener('click', _tryAdminUnlock);
+                var passInput = document.getElementById('adminPasscode');
+                if (passInput) {
+                    passInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') { e.preventDefault(); _tryAdminUnlock(); }
+                    });
+                }
+
+                // Login modal: backdrop click
+                document.getElementById('loginModal').addEventListener('click', function(e) {
+                    if (e.target === this) closeLogin();
+                });
+
+                // Welcome modal: backdrop click
+                document.getElementById('betaWelcomeModal').addEventListener('click', function(e) {
+                    if (e.target === this) closeWelcome();
+                });
+
+                // Admin modal: backdrop click
+                document.getElementById('adminModal').addEventListener('click', function(e) {
+                    if (e.target === this) closeAdminPanel();
+                });
+
+                // Escape key closes modals
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        closeLogin();
+                        closeWelcome();
+                        closeAdminPanel();
+                    }
+                });
+
+                // Login form submit
+                document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
+                // CTA button: open login
+                var ctaBtn = document.querySelector('.cta-btn');
+                if (ctaBtn) ctaBtn.addEventListener('click', openLogin);
+
+                // Admin footer link: open admin panel
+                var adminLink = document.querySelector('.admin-footer-link');
+                if (adminLink) adminLink.addEventListener('click', openAdminPanel);
+
+                // Login close button
+                var loginClose = document.querySelector('.login-close');
+                if (loginClose) loginClose.addEventListener('click', closeLogin);
+
+                // Welcome close button
+                var welcomeClose = document.querySelector('.welcome-close');
+                if (welcomeClose) welcomeClose.addEventListener('click', closeWelcome);
+
+                // Welcome CTA link
+                var welcomeCta = document.querySelector('.welcome-cta');
+                if (welcomeCta) welcomeCta.addEventListener('click', closeWelcome);
+
+                // Admin close button
+                var adminClose = document.querySelector('.admin-close');
+                if (adminClose) adminClose.addEventListener('click', closeAdminPanel);
+
+                // Admin buttons
+                var downloadBtn = document.querySelector('.admin-btn-primary');
+                if (downloadBtn) downloadBtn.addEventListener('click', downloadEmailsCSV);
+
+                var copyBtn = document.querySelector('.admin-btn-secondary');
+                if (copyBtn) copyBtn.addEventListener('click', copyEmailsToClipboard);
+
+                var clearBtn = document.querySelector('.admin-btn-danger');
+                if (clearBtn) clearBtn.addEventListener('click', clearEmailList);
+
+                // Logo image fallback on error
+                var logoImg = document.querySelector('.logo img');
+                if (logoImg) {
+                    logoImg.addEventListener('error', function() {
+                        this.style.display = 'none';
+                    });
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>

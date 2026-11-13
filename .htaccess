@@ -1,0 +1,50 @@
+# WeaversCanvas - cache and security headers for GreenGeeks (Apache/cPanel)
+
+# ---------------------------------------------------------------------------
+# The app is a single HTML file that changes often during development. If the
+# browser heuristically caches it, a stale copy can be served - and a partially
+# cached copy can fail to parse, which takes the whole script block down with
+# it. Always revalidate the HTML.
+# ---------------------------------------------------------------------------
+<FilesMatch "\.(html|php)$">
+    <IfModule mod_headers.c>
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </IfModule>
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresByType text/html "access plus 0 seconds"
+        ExpiresByType application/xhtml+xml "access plus 0 seconds"
+        ExpiresByType application/x-httpd-php "access plus 0 seconds"
+    </IfModule>
+</FilesMatch>
+
+# Static assets are safe to cache for a long time - they change name or
+# content rarely, and the app is served as one file anyway.
+<IfModule mod_expires.c>
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+    ExpiresByType image/x-icon "access plus 30 days"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType text/css "access plus 1 hour"
+    ExpiresByType application/javascript "access plus 1 hour"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+    # Uncomment once everything is verified over HTTPS:
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# Never serve the SMTP credentials, backups, or dotfiles.
+<FilesMatch "^\.|\.(bak|old|log|ini|example)$">
+    Require all denied
+</FilesMatch>

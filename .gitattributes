@@ -1,0 +1,18 @@
+# Keep HTML/JS/CSS text files as LF in the working tree.
+# Without this, core.autocrlf=true on Windows rewrites every LF to CRLF,
+# which on the 500 KB single-file app means 9,407 spurious byte changes
+# on each checkout and a permanently noisy diff.
+*.html text eol=lf
+*.js   text eol=lf
+*.css  text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+
+# Binary assets must never be line-ending converted.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
