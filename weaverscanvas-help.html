@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeaversCanvas - Help & Instructions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            color: #3A3A3A;
+            padding: 30px 40px;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #001E87;
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
+        }
+        .version {
+            font-size: 0.78em;
+            color: #6b6b8a;
+            letter-spacing: 0.04em;
+        }
+        .help-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e4ec;
+            margin-bottom: 24px;
+        }
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .logo-row img {
+            height: 44px;
+            width: auto;
+        }
+        .logo-row span {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #001E87;
+            letter-spacing: 0.01em;
+        }
+        .toc {
+            background: white;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 0 0 30px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 4px solid #4D167C;
+        }
+        .toc-title {
+            font-weight: 800;
+            color: #4D167C;
+            font-size: 0.85em;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+            margin: 0;
+            padding: 0;
+            columns: 2;
+            column-gap: 24px;
+        }
+        .toc li {
+            counter-increment: toc-counter;
+            margin: 0 0 8px 0;
+            break-inside: avoid;
+            font-size: 0.92em;
+        }
+        .toc li::before {
+            content: counter(toc-counter) ". ";
+            color: #001E87;
+            font-weight: 700;
+        }
+        .toc a {
+            color: #001E87;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(0, 30, 135, 0.3);
+        }
+        .toc a:hover {
+            color: #4D167C;
+            border-bottom-color: #4D167C;
+        }
+        @media (max-width: 600px) {
+            .toc ol { columns: 1; }
+        }
+        h2 {
+            font-size: 1.15em;
+            font-weight: 700;
+            color: #4D167C;
+            margin: 32px 0 12px 0;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #ddd;
+            letter-spacing: 0.04em;
+            scroll-margin-top: 20px;
+        }
+        h3 {
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #001E87;
+            margin: 18px 0 8px 0;
+        }
+        p, li {
+            font-size: 0.92em;
+            margin-bottom: 10px;
+        }
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .tool-section {
+            background: white;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .tip {
+            background: #f0f9ff;
+            border-left: 4px solid #001E87;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .tip-warn {
+            background: #fff8e6;
+            border-left: 4px solid #C9A227;
+        }
+        .tip-warn strong { color: #8a6d10; }
+        .keyboard {
+            background: #f5f3f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            border: 1px solid #ddd;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 14px 0;
+        }
+        @media (max-width: 600px) {
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+        .feature-card {
+            background: #f0f2f8;
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+        .feature-card-title {
+            font-weight: 700;
+            color: #001E87;
+            margin-bottom: 4px;
+            font-size: 0.92em;
+        }
+        .feature-card-desc {
+            font-size: 0.85em;
+            color: #6b6b8a;
+        }
+        .print-btn {
+            display: inline-block;
+            background: #4D167C;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .print-btn:hover {
+            background: #3a0f5e;
+        }
+        @media print {
+            body { background: white; padding: 20px; }
+            .toc, .print-btn { display: none; }
+            .tool-section, .feature-card { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-row">
+        <img src="weaverscanvas-logo.png" alt="WeaversCanvas">
+        <span>WeaversCanvas</span>
+    </div>
+    <div class="help-header">
+        <h1>Help &amp; Instructions</h1>
+        <div class="version">v1.18.0 [Build 801] — Eldon's Complete Guide</div>
+    </div>
+
+    <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+            <li><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#grid-area">The Grid Area</a></li>
+            <li><a href="#drawing-tools">Drawing Tools</a></li>
+            <li><a href="#toolbar">Toolbar Reference</a></li>
+            <li><a href="#controls">Controls Bar</a></li>
+            <li><a href="#colors">Color Palette</a></li>
+            <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
+            <li><a href="#export">Export Formats</a></li>
+            <li><a href="#yarn-calc">Yarn Calculator</a></li>
+            <li><a href="#sett-advisor">Sett Advisor</a></li>
+            <li><a href="#yarn-library">Yarn Library</a></li>
+            <li><a href="#tips">Tips &amp; Tricks</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#history">Version History</a></li>
+        </ol>
+    </div>
+
+    <h2 id="getting-started">Getting Started</h2>
+    <p>WeaversCanvas is a comprehensive tool for creating weaving drafts. It consists of four main components that work together to define a complete weave structure:</p>
+    <ul>
+        <li><strong>Threading</strong> — Which warp threads (ends) connect to which shafts</li>
+        <li><strong>Tie-Up</strong> — Which shafts are lifted by which treadles</li>
+        <li><strong>Treadling</strong> — Which treadles are pressed in which order (weft picks)</li>
+        <li><strong>Main Drawdown</strong> — The resulting weave pattern (warp over weft or weft over warp)</li>
+    </ul>
+
+    <h2 id="grid-area">The Grid Area</h2>
+    <p>The main workspace shows four linked draft areas:</p>
+
+    <div class="tool-section">
+        <h3>Threading (top row)</h3>
+        <p>Shows which shaft each warp thread (vertical end) is tied to. Click any cell to cycle through shafts 1-8 (or set number of shafts in controls).</p>
+    </div>
+
+    <div class="tool-section">
+        <h3>Tie-Up (middle row)</h3>
+        <p>Matrix showing which shafts are lifted by each treadle. Click any cell to toggle lift/no-lift for that shaft-treadle combination.</p>
+    </div>
+
+    <div class="tool-section">
+        <h3>Treadling (left column)</h3>
+        <p>Shows which treadle is pressed for each weft pick (horizontal row). Click to cycle through treadles.</p>
+    </div>
+
+    <div class="tool-section">
+        <h3>Main Drawdown (center)</h3>
+        <p>The actual weave structure — white = warp shows over weft (warp-up), dark = weft shows over warp (weft-up). Click cells to manually add/edit pattern.</p>
+    </div>
+
+    <h2 id="drawing-tools">Drawing Tools</h2>
+    <p>Use the tools panel on the left to draw patterns:</p>
+    <ul>
+        <li><strong>Point Tool</strong> — Click individual cells to toggle</li>
+        <li><strong>Line Tool</strong> — Click and drag to draw lines</li>
+        <li><strong>Freehand Tool</strong> — Draw freely like a brush</li>
+        <li><strong>Select Tool</strong> — Select area to move/copy</li>
+        <li><strong>Fill Tool</strong> — Flood fill an area</li>
+    </ul>
+
+    <h2 id="toolbar">Toolbar Reference</h2>
+
+    <h3>Document Section</h3>
+    <ul>
+        <li><strong>Clear All</strong> — Clear entire draft</li>
+        <li><strong>Reset Default</strong> — Reset to default 48×48, 8 shafts, 10 treadles</li>
+    </ul>
+
+    <h3>View Section</h3>
+    <ul>
+        <li><strong>Show Back</strong> — View underside of weave</li>
+        <li><strong>Cloth View</strong> — Photographic weave preview: round shaded threads, cast shadows at every crossing, and true over/under interlacement. Combine with <strong>Show Back</strong> to flip to the underside.</li>
+        <li><strong>Hide Rulers</strong> — Toggle ruler display</li>
+        <li><strong>Undo/Redo</strong> — Reverse/repeat actions (<span class="keyboard">Ctrl+Z</span> / <span class="keyboard">Ctrl+Y</span>)</li>
+    </ul>
+
+    <h3>Generate Section</h3>
+    <ul>
+        <li><strong>Randomize</strong> — Generate random pattern with density controls</li>
+    </ul>
+
+    <h3>Tools Section</h3>
+    <ul>
+        <li><strong>Yarn Library</strong> — Browse 480+ yarns from the Master Yarn Chart 2014 and apply them to Sett Advisor or Yarn Calculator</li>
+        <li><strong>Yarn Calc</strong> — Yarn calculator &amp; cost estimator</li>
+        <li><strong>Sett Advisor</strong> — Recommended EPI/sett guidance</li>
+        <li><strong>Tools ▼</strong> — Dropdown with:
+            <ul>
+                <li>Library — Save/load patterns</li>
+                <li>Analysis — Pattern analysis tools</li>
+                <li>Draw Tools — Advanced drawing</li>
+                <li>Pattern Tools — Transformations</li>
+                <li>Workflow — Project planning</li>
+                <li>Practical — Production notes</li>
+                <li>Notes — Freeform notes</li>
+                <li>Colour Tools — Color management</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h3>Output Section</h3>
+    <ul>
+        <li><strong>Export WIF</strong> — Export in WIF format (Weaving Include File)</li>
+        <li><strong>Import WIF</strong> — Import a WIF file</li>
+        <li><strong>Print</strong> — Print/save PDF of draft</li>
+        <li><strong>Export &amp; Share</strong> — Export as PNG, PDF, or shareable link</li>
+    </ul>
+
+    <h3>Project Section</h3>
+    <ul>
+        <li><strong>Save</strong> — Save project to file</li>
+        <li><strong>Load</strong> — Load saved project</li>
+    </ul>
+
+    <h2 id="controls">Controls Bar</h2>
+    <ul>
+        <li><strong>Cell Size</strong> — Zoom in/out (10-40px)</li>
+        <li><strong>Quick Sizes</strong> — 16×, 24×, 32×, 48× presets</li>
+        <li><strong>Dimensions</strong> — Warp, Weft, Shafts, Treadles steppers</li>
+        <li><strong>Color Palette</strong> — Click to change colors</li>
+    </ul>
+
+    <h2 id="colors">Color Palette</h2>
+    <p>The palette starts with 3 colors (blue, purple, burgundy) plus a <strong>+</strong> button to add more. You can have up to 6 colors at a time. Click any color to select it, then click on warp/weft color strips to apply. Double-click a swatch to edit its color; right-click to remove it. A fresh palette of 3 colors is restored whenever you press <strong>Clear All</strong> or <strong>Reset Default</strong>.</p>
+
+    <h2 id="shortcuts">Keyboard Shortcuts</h2>
+    <ul>
+        <li><span class="keyboard">Ctrl+Z</span> — Undo</li>
+        <li><span class="keyboard">Ctrl+Y</span> — Redo</li>
+        <li><span class="keyboard">Ctrl+S</span> — Save project</li>
+        <li><span class="keyboard">Delete</span> — Clear selected</li>
+    </ul>
+
+    <h2 id="export">Export Formats</h2>
+    <ul>
+        <li><strong>WIF</strong> — Standard weaving format compatible with most weaving software</li>
+        <li><strong>PNG</strong> — Image at your chosen resolution</li>
+        <li><strong>PDF</strong> — Full draft with all sections</li>
+        <li><strong>Tileable PNG</strong> — Seamless repeating pattern</li>
+    </ul>
+
+    <h2 id="yarn-calc">Yarn Calculator</h2>
+    <p>Calculate yarn requirements and project cost:</p>
+    <ul>
+        <li>Enter fabric dimensions (width, length)</li>
+        <li>Enter EPI (ends per inch) and PPI (picks per inch)</li>
+        <li>Input yarn length per cone/spoon and price</li>
+        <li>See calculated total yardage, number of cones, and estimated cost</li>
+        <li>Use the green <strong>Use This Pattern</strong> button to apply the current draft's EPI/PPI to a fresh project</li>
+    </ul>
+    <div class="tip">
+        <strong>Tip:</strong> Combine with <strong>Yarn Library</strong> — pick a yarn from the library and apply it here in one click.
+    </div>
+
+    <h2 id="sett-advisor">Sett Advisor</h2>
+    <p>Get recommended sett (EPI) based on:</p>
+    <ul>
+        <li>Yarn type (cotton, wool, silk, etc.)</li>
+        <li>Yarn weight/thickness (WPI — wraps per inch)</li>
+        <li>Weave structure (plain, twill, satin, etc.)</li>
+    </ul>
+    <p>Use the <strong>Common Yarn Weights</strong> preset dropdown to jump to a standard WPI (6, 8, 10, 12, 16, 22, 28, 40, 60, or 80 WPI). Selecting a preset auto-applies the WPI and recalculates the recommendation.</p>
+    <div class="tip">
+        <strong>Tip:</strong> Use the Yarn Library's <strong>Use for Sett</strong> button to load a yarn's WPI in one click.
+    </div>
+
+    <h2 id="yarn-library">Yarn Library</h2>
+    <p>The Yarn Library is a searchable catalog of over 480 yarns from the <em>Master Yarn Chart 2014</em>, built directly into the app. It is the fastest way to pick a yarn and have it pre-loaded into either the Sett Advisor or the Yarn Calculator.</p>
+
+    <h3>Opening the Library</h3>
+    <p>Click the <strong>📚 Yarn Library</strong> button in the header's green tools group. The modal opens on top of the main workspace.</p>
+
+    <h3>The Catalog</h3>
+    <p>Each yarn is shown as a compact card displaying:</p>
+    <ul>
+        <li><strong>Name</strong> — the yarn's brand or generic name (e.g. "8/2 Cotton", "Cottolin", "Silk Noil")</li>
+        <li><strong>Fiber dot &amp; badge</strong> — a small colored dot indicates the fiber type (16 fibers total, color-coded), with the fiber name in a pill badge next to it</li>
+        <li><strong>Yards per pound</strong> — the standard yardage metric used by weavers</li>
+        <li><strong>Recommended sett</strong> — typical EPI range, shown only when the chart lists one</li>
+    </ul>
+
+    <h3>Toolbar</h3>
+    <ul>
+        <li><strong>Search box</strong> — type any part of a yarn's name to filter the grid in real time (case-insensitive)</li>
+        <li><strong>Family filter</strong> — narrow the catalog, or pick <em>⭐ Favorites</em> (always at the top of the list) to show all yarns with your favorites sorted to the top</li>
+        <li><strong>Count badge</strong> — shows how many yarns match the current search and filter (e.g. "12 of 487", or "3 favorites · 487 shown" when in Favorites mode)</li>
+    </ul>
+
+    <h3>Favorites</h3>
+    <p>Every card has a small star button at the end of the title (right side, same line as the yarn name). Click it to mark a yarn as a favorite (the star turns gold ★); click again to un-favorite (☆). Your favorites are stored in the browser's local storage, so they persist between sessions on the same computer and browser.</p>
+    <p>To find your favorites, pick <strong>⭐ Favorites</strong> from the family filter. Only your favorited yarns are shown — everything else is hidden.</p>
+
+    <h3>Applying a Yarn</h3>
+    <p>Each card has one or two action buttons at the bottom:</p>
+    <ul>
+        <li><strong>Use for Sett</strong> — opens the Sett Advisor with the yarn's typical WPI loaded. The yarn is then handled the same as if you had entered the WPI by hand.</li>
+        <li><strong>Use for Yarn Calc</strong> — opens the Yarn Calculator with the yarn's typical EPI and PPI loaded, ready to size a project.</li>
+    </ul>
+    <p>If a yarn in the chart has no listed sett, the corresponding button is disabled (greyed out) so the input is never pre-filled with a blank.</p>
+
+    <div class="tip">
+        <strong>Workflow tip:</strong> The most common flow is: pick a yarn in the Library → <em>Use for Sett</em> to confirm a sett → <em>Use for Yarn Calc</em> to size the project → start drafting.
+    </div>
+
+    <div class="tip tip-warn">
+        <strong>Data note:</strong> The library is sourced from a printed reference chart. Yardages and setts are typical ranges for each yarn; always confirm with the actual yarn in hand before warping a full project.
+    </div>
+
+    <h2 id="tips">Tips &amp; Tricks</h2>
+    <ul>
+        <li>Use <strong>Randomize</strong> with low density values for subtle patterns</li>
+        <li>Use <strong>Undo/Redo</strong> liberally — they're free!</li>
+        <li>Save your favorite patterns to the <strong>Library</strong></li>
+        <li>Use <strong>Cloth View</strong> to preview the final result</li>
+        <li>Export as <strong>Tileable PNG</strong> for fabric mockups</li>
+        <li>Use the <strong>Yarn Library</strong> as the starting point for any new project — picking a yarn first often clarifies the rest of the design decisions</li>
+    </ul>
+
+    <h2 id="features">Features</h2>
+    <p>WeaversCanvas includes the following features:</p>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-card-title">🎯 Threading Draft</div>
+            <div class="feature-card-desc">Define which warp ends connect to which shafts (1-32 shafts supported).</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">🔗 Tie-Up Grid</div>
+            <div class="feature-card-desc">Define shaft-treadle connections for lift mechanics.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">↔ Treadling</div>
+            <div class="feature-card-desc">Set the weft sequence (which treadles to press per pick).</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">🧵 Main Drawdown</div>
+            <div class="feature-card-desc">The resulting weave pattern (warp over weft or vice versa).</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">📸 Cloth View</div>
+            <div class="feature-card-desc">Photographic preview of your weave — round shaded threads, cast shadows at every crossing, true over/under interlacement, and instant Show Back flip.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">⚡ Instant Resizing</div>
+            <div class="feature-card-desc">Warp, weft, shaft, and treadle steppers respond instantly at any grid size — patterns and colours are preserved as the grid grows.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">🖌 Drawing Tools</div>
+            <div class="feature-card-desc">Point, Line, Freehand, Select, and Fill tools for pattern creation.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">🎲 Randomize</div>
+            <div class="feature-card-desc">Generate random patterns with adjustable density controls.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">🎨 Colour Palette</div>
+            <div class="feature-card-desc">Customizable warp and weft colors with harmony generator.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">🧶 Yarn Calculator</div>
+            <div class="feature-card-desc">Calculate yarn requirements, EPI, and cost estimates.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">📐 Sett Advisor</div>
+            <div class="feature-card-desc">Get recommended sett based on yarn type and weave structure.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">📚 Yarn Library</div>
+            <div class="feature-card-desc">Browse 480+ yarns from the Master Yarn Chart 2014; apply directly to Sett Advisor or Yarn Calculator.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">📊 Analysis Tools</div>
+            <div class="feature-card-desc">Identify weave structure, find repeats, check floats.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">📤 Export &amp; Share</div>
+            <div class="feature-card-desc">Export WIF, PNG, PDF, tileable patterns, or shareable links.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">🗂 Project Save/Load</div>
+            <div class="feature-card-desc">Save and load projects locally or to browser storage.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">↩ Undo/Redo</div>
+            <div class="feature-card-desc">Full history with undo and redo (Ctrl+Z/Y).</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-title">🔀 Pattern Tools</div>
+            <div class="feature-card-desc">Flip, rotate, invert, tile, and transform patterns.</div>
+        </div>
+    </div>
+
+    <h2 id="history">Version History</h2>
+    <p><strong>V 1.18.0 [BETA] [Build 801]</strong> — Photographic Cloth View: the weave is rendered as continuous threads with cylindrical shading, cast shadows at every over/under crossing, per-thread yarn variation, and twist texture — plus an instant Show Back flip. Stepper resizing rewritten: each warp/weft/shaft/treadle click now extends the grid in place, so +/- responds instantly at any size with patterns and colours preserved. Readability pass across the Yarn Calculator and Sett Advisor (dark navy labels, mid-gray tooltips), a consistent rounded button family with white Close pills on every modal, and the Tools dropdown now opens beneath its button.</p>
+    <p><strong>V 1.15.11 [Build 784]</strong> — Simplified login: email-only sign-in, no password required. Sign-up emails are sent automatically to the studio owner via SMTP. Beta gate and password system removed. Studio header updated with WeaversCanvas logo, prominent Tools button, and red Clear/Reset button. Button hover states and tooltip positioning fixed.</p>
+    <p><strong>V 1.15.10 [BETA] [Build 783]</strong> — Landing page collects sign-up emails. Each successful sign-up stores the email and timestamp in localStorage.</p>
+    <p><strong>V 1.15.10 [BETA] [Build 775]</strong> — Added the Yarn Library: searchable catalog of 480+ yarns from the Master Yarn Chart 2014, with one-click apply to Sett Advisor or Yarn Calculator.</p>
+    <p><strong>V 1.15.8 [BETA] [Build 765]</strong> — Earlier version with new WeaversCanvas W monogram in the header.</p>
+    <p><strong>V 1.15.7 [BETA] [Build 764]</strong> — Earlier version with reorganized features list and refreshed help guide.</p>
+    <p><strong>V 1.13.0 [BETA] [Build 551]</strong> — Earlier version with reorganized toolbar and dropdown tools.</p>
+    <p>Use the version number to track which instructions match your installation.</p>
+
+    <button class="print-btn" id="printBtn">🖨 Print This Guide</button>
+    <script>
+        document.getElementById('printBtn').addEventListener('click', function() { window.print(); });
+    </script>
+</body>
+</html>
