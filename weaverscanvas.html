@@ -1504,8 +1504,10 @@
 }
 .yc-input:focus { border-color:var(--brand-purple); }
 /* Selects read left-aligned with room for the dropdown arrow; the
-   text-align:right above is for the numeric spinners. */
-select.yc-input { text-align:left; padding-right:24px; }
+   text-align:right above is for the numeric spinners. Selects flex to
+   their row so long option text (e.g. "Fingering / Sock (~1500 ypp)")
+   fits when selected. */
+select.yc-input { text-align:left; padding-right:24px; flex:1 1 auto; width:auto; min-width:200px; }
 .yc-sync { padding:5px 10px; background:var(--brand-purple); border:1px solid transparent; border-radius:9px; cursor:pointer; font-size:10px; font-weight:700; color:var(--surface); font-family:'Raleway',sans-serif; white-space:nowrap; }
 .yc-sync:hover { background:var(--brand-purple-hover); }
 .yc-stat-card { background:var(--header-bg); border:1px solid var(--shaft-bg); border-radius:7px; padding:10px 12px; }
